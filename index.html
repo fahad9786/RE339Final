@@ -1035,6 +1035,14 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     </div>
 
   </div>
+
+  <!-- Colonial Map -->
+  <div class="map-box reveal" id="colonial-map-box" style="max-width:1080px;margin:2.5rem auto 0;width:calc(100% - 4.8rem)">
+    <div class="map-hint">Click markers · each one a decision made without Palestinians</div>
+    <div id="colonial-map" style="height:400px"></div>
+  </div>
+  <div style="height:1rem"></div>
+
 </section>
 
 <!-- FULL-WIDTH PULL QUOTE — Khalidi -->
@@ -1337,9 +1345,10 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       </button>
     </div>
     <div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Origin: Gaza</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Origin: Gaza / Palestine</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Diaspora communities</div>
-      <div class="legend-item"><div class="legend-dash" style="background:var(--red)"></div>Flight path to Toronto</div>
+      <div class="legend-item"><div class="legend-dash" style="background:var(--red)"></div>Flight path animation</div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:.9rem;line-height:1.75"><b style="color:var(--black)">Biggest communities:</b><br>Jordan 2.4M · Syria 560K<br>USA 700K · Chile 500K<br>Saudi Arabia 280K · Lebanon 270K<br>Qatar 200K · Australia 60K</div>
     </div>
   </div>
   <div class="map-box reveal" id="dias-map-box" style="max-width:1080px;margin:1.8rem auto 0;width:calc(100% - 4.8rem)">
@@ -1736,6 +1745,33 @@ CITIES.forEach((c,i)=>{
 });
 new IntersectionObserver(es=>{if(es[0].isIntersecting)setTimeout(()=>citiesMap.invalidateSize(),200);},{threshold:.2}).observe(document.getElementById('cities'));
 
+/* ══ COLONIAL FOUNDATIONS MAP (02.5) ══ */
+const colMap = L.map('colonial-map',{zoomControl:true,scrollWheelZoom:false,tap:true}).setView([34,20],3);
+voyagerTile().addTo(colMap);
+const COL_EVENTS=[
+  {lat:31.77,lng:35.21,label:'Jerusalem — 1899',color:'#a05020',
+   note:'Mayor Yusuf Diya writes to Theodor Herzl, founder of the Zionist movement, warning that Palestine already has a people. The first formal Palestinian objection to Zionist plans. Herzl\'s response: the Arabs would benefit. He was wrong.'},
+  {lat:33.89,lng:35.50,label:'Sykes-Picot — 1916',color:'#5c6b2e',
+   note:'Britain and France secretly divide the Middle East between themselves. Most of Palestine goes to Britain. The Ottoman Empire is collapsing after 400 years and two European powers are drawing the new borders — without asking a single Palestinian.'},
+  {lat:51.50,lng:-0.12,label:'London — Balfour Declaration 1917',color:'#007A3D',
+   note:'Britain promises a "national home for the Jewish people" inside Palestine — a land it doesn\'t own. Balfour wrote in a memo that they wouldn\'t even go through "the form of consulting the wishes of the present inhabitants." That quote aged exactly as you\'d expect.'},
+  {lat:40.75,lng:-73.99,label:'New York — UN Partition Plan 1947',color:'#CE1126',
+   note:'Jewish land ownership in Palestine was 11.8%. The UN partition gave a majority share to create a Jewish state. Palestinians rejected it — you can\'t divide someone else\'s land without asking them. The plan gave international cover to what was already happening.'},
+  {lat:32.05,lng:34.75,label:'Jaffa — The Nakba 1948',color:'#CE1126',
+   note:'Plan Dalet launches. Jaffa, home to 120,000 Palestinians, is emptied within weeks — like if the entire city of Cambridge UK disappeared in a day. 700,000 Palestinians expelled or flee. ~500 villages destroyed. Many left holding their house keys.'},
+  {lat:32.82,lng:34.99,label:'Haifa — 1948',color:'#CE1126',
+   note:'~70,000 Palestinians expelled from Haifa during the siege. Most fled by boat to Lebanon, told it was temporary. They were never allowed to come back.'},
+  {lat:32.93,lng:35.07,label:'Acre — 1948',color:'#CE1126',
+   note:'~13,500 Arab residents expelled from Acre — a UNESCO World Heritage city continuously inhabited for 4,000 years. The dispossession wasn\'t random. It was strategic.'},
+];
+COL_EVENTS.forEach(ev=>{
+  L.marker([ev.lat,ev.lng],{icon:pulseIcon(ev.color)})
+   .bindPopup(popup(ev.label,'',ev.note),{maxWidth:280}).addTo(colMap);
+});
+new IntersectionObserver(es=>{
+  if(es[0].isIntersecting) setTimeout(()=>colMap.invalidateSize(),200);
+},{threshold:.2}).observe(document.getElementById('colonial'));
+
 /* ══ TIMELINE with TAB BUTTONS — 1948 to 2026 ══ */
 const TL=[
   {year:1948,label:'The Nakba',ar:'النكبة',num:'700,000+',ctx:'~531 villages depopulated',
@@ -1877,19 +1913,32 @@ new IntersectionObserver(es => {
 const diasMap=L.map('dias-map',{zoomControl:true,scrollWheelZoom:false,tap:true,minZoom:1}).setView([38,15],2);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'© OSM © CARTO',maxZoom:10}).addTo(diasMap);
 function dotIcon(c,s=12){return L.divIcon({html:`<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};border:2.5px solid white;box-shadow:0 2px 10px ${c}88"></div>`,className:'',iconSize:[s,s],iconAnchor:[s/2,s/2]})}
-[{lat:31.5,lng:34.46,label:'Gaza, Palestine',badge:'Origin',c:'#007A3D',s:15},
- {lat:33.85,lng:35.86,label:'Beirut, Lebanon',badge:'~270,000 registered',c:'#CE1126',s:10},
- {lat:31.95,lng:35.93,label:'Amman, Jordan',badge:'~2.4M registered',c:'#CE1126',s:10},
- {lat:43.65,lng:-79.38,label:'Toronto, Canada',badge:'~50,000 Palestinians',c:'#CE1126',s:10},
- {lat:52.52,lng:13.40,label:'Berlin, Germany',badge:'Growing community',c:'#CE1126',s:10},
- {lat:24.70,lng:46.70,label:'Riyadh, Saudi Arabia',badge:'~280,000',c:'#CE1126',s:10},
-].forEach(p=>{
+const DIASPORA_PTS=[
+  {lat:31.5,  lng:34.46,  label:'Gaza, Palestine',          badge:'Origin · Historic homeland',                  c:'#007A3D',s:16},
+  {lat:31.95, lng:35.93,  label:'Amman, Jordan',             badge:'~2.4M registered refugees · Largest diaspora',c:'#CE1126',s:14},
+  {lat:33.85, lng:35.86,  label:'Beirut, Lebanon',           badge:'~270,000 registered · 12 refugee camps',     c:'#CE1126',s:11},
+  {lat:31.77, lng:35.21,  label:'West Bank',                 badge:'~3M Palestinians under occupation',           c:'#CE1126',s:12},
+  {lat:33.51, lng:36.29,  label:'Damascus, Syria',           badge:'~560,000 registered before Syrian civil war', c:'#CE1126',s:11},
+  {lat:25.28, lng:51.53,  label:'Doha, Qatar',               badge:'~200,000 Palestinian workers + residents',    c:'#CE1126',s:10},
+  {lat:24.70, lng:46.70,  label:'Riyadh, Saudi Arabia',      badge:'~280,000 Palestinians',                       c:'#CE1126',s:10},
+  {lat:30.06, lng:31.24,  label:'Cairo, Egypt',              badge:'~70,000 Palestinians',                        c:'#CE1126',s:9},
+  {lat:43.65, lng:-79.38, label:'Toronto, Canada',           badge:'~50,000 Palestinians',                        c:'#CE1126',s:10},
+  {lat:41.85, lng:-87.65, label:'Chicago, USA',              badge:'Large Palestinian-American community · ~300K Arab Americans in metro area',c:'#CE1126',s:10},
+  {lat:40.71, lng:-74.00, label:'New York, USA',             badge:'~700,000 Palestinian Americans nationwide',   c:'#CE1126',s:11},
+  {lat:52.52, lng:13.40,  label:'Berlin, Germany',           badge:'~30,000 Palestinians · growing community',    c:'#CE1126',s:9},
+  {lat:52.37, lng:4.89,   label:'Amsterdam, Netherlands',    badge:'~40,000 Palestinians in Netherlands',         c:'#CE1126',s:9},
+  {lat:-33.87,lng:151.21, label:'Sydney, Australia',         badge:'~60,000 Palestinians in Australia',           c:'#CE1126',s:9},
+  {lat:-33.45,lng:-70.67, label:'Santiago, Chile',           badge:'~500,000 Palestinians · oldest diaspora outside Middle East',c:'#CE1126',s:12},
+  {lat:-23.55,lng:-46.63, label:'São Paulo, Brazil',         badge:'~50,000 Palestinians · Brazil has 10M Arab descendants',c:'#CE1126',s:10},
+];
+DIASPORA_PTS.forEach(p=>{
   L.marker([p.lat,p.lng],{icon:dotIcon(p.c,p.s)})
-   .bindPopup(popup(p.label,'','',p.badge),{maxWidth:200}).addTo(diasMap);
+   .bindPopup(popup(p.label,'','',p.badge),{maxWidth:220}).addTo(diasMap);
 });
-[[31.5,34.46],[33.85,35.86],[31.5,34.46],[31.95,35.93],
- [31.5,34.46],[43.65,-79.38],[31.5,34.46],[52.52,13.40],[31.5,34.46],[24.70,46.70]
-].reduce((acc,p,i)=>{if(i%2)L.polyline([acc,p],{color:'#007A3D',weight:1.2,opacity:.2,dashArray:'4 7'}).addTo(diasMap);return p;});
+// draw dashed lines from Gaza to each diaspora point
+DIASPORA_PTS.slice(1).forEach(p=>{
+  L.polyline([[31.5,34.46],[p.lat,p.lng]],{color:'#007A3D',weight:1,opacity:.18,dashArray:'4 8'}).addTo(diasMap);
+});
 
 const FLIGHT=[
   [31.50,34.46],[34.50,30.00],[38.50,23.00],[44.00,15.00],[48.50,5.50],
