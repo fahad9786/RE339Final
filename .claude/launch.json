@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "palestine-site",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "4040", "."],
+      "port": 4040
+    }
+  ]
+}

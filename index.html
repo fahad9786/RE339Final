@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>فلسطين · Mapping Displacement &amp; Islamophobia</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --cream:#f5ede0; --parchment:#ede1cc; --sand:#e8d9c0; --stone:#c9b99a;
+  --red:#CE1126; --green:#007A3D; --olive:#5c6b2e;
+  --black:#1a1410; --charcoal:#2e2720; --muted:#7a6e62;
+  --white:#fdf8f2; --card:#faf4ea;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--black);overflow-x:hidden}
+
+/* ── KUFIYEH pattern ── */
+.kufiyeh-divider{width:100%;height:36px;overflow:hidden}
+.kufiyeh-divider svg{width:100%;height:36px}
+
+/* ── TATREEZ divider ── */
+.tatreez-row{width:100%;overflow:hidden;line-height:0}
+.tatreez-row svg{width:100%;max-height:28px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:9999;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.8rem 2.4rem;
+  background:rgba(245,237,224,.96);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--stone);}
+.nav-logo{display:flex;align-items:center;gap:.6rem;
+  font-family:'Amiri',serif;font-size:1.3rem;color:var(--green);}
+.nav-logo-en{font-family:'Cormorant Garamond',serif;font-size:.76rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-left:.05rem}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--green)}
+
+/* ── HERO ── */
+#hero{min-height:100vh;background:#0e2118;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:9rem 4rem 7rem;overflow:hidden;position:relative;}
+/* radial green glow behind olive */
+#hero::before{content:'';position:absolute;top:42%;left:50%;
+  transform:translate(-50%,-50%);
+  width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,122,61,.18) 0%,transparent 70%);
+  pointer-events:none;}
+#hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:8px;
+  background:linear-gradient(90deg,#000 25%,#fff 25% 50%,var(--green) 50% 75%,var(--red) 75%);}
+.hero-vol{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(93,184,122,.7);margin-bottom:1.4rem;
+  opacity:0;animation:fadeUp .7s .1s forwards;}
+.hero-arabic{font-family:'Amiri',serif;font-size:clamp(4rem,12vw,10rem);
+  color:#4eff85;line-height:.95;margin-bottom:.5rem;
+  opacity:0;animation:fadeUp .9s .2s forwards;
+  text-shadow:0 0 60px rgba(78,255,133,.25);}
+.hero-en{font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1rem,2.5vw,1.5rem);font-weight:300;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(253,248,242,.32);margin-bottom:2.4rem;
+  opacity:0;animation:fadeUp .8s .45s forwards;}
+.hero-symbols{display:flex;align-items:center;justify-content:center;
+  gap:2.5rem;margin-bottom:2rem;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .9s .65s forwards;}
+.hero-sym{display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(253,248,242,.3);}
+.hero-sub{font-size:.87rem;line-height:1.95;font-weight:300;max-width:400px;
+  color:rgba(253,248,242,.42);margin:0 auto 2.4rem;
+  opacity:0;animation:fadeUp .8s .88s forwards;}
+.scroll-hint{display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(253,248,242,.18);opacity:0;animation:fadeUp .8s 1.1s forwards;}
+.scroll-line{width:1px;height:34px;background:linear-gradient(to bottom,rgba(253,248,242,.18),transparent)}
+
+/* ── HERO SUMUD ── */
+.hero-sumud{display:flex;align-items:center;gap:.8rem;justify-content:flex-start;
+  margin-bottom:.3rem;opacity:0;animation:fadeUp .8s .35s forwards;}
+.sumud-ar{font-family:'Amiri',serif;font-size:clamp(1.8rem,4vw,3rem);
+  color:#CE1126;line-height:1;}
+.sumud-divider{color:rgba(245,237,224,.3);font-size:1.5rem;}
+.sumud-en{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3.5vw,2.5rem);
+  font-style:italic;color:rgba(245,237,224,.75);letter-spacing:.04em;}
+.hero-sumud-def{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(245,237,224,.38);margin-bottom:1.8rem;
+  opacity:0;animation:fadeUp .8s .5s forwards;}
+
+/* ── SHARED ── */
+.wrap{max-width:1080px;margin:0 auto;width:100%;padding:0 2.4rem}
+.sec-label-en{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--stone);margin-bottom:.3rem}
+.sec-label-ar{font-family:'Amiri',serif;font-size:1rem;color:var(--green);margin-bottom:.5rem;direction:rtl}
+.sec-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,3.8vw,2.9rem);font-weight:600;line-height:1.18}
+.sec-p{font-size:.85rem;line-height:1.9;color:var(--muted);max-width:440px;margin-top:.5rem}
+.sec-pad{padding:6rem 2.4rem}
+
+/* map boxes */
+.map-box{border-radius:12px;overflow:hidden;
+  box-shadow:0 16px 50px rgba(0,0,0,.13);border:1px solid var(--sand);position:relative;}
+.map-hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  font-size:.6rem;letter-spacing:.07em;text-transform:uppercase;
+  background:rgba(26,20,16,.55);color:rgba(255,255,255,.75);
+  padding:.24rem .75rem;border-radius:20px;z-index:500;
+  pointer-events:none;transition:opacity .6s;white-space:nowrap;}
+.map-box.touched .map-hint{opacity:0}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.on{opacity:1;transform:none}
+
+/* ══════════════════ 01 SYMBOLS ══════════════════ */
+#symbols{background:var(--parchment);padding:5rem 2.4rem 4rem}
+.sym-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.4rem;
+  max-width:1080px;margin:2.5rem auto 0}
+.sym-card{background:var(--card);border:1px solid var(--sand);border-radius:14px;
+  padding:2rem 1.4rem 1.6rem;text-align:center;
+  transition:transform .2s,box-shadow .2s;}
+.sym-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,.1)}
+.sym-icon{height:72px;display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem}
+.sym-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:.25rem}
+.sym-name-ar{font-family:'Amiri',serif;font-size:.95rem;color:var(--muted);direction:rtl;margin-bottom:.55rem}
+.sym-desc{font-size:.76rem;line-height:1.75;color:var(--muted)}
+
+/* ══════════════════ 02 CITIES ══════════════════ */
+#cities{background:var(--cream);padding:6rem 2.4rem 0}
+.cities-layout{display:grid;grid-template-columns:220px 1fr;gap:1.5rem;
+  max-width:1080px;margin:2rem auto 0}
+.city-list{display:flex;flex-direction:column;gap:.55rem}
+.city-btn{background:var(--card);border:1.5px solid var(--sand);border-radius:10px;
+  padding:.85rem 1rem;cursor:pointer;display:flex;align-items:flex-start;gap:.7rem;
+  transition:border-color .2s,box-shadow .2s,transform .18s;text-align:left;}
+.city-btn:hover,.city-btn.active{border-color:var(--green);
+  box-shadow:0 4px 18px rgba(0,122,61,.13);transform:translateX(4px)}
+.city-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.city-name{font-size:.85rem;font-weight:500}
+.city-name-ar{font-family:'Amiri',serif;font-size:.88rem;color:var(--muted);direction:rtl}
+.city-sub{font-size:.7rem;color:var(--muted);margin-top:.1rem;line-height:1.5}
+#cities-map{height:440px}
+
+/* ══════════════════ 03 TIMELINE ══════════════════ */
+#timeline{background:var(--parchment);padding:6rem 2.4rem 0}
+
+/* year button tabs — much more intuitive than a slider */
+.tl-tabs{display:flex;gap:.8rem;max-width:1080px;margin:1.8rem auto 0;flex-wrap:wrap}
+.tl-tab{flex:1;min-width:140px;background:var(--card);border:2px solid var(--sand);
+  border-radius:12px;padding:1.1rem 1.4rem;cursor:pointer;text-align:left;
+  transition:border-color .25s,box-shadow .25s,transform .18s;position:relative;}
+.tl-tab:hover{border-color:var(--stone);transform:translateY(-2px)}
+.tl-tab.active{border-color:var(--green);box-shadow:0 6px 20px rgba(0,122,61,.15);transform:translateY(-2px)}
+.tl-tab .tab-yr{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;
+  color:var(--green);display:block;margin-bottom:.2rem}
+.tl-tab .tab-name{font-size:.72rem;letter-spacing:.04em;color:var(--muted)}
+.tl-tab .tab-name-ar{font-family:'Amiri',serif;font-size:.85rem;color:var(--stone);direction:rtl;margin-top:.1rem}
+.tl-tab.active .tab-yr{color:var(--green)}
+/* active dot indicator */
+.tl-tab::after{content:'';position:absolute;bottom:-2px;left:50%;
+  transform:translateX(-50%);width:0;height:3px;
+  background:var(--green);border-radius:2px;transition:width .3s;}
+.tl-tab.active::after{width:60%}
+
+#tl-map{height:380px;max-width:1080px;margin:1.2rem auto 0}
+.tl-info{max-width:1080px;margin:1.2rem auto 0;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.tl-fact{background:var(--card);border-radius:10px;padding:1rem 1.2rem;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid var(--sand)}
+.tl-fact-n{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--red)}
+.tl-fact-d{font-size:.73rem;color:var(--muted);margin-top:.2rem;line-height:1.55}
+
+/* ══════════════════ 04 INSIDE GAZA ══════════════════ */
+#gaza{background:#0e2118;color:var(--white);padding:7rem 2.4rem}
+#gaza .sec-label-en{color:rgba(253,248,242,.28)}
+#gaza .sec-label-ar{color:#5db87a}
+#gaza .sec-h{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-weight:300;
+  font-size:clamp(2rem,4.5vw,3.4rem);
+  color:var(--white);line-height:1.15;
+}
+#gaza .sec-p{color:rgba(253,248,242,.38)}
+
+/* Gaza infographic — Leaflet map */
+.gaza-layout{display:grid;grid-template-columns:1fr 300px;gap:3rem;
+  max-width:1080px;margin:2.5rem auto 0;align-items:start}
+
+/* infographic cards — 2×2 grid */
+.gz-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.gz-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:1.6rem 1.4rem;display:flex;flex-direction:column;gap:.5rem}
+.gz-card-icon{display:none}
+.gz-card-n{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.2rem);
+  color:var(--red);display:block;line-height:1;margin-bottom:.3rem}
+.gz-card-d{font-size:.82rem;color:rgba(245,237,224,.6);line-height:1.7;text-transform:none;letter-spacing:0}
+/* density comparison bar */
+.density-bar-wrap{max-width:1080px;margin:2rem auto 0;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;padding:1.4rem 1.8rem}
+.density-title{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(253,248,242,.35);margin-bottom:1rem}
+.d-row{display:flex;align-items:center;gap:1rem;margin-bottom:.7rem}
+.d-label{font-size:.78rem;color:rgba(253,248,242,.55);width:130px;flex-shrink:0}
+.d-bar-bg{flex:1;height:10px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden}
+.d-bar-fill{height:100%;border-radius:5px;transition:width 1s ease}
+.d-val{font-size:.75rem;color:rgba(253,248,242,.4);width:90px;text-align:right;flex-shrink:0}
+
+/* ══════════════════ 05 DIASPORA ══════════════════ */
+#diaspora{background:var(--cream);padding:6rem 2.4rem 0}
+.flight-layout{display:grid;grid-template-columns:1fr 240px;gap:2rem;
+  max-width:1080px;margin:1.5rem auto 0;align-items:start}
+.flight-story p{font-size:.84rem;line-height:1.9;color:var(--muted);margin-bottom:.8rem}
+.flight-story b{color:var(--black);font-weight:500}
+.plane-btn{display:inline-flex;align-items:center;gap:.65rem;
+  background:var(--charcoal);color:var(--white);border:none;border-radius:10px;
+  padding:.85rem 1.4rem;cursor:pointer;font-family:'Inter',sans-serif;
+  font-size:.82rem;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.18);
+  transition:transform .18s,box-shadow .18s;margin-top:.4rem;}
+.plane-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.28)}
+.plane-btn.flew{background:var(--green)}
+.plane-btn:disabled{opacity:.7;cursor:default}
+.legend-item{display:flex;align-items:center;gap:.5rem;font-size:.74rem;color:var(--muted);margin-bottom:.38rem}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-dash{width:24px;height:2px;border-radius:1px;flex-shrink:0}
+#dias-map{height:450px;max-width:1080px;margin:1.8rem auto 0}
+.flight-progress{position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:rgba(0,0,0,.1);z-index:500;pointer-events:none}
+.flight-bar-fill{height:100%;width:0;
+  background:linear-gradient(90deg,var(--green),var(--red));transition:none}
+.story-bubble{position:absolute;top:14px;right:14px;z-index:600;
+  background:rgba(26,20,16,.86);color:var(--white);border-radius:12px;
+  padding:1rem 1.2rem;max-width:210px;font-size:.74rem;line-height:1.75;
+  opacity:0;pointer-events:none;transition:opacity .5s;
+  backdrop-filter:blur(8px);border-left:3px solid var(--green);}
+.story-bubble.show{opacity:1}
+.story-bubble b{color:#5db87a}
+
+/* ══════════════════ 06 ZINE FRAME ══════════════════ */
+#zine-frame{background:var(--parchment);padding:6rem 2.4rem}
+.zine-intro{font-size:.84rem;line-height:1.9;color:var(--muted);
+  max-width:1080px;margin:.8rem auto 0}
+.zine-intro b{color:var(--black);font-weight:500}
+.concepts{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;
+  max-width:1080px;margin:2rem auto 0}
+.concept{background:var(--card);border-radius:12px;padding:1.5rem 1.6rem;
+  border-left:3px solid var(--green);box-shadow:0 3px 12px rgba(0,0,0,.06)}
+.concept.red{border-left-color:var(--red)}
+.concept-tag{font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--green);font-weight:600;margin-bottom:.5rem}
+.concept.red .concept-tag{color:var(--red)}
+.concept h4{font-family:'Cormorant Garamond',serif;font-size:1.05rem;margin-bottom:.5rem}
+.concept p{font-size:.78rem;line-height:1.72;color:var(--muted)}
+
+/* ══ SPLIT ISLAMOPHOBIA SECTION ══ */
+.split-frame{display:grid;grid-template-columns:1fr 1fr;max-width:1200px;margin:3rem auto 0;width:100%;min-height:560px}
+.split-side{padding:3.5rem 3rem;display:flex;flex-direction:column;justify-content:flex-start}
+.split-green{background:var(--green);color:white;}
+.split-red{background:var(--red);color:white;}
+.split-tag{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  opacity:.65;margin-bottom:1.2rem;font-weight:600}
+.split-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.4rem);
+  font-weight:600;line-height:1.18;margin-bottom:1.4rem;}
+.split-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.9rem}
+.split-list li{font-size:.86rem;line-height:1.75;opacity:.88;padding-left:1.2rem;position:relative}
+.split-list li::before{content:'—';position:absolute;left:0;opacity:.5}
+.split-quote{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.1rem;line-height:1.6;margin-top:auto;padding-top:2rem;
+  opacity:.75;border-top:1px solid rgba(255,255,255,.2);}
+@media(max-width:768px){.split-frame{grid-template-columns:1fr}}
+
+/* ══════════════════ 07 NARRATIVE ══════════════════ */
+#narrative{background:var(--cream);padding:6rem 2.4rem 0}
+.tog-row{display:flex;align-items:center;gap:1.2rem;max-width:1080px;margin:2rem auto 0}
+.tog-lbl{font-size:.8rem;font-weight:500;color:var(--muted)}
+.tog{position:relative;width:50px;height:26px;cursor:pointer}
+.tog input{opacity:0;width:0;height:0}
+.tog-track{position:absolute;inset:0;background:var(--green);border-radius:13px;transition:.3s}
+.tog-track::before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;
+  background:white;border-radius:50%;transition:.3s;box-shadow:0 2px 5px rgba(0,0,0,.2)}
+.tog input:checked+.tog-track{background:var(--red)}
+.tog input:checked+.tog-track::before{transform:translateX(24px)}
+.nar-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;
+  max-width:1080px;margin:1.5rem auto 0}
+.nar-panel{background:var(--card);border-radius:12px;padding:1.8rem 2rem;
+  border-top:3px solid transparent;box-shadow:0 4px 14px rgba(0,0,0,.05);
+  border:1px solid var(--sand);border-top-width:3px;
+  transition:opacity .4s,transform .4s;}
+#p-human{border-top-color:var(--green)}
+#p-media{border-top-color:var(--red)}
+.nar-panel.dim{opacity:.14;transform:scale(.97);pointer-events:none}
+.nar-tag{font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:.75rem}
+#p-human .nar-tag{color:var(--green)} #p-media .nar-tag{color:var(--red)}
+.nar-panel h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.75rem}
+.nar-panel li{font-size:.81rem;color:var(--muted);line-height:1.8;margin-left:1rem;margin-bottom:.2rem}
+
+/* ══════════════════ 08 REFLECTION ══════════════════ */
+#reflection{background:var(--cream);color:var(--black);
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;padding:10rem 2rem 8rem;position:relative;overflow:hidden;
+  border-top:5px solid var(--green);}
+/* big Arabic watermark behind everything */
+#reflection::before{
+  content:'فلسطين';
+  font-family:'Amiri',serif;
+  font-size:clamp(8rem,22vw,18rem);
+  color:rgba(0,122,61,.04);
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;white-space:nowrap;
+  direction:rtl;line-height:1;
+}
+/* olive tree art bottom-left */
+#reflection .olive-corner{
+  position:absolute;bottom:0;left:-10px;
+  opacity:.1;pointer-events:none;
+}
+.refl-arabic{font-family:'Amiri',serif;font-size:clamp(1rem,2vw,1.3rem);
+  color:var(--muted);margin-bottom:2.5rem;direction:rtl;
+  letter-spacing:.06em;}
+.refl-q{font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,5vw,3.8rem);font-style:italic;font-weight:300;
+  color:var(--black);
+  line-height:1.18;margin-bottom:2rem;max-width:760px;}
+.refl-q em{color:var(--red);font-style:normal}
+.refl-div{width:56px;height:2px;background:var(--green);margin:0 auto 2.4rem}
+/* WCAG AA: #5a4e42 on cream #f5ede0 = 5.8:1 ✓ */
+.refl-body{font-size:.95rem;line-height:2.1;color:#4a3f35;margin-bottom:1.1rem;max-width:540px}
+.refl-body b{color:var(--black);font-weight:600}
+.refl-return{display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--green);text-decoration:none;margin-top:2.8rem;
+  transition:color .2s;}
+.refl-return:hover{color:#005a2d}
+/* Palestine flag SVG */
+.pal-flag-svg{margin:2.5rem auto 0;display:block;
+  border-radius:4px;box-shadow:0 6px 24px rgba(0,0,0,.18);}
+.pal-flag{display:flex;width:68px;height:40px;margin:2.5rem auto 0;
+  border-radius:3px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.55)}
+.pf-blk{background:#000;flex:1} .pf-wht{background:#fff;flex:2;position:relative;display:flex;align-items:center}
+.pf-tri{width:0;height:0;border-top:20px solid transparent;border-bottom:20px solid transparent;border-left:15px solid var(--green);position:absolute;left:0}
+.pf-red{background:var(--red);flex:1}
+.sources{font-size:.67rem;color:rgba(253,248,242,.17);max-width:520px;margin:3rem auto 0;line-height:2.2}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1;r:5}50%{opacity:.4;r:3}}
+@keyframes oliveSway{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+@keyframes barGrow{from{width:0}to{width:var(--w)}}
+
+/* Leaflet popup */
+.leaflet-popup-content-wrapper{border-radius:10px!important;
+  box-shadow:0 8px 28px rgba(0,0,0,.14)!important;font-family:'Inter',sans-serif!important}
+.pop-h{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--black);margin-bottom:.25rem}
+.pop-h-ar{font-family:'Amiri',serif;font-size:.92rem;color:var(--muted);direction:rtl;margin-bottom:.28rem}
+.pop-p{font-size:.76rem;color:var(--muted);line-height:1.65}
+.pop-badge{margin-top:.35rem;font-size:.7rem;font-weight:600;color:var(--green);
+  background:rgba(0,122,61,.09);padding:.18rem .5rem;border-radius:5px;display:inline-block}
+
+/* ══ PALESTINE SHRINKING MAPS ══ */
+.pal-shrink{max-width:1080px;margin:2rem auto 0;padding:0}
+.shrink-subtitle{font-size:.76rem;color:var(--muted);margin-bottom:1.8rem;line-height:1.7;max-width:500px}
+.shrink-maps{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;
+  gap:0;align-items:center}
+.shrink-card{background:var(--card);border:1.5px solid var(--sand);border-radius:14px;
+  padding:1.4rem .9rem 1.1rem;text-align:center;
+  transition:transform .2s,box-shadow .2s;}
+.shrink-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.12)}
+.shrink-yr{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:600;
+  color:var(--green);margin-bottom:.15rem}
+.shrink-era-lbl{font-size:.65rem;letter-spacing:.04em;color:var(--muted);margin-bottom:.75rem;line-height:1.55}
+.shrink-svg{width:100%;max-width:80px;height:auto;display:block;margin:0 auto .75rem}
+.shrink-pct{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;
+  color:var(--green);margin-bottom:.15rem}
+.shrink-pct.red{color:var(--red)}
+.shrink-km{font-size:.64rem;color:var(--muted);line-height:1.55}
+.shrink-arrow{font-size:1.6rem;color:var(--stone);padding:0 .4rem;display:flex;
+  align-items:center;justify-content:center;flex-shrink:0;padding-bottom:2rem}
+/* loss bar */
+.shrink-bar-row{display:flex;align-items:center;gap:1rem;margin-top:1.5rem;
+  background:var(--parchment);border-radius:10px;padding:1rem 1.4rem;
+  border:1px solid var(--sand)}
+.shrink-bar-label{font-size:.72rem;color:var(--muted);flex-shrink:0;width:200px}
+.shrink-bar-track{flex:1;height:10px;background:rgba(26,20,16,.1);border-radius:5px;overflow:hidden}
+.shrink-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--red),#ff5566);
+  border-radius:5px;transition:width 1.4s ease}
+.shrink-bar-pct{font-size:.72rem;font-weight:600;color:var(--red);flex-shrink:0}
+@media(max-width:900px){
+  .shrink-maps{grid-template-columns:1fr 1fr;gap:1rem}
+  .shrink-arrow{display:none}
+  .shrink-bar-row{flex-direction:column;align-items:flex-start;gap:.5rem}
+  .shrink-bar-label{width:auto}
+  .shrink-bar-track{width:100%}
+}
+@media(max-width:768px){
+  .cities-layout,.nar-grid,.flight-layout,.gaza-layout,.concepts,.return-grid{grid-template-columns:1fr}
+  .tl-info,.sym-grid{grid-template-columns:1fr 1fr}
+  .tl-tabs{gap:.5rem}
+  .nav-links{display:none}
+}
+
+/* ══ COLONIAL FOUNDATIONS ══ */
+.col-timeline{display:flex;flex-direction:column;gap:0}
+.col-step{display:grid;grid-template-columns:80px 1fr;gap:0 2rem;
+  position:relative;padding-bottom:2.5rem}
+.col-step::before{content:'';position:absolute;left:39px;top:28px;bottom:0;
+  width:2px;background:var(--sand);z-index:0}
+.col-step:last-child::before{display:none}
+.col-step-yr{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;
+  color:var(--green);padding-top:.15rem;position:relative;z-index:1;
+  width:80px;text-align:right;flex-shrink:0}
+/* year circle marker */
+.col-step-yr::after{content:'';position:absolute;right:-13px;top:8px;
+  width:10px;height:10px;border-radius:50%;background:var(--green);
+  border:2px solid var(--parchment);z-index:2}
+.col-step-content{padding-left:.5rem}
+.col-step-h{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;
+  margin-bottom:.5rem;color:var(--black)}
+.col-step-p{font-size:.84rem;line-height:1.88;color:var(--muted)}
+.col-pull{margin-top:1rem;padding:1rem 1.4rem;
+  background:var(--sand);border-left:3px solid var(--red);border-radius:0 8px 8px 0;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;line-height:1.55;color:var(--charcoal);position:relative}
+.col-pull-mark{font-size:2rem;color:var(--red);line-height:0;vertical-align:-.4rem;margin-right:.2rem}
+.col-pull-attr{display:block;font-size:.67rem;font-style:normal;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+@media(max-width:768px){
+  .col-step{grid-template-columns:60px 1fr}
+  .col-step::before{left:29px}
+  .canada-grid{grid-template-columns:1fr!important}
+}
+
+/* ══════════════════════════════════════════
+   SCROLL PROGRESS BAR
+══════════════════════════════════════════ */
+#scroll-progress{
+  position:fixed;top:0;left:0;height:3px;width:0%;z-index:10000;
+  background:linear-gradient(90deg,var(--green),#4eff85,var(--red));
+  transition:width .1s linear;
+  box-shadow:0 0 8px rgba(78,255,133,.4);
+}
+
+/* ══════════════════════════════════════════
+   NAV — active link highlight
+══════════════════════════════════════════ */
+.nav-links a.nav-active{color:var(--green);border-bottom:2px solid var(--green);padding-bottom:1px}
+.nav-links a{transition:color .2s,border-color .2s;border-bottom:2px solid transparent;padding-bottom:1px}
+
+/* ══════════════════════════════════════════
+   ENHANCED REVEAL ANIMATIONS
+══════════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.on{opacity:1;transform:none}
+.reveal-scale{opacity:0;transform:scale(.94);transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal-scale.on{opacity:1;transform:scale(1)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal-left.on{opacity:1;transform:none}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal-right.on{opacity:1;transform:none}
+
+/* stagger children */
+.stagger > *{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.stagger.on > *:nth-child(1){opacity:1;transform:none;transition-delay:.05s}
+.stagger.on > *:nth-child(2){opacity:1;transform:none;transition-delay:.15s}
+.stagger.on > *:nth-child(3){opacity:1;transform:none;transition-delay:.25s}
+.stagger.on > *:nth-child(4){opacity:1;transform:none;transition-delay:.35s}
+.stagger.on > *:nth-child(5){opacity:1;transform:none;transition-delay:.45s}
+.stagger.on > *:nth-child(6){opacity:1;transform:none;transition-delay:.55s}
+.stagger.on > *:nth-child(n+7){opacity:1;transform:none;transition-delay:.6s}
+
+/* word-by-word reveal */
+.word-reveal .word{
+  display:inline-block;opacity:0;
+  transform:translateY(20px);
+  transition:opacity .5s ease,transform .5s cubic-bezier(.16,1,.3,1);
+}
+.word-reveal.on .word{opacity:1;transform:none}
+
+/* ══════════════════════════════════════════
+   CINEMATIC SECTION SCENES
+══════════════════════════════════════════ */
+.scene-intro{
+  font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--stone);margin-bottom:2rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.scene-intro::before{
+  content:'';display:inline-block;width:32px;height:1px;
+  background:var(--green);
+}
+
+/* large cinematic chapter headings */
+.cinematic-h{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,7vw,5.5rem);
+  font-weight:900;line-height:1.05;
+  letter-spacing:-.02em;
+}
+.cinematic-h em{font-style:italic;color:var(--green)}
+.on-dark .cinematic-h em{color:#4eff85}
+
+/* section breathing room */
+.scene-pad{padding:8rem 2.4rem}
+
+/* ══════════════════════════════════════════
+   MICRO-INTERACTIONS
+══════════════════════════════════════════ */
+/* buttons */
+.plane-btn,.tl-tab,.city-btn{
+  transition:transform .22s cubic-bezier(.16,1,.3,1),
+             box-shadow .22s ease,
+             background .22s ease,
+             border-color .22s ease !important;
+}
+.plane-btn:hover{
+  transform:translateY(-3px) scale(1.02) !important;
+  box-shadow:0 12px 36px rgba(0,0,0,.28) !important;
+}
+.tl-tab:hover{
+  transform:translateY(-4px) !important;
+  box-shadow:0 10px 30px rgba(0,122,61,.18) !important;
+}
+.city-btn:hover{
+  transform:translateX(6px) !important;
+  box-shadow:0 6px 20px rgba(0,122,61,.14) !important;
+}
+
+/* card lift */
+.sym-card,.can-card,.shrink-card,.gz-card{
+  transition:transform .25s cubic-bezier(.16,1,.3,1),
+             box-shadow .25s ease !important;
+}
+.sym-card:hover,.shrink-card:hover{
+  transform:translateY(-6px) !important;
+  box-shadow:0 16px 48px rgba(0,0,0,.13) !important;
+}
+.gz-card:hover{
+  background:rgba(255,255,255,.07) !important;
+  transform:translateY(-3px);
+}
+
+/* animated underline links */
+.refl-return{
+  position:relative;overflow:hidden;
+}
+.refl-return::after{
+  content:'';position:absolute;bottom:0;left:0;
+  width:0;height:1px;background:var(--green);
+  transition:width .3s ease;
+}
+.refl-return:hover::after{width:100%}
+
+/* nav logo hover */
+.nav-logo{transition:opacity .2s}
+.nav-logo:hover{opacity:.75}
+
+/* ══════════════════════════════════════════
+   PARALLAX CONTAINERS
+══════════════════════════════════════════ */
+.parallax-bg{will-change:transform}
+
+/* ══════════════════════════════════════════
+   HERO — cinematic upgrade
+══════════════════════════════════════════ */
+.hero-arabic{
+  font-size:clamp(5rem,15vw,12rem) !important;
+  letter-spacing:-.03em;
+}
+.hero-sumud .sumud-ar{font-size:clamp(2.2rem,5vw,3.8rem) !important}
+.hero-sumud .sumud-en{font-size:clamp(1.8rem,4.5vw,3rem) !important}
+
+/* hero scroll cue pulse */
+.scroll-line{animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:.18;height:34px}50%{opacity:.5;height:48px}}
+
+/* ══════════════════════════════════════════
+   SECTION LABELS — enhanced
+══════════════════════════════════════════ */
+.sec-label-en{
+  font-size:.58rem !important;letter-spacing:.28em !important;
+  display:flex;align-items:center;gap:.7rem;
+}
+.sec-label-en::before{
+  content:'';display:inline-block;width:24px;height:1px;
+  background:currentColor;opacity:.5;flex-shrink:0;
+}
+.sec-h{font-size:clamp(2.2rem,4.5vw,3.4rem) !important;letter-spacing:-.015em;font-family:'Playfair Display',serif !important;font-weight:700 !important}
+
+/* ══════════════════════════════════════════
+   SPLIT SECTION — cinematic
+══════════════════════════════════════════ */
+.split-heading{font-family:'Playfair Display',serif !important;font-weight:700 !important}
+.split-quote{font-family:'Playfair Display',serif !important;font-size:1.25rem !important}
+
+/* ══════════════════════════════════════════
+   RETURN SECTION — cinematic pull quote
+══════════════════════════════════════════ */
+#return .refl-q-style{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.3rem,3vw,2rem);
+  font-style:italic;
+  line-height:1.5;
+}
+
+/* ══════════════════════════════════════════
+   STATS / NUMBERS — big cinematic numbers
+══════════════════════════════════════════ */
+.gz-card-n{font-family:'Playfair Display',serif !important}
+.tl-fact-n{font-family:'Playfair Display',serif !important}
+.shrink-pct{font-family:'Playfair Display',serif !important}
+
+/* ══════════════════════════════════════════
+   SOURCE TAGS — inline citation chips
+══════════════════════════════════════════ */
+.cite{
+  display:inline-block;font-size:.6rem;letter-spacing:.08em;
+  background:rgba(0,122,61,.1);color:var(--green);
+  border:1px solid rgba(0,122,61,.2);border-radius:4px;
+  padding:.1rem .45rem;margin-left:.25rem;vertical-align:middle;
+  font-family:'Inter',sans-serif;font-style:normal;
+}
+.on-dark .cite{background:rgba(78,255,133,.08);color:#5db87a;border-color:rgba(78,255,133,.2)}
+
+/* ══════════════════════════════════════════
+   COLONIAL TIMELINE — enhanced
+══════════════════════════════════════════ */
+.col-step-yr{font-family:'Playfair Display',serif !important;font-size:1.6rem !important}
+.col-step-h{font-family:'Playfair Display',serif !important;font-size:1.25rem !important}
+
+/* ══════════════════════════════════════════
+   REFLECTION — cinematic
+══════════════════════════════════════════ */
+.refl-q{font-family:'Playfair Display',serif !important;font-weight:700 !important;
+  font-size:clamp(2.2rem,5.5vw,4rem) !important;letter-spacing:-.02em !important}
+
+/* ══════════════════════════════════════════
+   SCROLLBAR — subtle custom
+══════════════════════════════════════════ */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--parchment)}
+::-webkit-scrollbar-thumb{background:var(--stone);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--green)}
+
+/* ══ SMOOTH SECTION TRANSITIONS ══ */
+section{position:relative}
+
+/* ══ BREATHING SECTIONS — extra vertical rhythm ══ */
+#colonial.sec-pad,#canada{padding-top:7rem;padding-bottom:7rem}
+
+/* ══ NAV scroll-shrink ══ */
+nav{transition:padding .3s ease,box-shadow .3s ease}
+nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
+
+/* ══ CITE CHIP hover ══ */
+.cite{transition:background .2s,color .2s;cursor:default}
+.cite:hover{background:rgba(0,122,61,.22)}
+
+/* ══ HERO — additional glow on Arabic ══ */
+.hero-arabic{
+  text-shadow:0 0 80px rgba(78,255,133,.3),0 0 160px rgba(78,255,133,.1) !important;
+}
+
+/* ══ FULL WIDTH QUOTE BLOCKS ══ */
+.fw-quote{
+  padding:6rem 2.4rem;text-align:center;
+}
+.fw-quote p{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.4rem,3vw,2.2rem);
+  font-style:italic;line-height:1.45;
+  max-width:760px;margin:0 auto;
+}
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav>
+  <span class="nav-logo">
+    <img src="logo.svg" alt="Palestine" style="height:28px;width:auto;filter:brightness(0) saturate(100%) invert(28%) sepia(96%) saturate(1206%) hue-rotate(131deg) brightness(93%) contrast(101%)">
+    فلسطين <span class="nav-logo-en">Palestine</span>
+  </span>
+  <ul class="nav-links">
+    <li><a href="#symbols">Symbols</a></li>
+    <li><a href="#cities">Cities</a></li>
+    <li><a href="#colonial">Colonial Roots</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#gaza">Gaza</a></li>
+    <li><a href="#diaspora">Diaspora</a></li>
+    <li><a href="#canada">In Canada</a></li>
+    <li><a href="#zine-frame">Islamophobia</a></li>
+    <li><a href="#return">Return</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section id="hero">
+  <div class="hero-vol">Volume I · The Living Archive</div>
+  <div class="hero-arabic" id="hero-arabic">فلسطين</div>
+  <div class="hero-sumud">
+    <span class="sumud-ar">صمود</span>
+    <span class="sumud-divider">·</span>
+    <span class="sumud-en">Sumud</span>
+  </div>
+  <div class="hero-sumud-def">Steadfastness · Firmness · Perseverance</div>
+  <div class="hero-en">A Century of Dispossession · Anti-Palestinian Racism &amp; Islamophobia</div>
+
+  <div style="position:absolute;right:3rem;top:50%;transform:translateY(-50%);opacity:.04;pointer-events:none;z-index:0">
+    <img src="logo.svg" alt="" style="height:55vh;width:auto;filter:brightness(0) invert(1)">
+  </div>
+
+  <!-- FOUR SYMBOLS in hero -->
+  <div class="hero-symbols">
+    <!-- Watermelon -->
+    <div class="hero-sym">
+      <svg width="56" height="48" viewBox="0 0 56 48" fill="none">
+        <!-- green outer rind -->
+        <path d="M4 28 Q28 2 52 28 Q40 50 28 50 Q16 50 4 28Z" fill="#007A3D"/>
+        <!-- white inner rind -->
+        <path d="M7 28 Q28 6 49 28 Q39 47 28 47 Q17 47 7 28Z" fill="#f0f0f0"/>
+        <!-- red flesh -->
+        <path d="M10 28 Q28 10 46 28 Q37 44 28 44 Q19 44 10 28Z" fill="#e8223a"/>
+        <!-- seeds -->
+        <ellipse cx="20" cy="34" rx="2" ry="3.2" fill="#1a1a18" transform="rotate(-15 20 34)"/>
+        <ellipse cx="28" cy="38" rx="2" ry="3.2" fill="#1a1a18"/>
+        <ellipse cx="36" cy="34" rx="2" ry="3.2" fill="#1a1a18" transform="rotate(15 36 34)"/>
+        <ellipse cx="24" cy="37" rx="1.5" ry="2.5" fill="#1a1a18" transform="rotate(-5 24 37)" opacity=".7"/>
+        <ellipse cx="32" cy="37" rx="1.5" ry="2.5" fill="#1a1a18" transform="rotate(5 32 37)" opacity=".7"/>
+      </svg>
+      <span>Watermelon</span>
+    </div>
+    <!-- Olive branch -->
+    <div class="hero-sym">
+      <svg width="56" height="48" viewBox="0 0 56 48" fill="none" style="animation:oliveSway 4s ease-in-out infinite">
+        <!-- stem -->
+        <path d="M8 42 C16 34 24 24 36 16 C44 10 50 8 52 6" stroke="#5a7a2a" stroke-width="2" stroke-linecap="round"/>
+        <!-- leaves left side -->
+        <ellipse cx="17" cy="34" rx="9" ry="3.5" fill="#4a7a2a" transform="rotate(-35 17 34)"/>
+        <ellipse cx="26" cy="26" rx="8.5" ry="3.2" fill="#4a7a2a" transform="rotate(-25 26 26)"/>
+        <ellipse cx="36" cy="19" rx="8" ry="3" fill="#4a7a2a" transform="rotate(-15 36 19)"/>
+        <ellipse cx="44" cy="13" rx="7" ry="2.8" fill="#4a7a2a" transform="rotate(-5 44 13)"/>
+        <!-- leaves right side -->
+        <ellipse cx="21" cy="30" rx="8" ry="3" fill="#5db87a" transform="rotate(-20 21 30)"/>
+        <ellipse cx="32" cy="22" rx="7.5" ry="2.8" fill="#5db87a" transform="rotate(-10 32 22)"/>
+        <!-- round olives -->
+        <circle cx="19" cy="32" r="4" fill="#3a5a1a"/>
+        <circle cx="19" cy="32" r="2" fill="#5a8a3a"/>
+        <circle cx="30" cy="24" r="3.5" fill="#3a5a1a"/>
+        <circle cx="30" cy="24" r="1.8" fill="#5a8a3a"/>
+        <circle cx="42" cy="15" r="3" fill="#3a5a1a"/>
+        <circle cx="42" cy="15" r="1.5" fill="#5a8a3a"/>
+      </svg>
+      <span>Olive</span>
+    </div>
+    <!-- Key of Return -->
+    <div class="hero-sym">
+      <svg width="44" height="60" viewBox="0 0 44 60" fill="none">
+        <!-- key bow (decorative top) -->
+        <circle cx="22" cy="16" r="13" stroke="#b8860b" stroke-width="3" fill="none"/>
+        <circle cx="22" cy="16" r="7" stroke="#b8860b" stroke-width="2" fill="none"/>
+        <circle cx="22" cy="16" r="3" fill="#b8860b"/>
+        <!-- key blade (stem) -->
+        <rect x="20" y="28" width="4" height="26" rx="2" fill="#b8860b"/>
+        <!-- key bits (teeth) -->
+        <rect x="24" y="40" width="8" height="3" rx="1.5" fill="#b8860b"/>
+        <rect x="24" y="47" width="6" height="3" rx="1.5" fill="#b8860b"/>
+        <rect x="24" y="34" width="5" height="2.5" rx="1" fill="#b8860b" opacity=".6"/>
+      </svg>
+      <span>مفتاح · Key</span>
+    </div>
+    <!-- Kufiyeh swatch -->
+    <div class="hero-sym">
+      <svg width="56" height="48" viewBox="0 0 56 48" fill="none">
+        <rect width="56" height="48" rx="6" fill="white"/>
+        <!-- fishnet grid -->
+        <path d="M0 8 L8 0 M0 16 L16 0 M0 24 L24 0 M0 32 L32 0 M0 40 L40 0 M0 48 L48 0 M8 48 L56 0 M16 48 L56 8 M24 48 L56 16 M32 48 L56 24 M40 48 L56 32 M48 48 L56 40" stroke="#1a1a18" stroke-width=".6" opacity=".2"/>
+        <path d="M56 8 L48 0 M56 16 L40 0 M56 24 L32 0 M56 32 L24 0 M56 40 L16 0 M56 48 L8 0 M48 48 L0 8 M40 48 L0 16 M32 48 L0 24 M24 48 L0 32 M16 48 L0 40 M8 48 L0 48" stroke="#1a1a18" stroke-width=".6" opacity=".2"/>
+        <!-- bold diamond stripe horizontal -->
+        <rect x="0" y="20" width="56" height="8" fill="#1a1a18" opacity=".12"/>
+        <!-- bold vertical stripes -->
+        <rect x="24" y="0" width="8" height="48" fill="#1a1a18" opacity=".1"/>
+        <!-- diamond centers -->
+        <rect x="10" y="10" width="8" height="8" fill="#CE1126" opacity=".35" transform="rotate(45 14 14)"/>
+        <rect x="34" y="10" width="8" height="8" fill="#CE1126" opacity=".35" transform="rotate(45 38 14)"/>
+        <rect x="10" y="30" width="8" height="8" fill="#007A3D" opacity=".35" transform="rotate(45 14 34)"/>
+        <rect x="34" y="30" width="8" height="8" fill="#007A3D" opacity=".35" transform="rotate(45 38 34)"/>
+        <rect x="22" y="20" width="8" height="8" fill="#CE1126" opacity=".25" transform="rotate(45 26 24)"/>
+        <rect width="56" height="48" rx="6" fill="none" stroke="#c9b99a" stroke-width="1.5"/>
+      </svg>
+      <span>كوفية · Kufiyeh</span>
+    </div>
+  </div>
+
+  <p class="hero-sub">Most people call what is happening in Palestine a <em style="color:rgba(245,237,224,.65);font-style:italic">conflict</em>. But a conflict implies two equal sides. What is unfolding is a century-long colonial project — traced here from Ottoman Palestine through the Nakba, the siege of Gaza, and into the Canadian diaspora.</p>
+  <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- kufiyeh divider -->
+<div class="kufiyeh-divider" style="background:var(--parchment)">
+  <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="kuf" x="0" y="0" width="24" height="36" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="24" y2="36" stroke="#1a1410" stroke-width="2" opacity=".12"/>
+        <line x1="24" y1="0" x2="0" y2="36" stroke="#1a1410" stroke-width="2" opacity=".12"/>
+        <line x1="12" y1="0" x2="12" y2="36" stroke="#1a1410" stroke-width=".8" opacity=".07"/>
+        <line x1="0" y1="18" x2="24" y2="18" stroke="#1a1410" stroke-width=".8" opacity=".07"/>
+        <rect x="9" y="15" width="6" height="6" fill="#CE1126" opacity=".25"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="36" fill="url(#kuf)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 01 SYMBOLS OF RESISTANCE ══════════════ -->
+<section id="symbols" class="sec-pad">
+  <div class="wrap reveal">
+    <div class="sec-label-en">01 — Symbols of Resistance</div>
+    <div class="sec-label-ar">رموز المقاومة</div>
+    <h2 class="sec-h">Objects That Refuse to Disappear</h2>
+    <p class="sec-p">The watermelon, the olive tree, the key, the kufiyeh — each one a refusal to be erased. When Israel bans a flag, Palestinians hold up a fruit. When trees are uprooted, they plant again.</p>
+  </div>
+  <div class="sym-grid reveal stagger">
+
+    <!-- Sumud -->
+    <div class="sym-card" style="border-top:3px solid #CE1126">
+      <div class="sym-icon">
+        <svg width="70" height="64" viewBox="0 0 70 64" fill="none">
+          <!-- stylized arabic ص shape suggestion + bold geometric -->
+          <circle cx="35" cy="32" r="28" stroke="#CE1126" stroke-width="2.5" fill="none" opacity=".15"/>
+          <text x="35" y="46" font-family="Amiri,serif" font-size="36" fill="#CE1126" text-anchor="middle" font-weight="700">صمود</text>
+        </svg>
+      </div>
+      <div class="sym-name">Sumud · صمود</div>
+      <div class="sym-name-ar">[ṣu-mūd]</div>
+      <div class="sym-desc">An Arabic word meaning steadfastness — the refusal to be uprooted even when everything is taken. Palestinians practice sumud. The olive tree is sumud made physical — it can live for a thousand years, and hundreds of thousands have been uprooted not because they pose a threat, but because their roots are proof that someone was there before.</div>
+    </div>
+
+    <!-- Watermelon -->
+    <div class="sym-card">
+      <div class="sym-icon">
+        <svg width="70" height="60" viewBox="0 0 70 60" fill="none">
+          <path d="M5 30 Q35 -2 65 30" fill="#007A3D"/>
+          <path d="M5 30 Q35 58 65 30" fill="#CE1126"/>
+          <path d="M8 30 Q35 55 62 30 Q35 58 8 30Z" fill="white" opacity=".85"/>
+          <ellipse cx="22" cy="40" rx="2.5" ry="3.5" fill="#1a1410" transform="rotate(-12 22 40)"/>
+          <ellipse cx="35" cy="46" rx="2.5" ry="3.5" fill="#1a1410"/>
+          <ellipse cx="48" cy="40" rx="2.5" ry="3.5" fill="#1a1410" transform="rotate(12 48 40)"/>
+          <ellipse cx="28" cy="44" rx="1.8" ry="2.5" fill="#1a1410" transform="rotate(-5 28 44)" opacity=".7"/>
+          <ellipse cx="42" cy="44" rx="1.8" ry="2.5" fill="#1a1410" transform="rotate(5 42 44)" opacity=".7"/>
+        </svg>
+      </div>
+      <div class="sym-name">Watermelon</div>
+      <div class="sym-name-ar">بطيخ</div>
+      <div class="sym-desc">When Israel banned the Palestinian flag in the occupied territories in the 1980s, Palestinians held up watermelons instead — red, green, black and white, the flag in fruit form. Even identity requires a workaround under total colonial control.</div>
+    </div>
+
+    <!-- Olive -->
+    <div class="sym-card">
+      <div class="sym-icon">
+        <svg width="70" height="62" viewBox="0 0 70 62" fill="none" style="animation:oliveSway 5s ease-in-out infinite">
+          <path d="M8 54C20 40 34 26 54 16" stroke="#5db87a" stroke-width="1.8" stroke-linecap="round"/>
+          <ellipse cx="22" cy="40" rx="10" ry="4" fill="#3a6b3a" transform="rotate(-30 22 40)" opacity=".9"/>
+          <ellipse cx="38" cy="28" rx="9.5" ry="3.8" fill="#3a6b3a" transform="rotate(-18 38 28)" opacity=".88"/>
+          <ellipse cx="50" cy="20" rx="8" ry="3.4" fill="#3a6b3a" transform="rotate(-8 50 20)" opacity=".82"/>
+          <circle cx="28" cy="36" r="3.5" fill="#5db87a"/>
+          <circle cx="43" cy="25" r="3.2" fill="#5db87a"/>
+          <circle cx="55" cy="18" r="2.5" fill="#4db870"/>
+        </svg>
+      </div>
+      <div class="sym-name">Olive Tree</div>
+      <div class="sym-name-ar">شجرة الزيتون</div>
+      <div class="sym-desc">Can live for a thousand years. Hundreds of thousands have been uprooted across occupied Palestine — not because they pose a threat but because their roots are proof that someone was there before. Destroying the olive tree is destroying the evidence of Palestinian existence. And yet Palestinians plant them again.</div>
+    </div>
+
+    <!-- Key -->
+    <div class="sym-card">
+      <div class="sym-icon">
+        <svg width="48" height="68" viewBox="0 0 48 68" fill="none">
+          <circle cx="24" cy="18" r="15" stroke="#a05020" stroke-width="3" fill="none"/>
+          <circle cx="24" cy="18" r="7" fill="#a05020" opacity=".35"/>
+          <circle cx="24" cy="18" r="3" fill="#a05020" opacity=".6"/>
+          <rect x="22" y="32" width="4" height="28" rx="2" fill="#a05020"/>
+          <rect x="26" y="45" width="9" height="3.5" rx="1.5" fill="#a05020"/>
+          <rect x="26" y="53" width="7" height="3.5" rx="1.5" fill="#a05020"/>
+        </svg>
+      </div>
+      <div class="sym-name">The Key of Return</div>
+      <div class="sym-name-ar">مفتاح العودة</div>
+      <div class="sym-desc">When Palestinians fled or were expelled in 1948, many locked their homes and kept the key — believing they would return in days. Seventy-five years later, these keys are passed between generations. The key is not just a symbol — it is a legal claim, a living memory, and a refusal to accept erasure.</div>
+    </div>
+
+    <!-- Kufiyeh -->
+    <div class="sym-card">
+      <div class="sym-icon">
+        <svg width="68" height="58" viewBox="0 0 68 58" fill="none">
+          <!-- kufiyeh cloth shape -->
+          <path d="M10 10 L34 4 L58 10 L58 44 Q34 58 10 44 Z" fill="white" stroke="#c9b99a" stroke-width="1"/>
+          <!-- pattern lines diagonal -->
+          <line x1="10" y1="10" x2="58" y2="44" stroke="#1a1410" stroke-width="1.5" opacity=".2"/>
+          <line x1="10" y1="22" x2="58" y2="32" stroke="#1a1410" stroke-width="1.5" opacity=".2"/>
+          <line x1="10" y1="34" x2="50" y2="20" stroke="#1a1410" stroke-width="1.5" opacity=".2"/>
+          <line x1="22" y1="10" x2="56" y2="30" stroke="#1a1410" stroke-width="1.5" opacity=".2"/>
+          <!-- cross squares -->
+          <rect x="20" y="18" width="7" height="7" fill="#1a1410" opacity=".15"/>
+          <rect x="34" y="24" width="7" height="7" fill="#1a1410" opacity=".15"/>
+          <rect x="46" y="16" width="6" height="6" fill="#1a1410" opacity=".12"/>
+          <!-- fringe at bottom -->
+          <line x1="14" y1="50" x2="14" y2="58" stroke="#c9b99a" stroke-width="1.5"/>
+          <line x1="20" y1="54" x2="20" y2="62" stroke="#c9b99a" stroke-width="1.5"/>
+          <line x1="26" y1="56" x2="26" y2="64" stroke="#c9b99a" stroke-width="1.5"/>
+          <line x1="32" y1="57" x2="32" y2="65" stroke="#c9b99a" stroke-width="1.5"/>
+          <line x1="38" y1="56" x2="38" y2="64" stroke="#c9b99a" stroke-width="1.5"/>
+          <line x1="44" y1="54" x2="44" y2="62" stroke="#c9b99a" stroke-width="1.5"/>
+          <line x1="50" y1="50" x2="50" y2="58" stroke="#c9b99a" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="sym-name">Kufiyeh</div>
+      <div class="sym-name-ar">كوفية</div>
+      <div class="sym-desc">A guidance counsellor in Ontario told a student their kuffiyeh reminded her of a terrorist. A Muslim MPP was repeatedly removed from the Ontario legislature just for wearing one. The kufiyeh — once just a scarf — is now treated as a security threat. Wearing it is still an act of identity and resistance.</div>
+    </div>
+  </div>
+</section>
+
+<!-- tatreez divider -->
+<div class="tatreez-row" style="background:var(--cream)">
+  <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
+    <defs>
+      <pattern id="tz1" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 36,14 30,24 24,14" fill="#CE1126" opacity=".75"/>
+        <rect x="6" y="12" width="8" height="4" fill="#007A3D" opacity=".6"/>
+        <rect x="8" y="10" width="4" height="8" fill="#007A3D" opacity=".6"/>
+        <rect x="46" y="12" width="8" height="4" fill="#007A3D" opacity=".6"/>
+        <rect x="48" y="10" width="4" height="8" fill="#007A3D" opacity=".6"/>
+        <circle cx="30" cy="1.5" r="1.5" fill="#a05020" opacity=".4"/>
+        <circle cx="30" cy="26.5" r="1.5" fill="#a05020" opacity=".4"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="28" fill="url(#tz1)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 02 CITIES ══════════════ -->
+<section id="cities" style="background:var(--cream);padding:6rem 2.4rem 0">
+  <div class="wrap reveal">
+    <div class="sec-label-en">02 — Historic Cities</div>
+    <div class="sec-label-ar">المدن التاريخية</div>
+    <h2 class="sec-h">A Land That Was Never Empty</h2>
+    <p class="sec-p">Palestinian dispossession began as gradual colonial decisions by empires that never consulted the people whose lives they were deciding. Click a city to read its history.</p>
+  </div>
+  <div class="cities-layout reveal">
+    <div class="city-list" id="city-list"></div>
+    <div class="map-box" id="cities-map-box">
+      <div class="map-hint">Click &amp; drag to explore</div>
+      <div id="cities-map"></div>
+    </div>
+  </div>
+  <div style="height:5rem"></div>
+</section>
+
+<!-- tatreez divider -->
+<div class="tatreez-row" style="background:var(--parchment)">
+  <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
+    <defs>
+      <pattern id="tz2" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 36,14 30,24 24,14" fill="#007A3D" opacity=".65"/>
+        <rect x="6" y="12" width="8" height="4" fill="#CE1126" opacity=".5"/>
+        <rect x="8" y="10" width="4" height="8" fill="#CE1126" opacity=".5"/>
+        <rect x="46" y="12" width="8" height="4" fill="#CE1126" opacity=".5"/>
+        <rect x="48" y="10" width="4" height="8" fill="#CE1126" opacity=".5"/>
+        <circle cx="30" cy="1.5" r="1.5" fill="#c9b99a" opacity=".5"/>
+        <circle cx="30" cy="26.5" r="1.5" fill="#c9b99a" opacity=".5"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="28" fill="url(#tz2)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 02.5 COLONIAL FOUNDATIONS ══════════════ -->
+<section id="colonial" style="background:var(--cream);padding:6rem 2.4rem">
+  <div class="wrap reveal">
+    <div class="sec-label-en">02.5 — How It Was Taken</div>
+    <div class="sec-label-ar">كيف استُولي عليها</div>
+    <h2 class="sec-h">Not a Conflict.<br>A Colonial Project.</h2>
+    <p class="sec-p">In order for something to be a "conflict," it would imply two parties struggling equally. What the media calls a conflict is instead a one-sided settler colonial takeover — built in stages, by empires that never consulted the people whose lives they were deciding.</p>
+  </div>
+
+  <div class="col-timeline reveal" style="max-width:1080px;margin:3rem auto 0">
+
+    <div class="col-step">
+      <div class="col-step-yr">1899</div>
+      <div class="col-step-content">
+        <h3 class="col-step-h">The First Warning</h3>
+        <p class="col-step-p">Yusuf Diya, the mayor of Jerusalem, wrote a letter to the founder of the Zionist movement — raising a clear Palestinian objection to plans for their land. Palestinians were aware of Zionism long before the world paid attention. Their warnings were ignored.</p>
+      </div>
+    </div>
+
+    <div class="col-step">
+      <div class="col-step-yr">1916</div>
+      <div class="col-step-content">
+        <h3 class="col-step-h">Sykes-Picot Agreement</h3>
+        <p class="col-step-p">As the Ottoman Empire collapsed after 400 years of rule over Palestine, Britain and France divided the Middle East into zones of influence — most of Palestine falling under direct British rule. The people of Palestine were not consulted. Their borders were drawn by two European powers who had never lived there.</p>
+      </div>
+    </div>
+
+    <div class="col-step">
+      <div class="col-step-yr">1917</div>
+      <div class="col-step-content">
+        <h3 class="col-step-h">The Balfour Declaration</h3>
+        <p class="col-step-p">Britain promised a homeland for the Zionist movement inside Palestine — a land it did not own, inhabited by people it did not ask. Balfour himself wrote in a confidential memo that "in Palestine we do not propose even to go through the form of consulting the wishes of the present inhabitants of the country." This was the beginning of denying Palestinians their identity.<span class="cite">Khalidi, 2017</span></p>
+        <div class="col-pull">
+          <span class="col-pull-mark">"</span>
+          We do not propose even to go through the form of consulting the wishes of the present inhabitants.
+          <span class="col-pull-attr">— Arthur Balfour, cited in Khalidi (2016)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-step">
+      <div class="col-step-yr">1947</div>
+      <div class="col-step-content">
+        <h3 class="col-step-h">The UN Partition Plan</h3>
+        <p class="col-step-p">Jewish land ownership in Palestine was only 11.8% — yet the UN partition plan gave a majority share to establish a Jewish state. Palestinians rejected it as illegitimate: you cannot partition land belonging to a people without their consent. The plan was never genuinely intended to fulfill Palestinian aspirations — it functioned to provide international legitimacy for what was already underway.<span class="cite">Salem, 2002</span></p>
+      </div>
+    </div>
+
+    <div class="col-step" style="--step-color:var(--red)">
+      <div class="col-step-yr" style="color:var(--red)">1948</div>
+      <div class="col-step-content">
+        <h3 class="col-step-h">Plan Dalet &amp; The Nakba</h3>
+        <p class="col-step-p">In February 1948, the Zionist movement launched Plan Dalet — a military strategy to capture land outside their allocated jurisdiction, including Jerusalem, Jaffa, and Acre. What followed was the Nakba: 700,000 Palestinians expelled or fled, ~500 villages destroyed, and a land that was 94% Arab transformed within months. Many left with only their house keys, believing they would return in days.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FULL-WIDTH PULL QUOTE — Khalidi -->
+<div style="background:var(--charcoal);padding:5rem 2.4rem;text-align:center" class="reveal">
+  <div style="max-width:800px;margin:0 auto">
+    <div style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(245,237,224,.3);margin-bottom:1.4rem;display:flex;align-items:center;justify-content:center;gap:.8rem"><span style="display:inline-block;width:24px;height:1px;background:rgba(245,237,224,.3)"></span>Khalidi, 2020<span style="display:inline-block;width:24px;height:1px;background:rgba(245,237,224,.3)"></span></div>
+    <p style="font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3.5vw,2.4rem);font-style:italic;color:var(--white);line-height:1.4;margin-bottom:1.2rem;font-weight:700">"What is taking place in Palestine is not a conflict between two equal peoples — it is a colonial war of conquest, involving the dispossession and displacement of a people from their homeland."</p>
+    <div style="font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,237,224,.3)">Rashid Khalidi · The Hundred Years' War on Palestine · 2020</div>
+  </div>
+</div>
+
+<!-- tatreez divider -->
+<div class="tatreez-row" style="background:var(--parchment)">
+  <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
+    <defs>
+      <pattern id="tz2b" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 36,14 30,24 24,14" fill="#007A3D" opacity=".65"/>
+        <rect x="6" y="12" width="8" height="4" fill="#CE1126" opacity=".5"/>
+        <rect x="8" y="10" width="4" height="8" fill="#CE1126" opacity=".5"/>
+        <rect x="46" y="12" width="8" height="4" fill="#CE1126" opacity=".5"/>
+        <rect x="48" y="10" width="4" height="8" fill="#CE1126" opacity=".5"/>
+        <circle cx="30" cy="1.5" r="1.5" fill="#c9b99a" opacity=".5"/>
+        <circle cx="30" cy="26.5" r="1.5" fill="#c9b99a" opacity=".5"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="28" fill="url(#tz2b)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 03 TIMELINE ══════════════ -->
+<section id="timeline" style="background:var(--parchment);padding:6rem 2.4rem 0">
+  <div class="wrap reveal">
+    <div class="sec-label-en">03 — Historical Timeline</div>
+    <div class="sec-label-ar">الجدول الزمني للتهجير</div>
+    <h2 class="sec-h">A Century of Erasure</h2>
+  </div>
+
+<!-- ── PALESTINE SHRINKING MAPS ── -->
+<div class="pal-shrink reveal">
+  <p class="shrink-subtitle">Each map shows the same land. Even though Jewish land ownership was only 11.8% in 1947, the UN partition gave a majority share to expand the Jewish state — without consulting the Palestinians whose land it was.</p>
+  <div class="shrink-maps">
+
+    <!-- ERA 1: PRE-1948 -->
+    <div class="shrink-card">
+      <div class="shrink-yr">Pre-1948</div>
+      <div class="shrink-era-lbl">British Mandate<br>Historic Palestine</div>
+      <svg class="shrink-svg" viewBox="0 0 100 230" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 49 5 L 83 2 L 89 14 C 90 24 87 32 81 38 C 75 44 70 46 71 55 L 73 68 C 74 83 75 98 73 112 L 71 132 C 67 150 62 170 53 190 L 46 228 L 35 190 C 27 170 21 150 16 132 L 12 112 C 10 96 10 82 12 68 L 16 50 C 22 34 33 20 45 10 C 47 8 48 6 49 5 Z"
+          fill="#007A3D" stroke="#005a2d" stroke-width="1.5" opacity=".9"/>
+        <!-- tiny star dot for Gaza location reference -->
+        <circle cx="6" cy="172" r="2" fill="white" opacity=".7"/>
+      </svg>
+      <div class="shrink-pct">100%</div>
+      <div class="shrink-km">~26,000 km²<br>Full historic Palestine</div>
+    </div>
+
+    <div class="shrink-arrow">→</div>
+
+    <!-- ERA 2: 1948 NAKBA -->
+    <div class="shrink-card">
+      <div class="shrink-yr">1948</div>
+      <div class="shrink-era-lbl">النكبة<br>The Nakba</div>
+      <svg class="shrink-svg" viewBox="0 0 100 230" xmlns="http://www.w3.org/2000/svg">
+        <!-- Full shape in muted (lost) -->
+        <path d="M 49 5 L 83 2 L 89 14 C 90 24 87 32 81 38 C 75 44 70 46 71 55 L 73 68 C 74 83 75 98 73 112 L 71 132 C 67 150 62 170 53 190 L 46 228 L 35 190 C 27 170 21 150 16 132 L 12 112 C 10 96 10 82 12 68 L 16 50 C 22 34 33 20 45 10 C 47 8 48 6 49 5 Z"
+          fill="#b8a898" stroke="#9a8878" stroke-width="1.2"/>
+        <!-- West Bank (Palestinians kept) -->
+        <path d="M 46 58 L 68 50 L 82 55 L 84 68 L 82 85 L 86 98 L 87 124 L 56 130 L 44 104 L 43 78 Z"
+          fill="#007A3D" stroke="#005a2d" stroke-width="1"/>
+        <!-- Gaza Strip -->
+        <path d="M 4 160 L 13 157 L 15 168 L 12 180 L 10 185 L 4 185 Z"
+          fill="#007A3D" stroke="#005a2d" stroke-width="1"/>
+      </svg>
+      <div class="shrink-pct red">~22%</div>
+      <div class="shrink-km">~5,700 km²<br>West Bank + Gaza Strip</div>
+    </div>
+
+    <div class="shrink-arrow">→</div>
+
+    <!-- ERA 3: 1967 OCCUPATION -->
+    <div class="shrink-card">
+      <div class="shrink-yr">1967</div>
+      <div class="shrink-era-lbl">الاحتلال<br>The Occupation</div>
+      <svg class="shrink-svg" viewBox="0 0 100 230" xmlns="http://www.w3.org/2000/svg">
+        <!-- Full shape in muted -->
+        <path d="M 49 5 L 83 2 L 89 14 C 90 24 87 32 81 38 C 75 44 70 46 71 55 L 73 68 C 74 83 75 98 73 112 L 71 132 C 67 150 62 170 53 190 L 46 228 L 35 190 C 27 170 21 150 16 132 L 12 112 C 10 96 10 82 12 68 L 16 50 C 22 34 33 20 45 10 C 47 8 48 6 49 5 Z"
+          fill="#8a7868" stroke="#7a6858" stroke-width="1.2"/>
+        <!-- West Bank — orange/red = occupied Palestinian territory -->
+        <path d="M 46 58 L 68 50 L 82 55 L 84 68 L 82 85 L 86 98 L 87 124 L 56 130 L 44 104 L 43 78 Z"
+          fill="#CE1126" stroke="#9a0010" stroke-width="1" opacity=".75"/>
+        <!-- Gaza Strip — also occupied, shown red -->
+        <path d="M 4 160 L 13 157 L 15 168 L 12 180 L 10 185 L 4 185 Z"
+          fill="#CE1126" stroke="#9a0010" stroke-width="1" opacity=".75"/>
+        <!-- hatching overlay on WB to show occupation -->
+        <path d="M 46 58 L 68 50 L 82 55 L 84 68 L 82 85 L 86 98 L 87 124 L 56 130 L 44 104 L 43 78 Z"
+          fill="url(#hatch67)" stroke="none"/>
+        <defs>
+          <pattern id="hatch67" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+          </pattern>
+        </defs>
+      </svg>
+      <div class="shrink-pct red">~10%</div>
+      <div class="shrink-km">WB + Gaza — militarily<br>occupied by Israel</div>
+    </div>
+
+    <div class="shrink-arrow">→</div>
+
+    <!-- ERA 4: 2026 -->
+    <div class="shrink-card" style="border-color:var(--red)">
+      <div class="shrink-yr" style="color:var(--red)">2026</div>
+      <div class="shrink-era-lbl">Today<br>Only Gaza Remains</div>
+      <svg class="shrink-svg" viewBox="0 0 100 230" xmlns="http://www.w3.org/2000/svg">
+        <!-- Full shape very dark -->
+        <path d="M 49 5 L 83 2 L 89 14 C 90 24 87 32 81 38 C 75 44 70 46 71 55 L 73 68 C 74 83 75 98 73 112 L 71 132 C 67 150 62 170 53 190 L 46 228 L 35 190 C 27 170 21 150 16 132 L 12 112 C 10 96 10 82 12 68 L 16 50 C 22 34 33 20 45 10 C 47 8 48 6 49 5 Z"
+          fill="#5a4e42" stroke="#3a2e22" stroke-width="1.2"/>
+        <!-- Gaza Strip only — bright to draw the eye -->
+        <path d="M 4 160 L 13 157 L 15 168 L 12 180 L 10 185 L 4 185 Z"
+          fill="#CE1126" stroke="#ff3344" stroke-width="1.5"/>
+        <!-- pulsing ring around Gaza -->
+        <circle cx="8" cy="172" r="7" fill="none" stroke="#CE1126" stroke-width="1" opacity=".5"/>
+      </svg>
+      <div class="shrink-pct red">~1.4%</div>
+      <div class="shrink-km">Gaza: 365 km²<br>Under siege since 2007</div>
+    </div>
+
+  </div>
+  <!-- loss callout bar -->
+  <div class="shrink-bar-row">
+    <div class="shrink-bar-label">Land accessible to Palestinians</div>
+    <div class="shrink-bar-track">
+      <div class="shrink-bar-fill" data-w="1.4%"></div>
+    </div>
+    <div class="shrink-bar-pct">1.4% remaining</div>
+  </div>
+</div>
+
+  <!-- INTUITIVE TAB BUTTONS instead of slider -->
+  <div class="tl-tabs reveal stagger" id="tl-tabs">
+    <button class="tl-tab active" data-idx="0" onclick="selectEra(0)">
+      <span class="tab-yr">1948</span>
+      <div class="tab-name">The Nakba</div>
+      <div class="tab-name-ar">النكبة</div>
+    </button>
+    <button class="tl-tab" data-idx="1" onclick="selectEra(1)">
+      <span class="tab-yr">1967</span>
+      <div class="tab-name">The Occupation</div>
+      <div class="tab-name-ar">الاحتلال</div>
+    </button>
+    <button class="tl-tab" data-idx="2" onclick="selectEra(2)">
+      <span class="tab-yr">2024</span>
+      <div class="tab-name">Present Day</div>
+      <div class="tab-name-ar">اليوم</div>
+    </button>
+  </div>
+
+  <div class="map-box reveal" id="tl-map-box" style="max-width:1080px;margin:1.2rem auto 0;width:calc(100% - 4.8rem)">
+    <div class="map-hint">Click a year tab above, then click markers</div>
+    <div id="tl-map"></div>
+  </div>
+  <div class="tl-info reveal" id="tl-info"></div>
+  <div style="height:5rem"></div>
+</section>
+
+<!-- tatreez divider -->
+<div class="tatreez-row" style="background:#0e2118">
+  <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
+    <defs>
+      <pattern id="tz3" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 36,14 30,24 24,14" fill="#CE1126" opacity=".75"/>
+        <rect x="6" y="12" width="8" height="4" fill="#5db87a" opacity=".55"/>
+        <rect x="8" y="10" width="4" height="8" fill="#5db87a" opacity=".55"/>
+        <rect x="46" y="12" width="8" height="4" fill="#5db87a" opacity=".55"/>
+        <rect x="48" y="10" width="4" height="8" fill="#5db87a" opacity=".55"/>
+        <circle cx="30" cy="1.5" r="1.5" fill="#f5ede0" opacity=".35"/>
+        <circle cx="30" cy="26.5" r="1.5" fill="#f5ede0" opacity=".35"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="28" fill="url(#tz3)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 04 INSIDE GAZA (no Leaflet) ══════════════ -->
+<section id="gaza">
+  <div class="wrap reveal">
+    <div class="sec-label-en">04 — Ground Reality</div>
+    <div class="sec-label-ar">غزة — الواقع</div>
+    <h2 class="sec-h">Inside Gaza:<br>The Topography of Endurance</h2>
+    <p class="sec-p">365 km². 2.3 million people. Gaza is not simply experiencing a humanitarian crisis — it is being deliberately dismantled from the inside.</p>
+  </div>
+
+  <div class="gaza-layout reveal">
+    <!-- Real Leaflet map — dark tiles, auto-zooms to Gaza on scroll -->
+    <div>
+      <div id="gz-map-real" style="height:420px;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.4)"></div>
+      <div style="font-size:.62rem;color:rgba(245,237,224,.32);text-align:center;margin-top:.6rem;letter-spacing:.08em;text-transform:uppercase">Click any marker · Auto-zooms on scroll</div>
+    </div>
+    <!-- stat cards stay same -->
+    <div class="gz-cards stagger">
+      <div class="gz-card">
+        <span class="gz-card-n">4 of 400</span>
+        <div class="gz-card-d">Aid distribution sites still operating — compared to 400 that once existed. Israeli forces accused of opening fire on civilians seeking aid.</div>
+      </div>
+      <div class="gz-card">
+        <span class="gz-card-n">50%</span>
+        <div class="gz-card-d">Of hospitals destroyed. 81% of roads and 92% of drinking water infrastructure demolished — making any form of economic function impossible.</div>
+      </div>
+      <div class="gz-card">
+        <span class="gz-card-n">2.3M</span>
+        <div class="gz-card-d">Palestinians trapped without adequate food, water, or hospitals — while Israeli planned mega-projects envision Gaza as a vacation destination for Israelis.</div>
+      </div>
+      <div class="gz-card">
+        <span class="gz-card-n">صمود</span>
+        <div class="gz-card-d">Steadfastness. The refusal to be uprooted. Palestinians in Gaza plant olive trees in the rubble. Existence itself becomes resistance.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- density comparison -->
+  <div class="density-bar-wrap reveal">
+    <div class="density-title">Population Density Comparison (people / km²)</div>
+    <div class="d-row">
+      <div class="d-label">Gaza Strip</div>
+      <div class="d-bar-bg"><div class="d-bar-fill" style="background:#CE1126;--w:100%;width:0" data-w="100%"></div></div>
+      <div class="d-val">~6,300 / km²</div>
+    </div>
+    <div class="d-row">
+      <div class="d-label">Jabalia Camp</div>
+      <div class="d-bar-bg"><div class="d-bar-fill" style="background:#e05060;--w:78%;width:0" data-w="78%"></div></div>
+      <div class="d-val">~115,000 / km²</div>
+    </div>
+    <div class="d-row">
+      <div class="d-label">Manhattan, NYC</div>
+      <div class="d-bar-bg"><div class="d-bar-fill" style="background:#5db87a;--w:28%;width:0" data-w="28%"></div></div>
+      <div class="d-val">~28,000 / km²</div>
+    </div>
+    <div class="d-row">
+      <div class="d-label">Toronto</div>
+      <div class="d-bar-bg"><div class="d-bar-fill" style="background:#4db870;--w:10%;width:0" data-w="10%"></div></div>
+      <div class="d-val">~4,500 / km²</div>
+    </div>
+    <div class="d-row">
+      <div class="d-label">London, UK</div>
+      <div class="d-bar-bg"><div class="d-bar-fill" style="background:#5c6b2e;--w:8%;width:0" data-w="8%"></div></div>
+      <div class="d-val">~5,700 / km²</div>
+    </div>
+  </div>
+</section>
+
+<!-- tatreez divider -->
+<div class="tatreez-row" style="background:var(--cream)">
+  <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
+    <defs>
+      <pattern id="tz4" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 36,14 30,24 24,14" fill="#007A3D" opacity=".55"/>
+        <rect x="6" y="12" width="8" height="4" fill="#6B1E1E" opacity=".45"/>
+        <rect x="8" y="10" width="4" height="8" fill="#6B1E1E" opacity=".45"/>
+        <rect x="46" y="12" width="8" height="4" fill="#6B1E1E" opacity=".45"/>
+        <rect x="48" y="10" width="4" height="8" fill="#6B1E1E" opacity=".45"/>
+        <circle cx="30" cy="1.5" r="1.5" fill="#5c6b2e" opacity=".45"/>
+        <circle cx="30" cy="26.5" r="1.5" fill="#5c6b2e" opacity=".45"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="28" fill="url(#tz4)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 05 DIASPORA ══════════════ -->
+<section id="diaspora" style="background:var(--cream);padding:6rem 2.4rem 0">
+  <div class="wrap reveal">
+    <div class="sec-label-en">05 — The Journey</div>
+    <div class="sec-label-ar">الشتات الفلسطيني</div>
+    <h2 class="sec-h">The Nakba Follows You Here</h2>
+  </div>
+  <div class="flight-layout reveal">
+    <div class="flight-story">
+      <p><b>Over 50,000 Palestinians call Canada home</b> — many carrying the Nakba not as distant history but as something their parents and grandparents lived through. Canada still does not officially recognize the Nakba as a historical event. The government only recognized Palestine as a state in 2025 — yet continues to send arms to Israel.</p>
+      <p>Canadians who speak out about Palestine are often labelled antisemitic. CBC journalists faced serious consequences simply for signing a letter supporting the Palestinian cause. At McGill in 2024, police used tear gas and brutal force against student protesters. One student put a Palestinian flag on their motorcycle — their own mother removed it, saying <em>"I want to see you come home safe."</em></p>
+      <button class="plane-btn" id="fly-btn" onclick="launchFlight()">
+        <span style="font-size:1.2rem">✈</span> Launch the flight
+      </button>
+    </div>
+    <div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Origin — Gaza</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Diaspora communities</div>
+      <div class="legend-item"><div class="legend-dash" style="background:var(--red)"></div>Flight path to Toronto</div>
+    </div>
+  </div>
+  <div class="map-box reveal" id="dias-map-box" style="max-width:1080px;margin:1.8rem auto 0;width:calc(100% - 4.8rem)">
+    <div class="map-hint">Click "Launch the flight" to watch the journey</div>
+    <div id="dias-map"></div>
+    <div class="flight-progress"><div class="flight-bar-fill" id="flight-bar"></div></div>
+    <div class="story-bubble" id="story-bubble">
+      <b>Somewhere over the Atlantic…</b><br>
+      A family carries a house key — to a home in Jaffa they have never been allowed to return to.
+    </div>
+  </div>
+  <div style="height:5rem"></div>
+</section>
+
+<!-- tatreez divider -->
+<div class="tatreez-row" style="background:var(--parchment)">
+  <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
+    <defs>
+      <pattern id="tz4b" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 36,14 30,24 24,14" fill="#CE1126" opacity=".6"/>
+        <rect x="6" y="12" width="8" height="4" fill="#007A3D" opacity=".5"/>
+        <rect x="8" y="10" width="4" height="8" fill="#007A3D" opacity=".5"/>
+        <rect x="46" y="12" width="8" height="4" fill="#007A3D" opacity=".5"/>
+        <rect x="48" y="10" width="4" height="8" fill="#007A3D" opacity=".5"/>
+        <circle cx="30" cy="1.5" r="1.5" fill="#c9b99a" opacity=".45"/>
+        <circle cx="30" cy="26.5" r="1.5" fill="#c9b99a" opacity=".45"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="28" fill="url(#tz4b)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 05.5 PALESTINIANS IN CANADA ══════════════ -->
+<section id="canada" style="background:var(--parchment);padding:6rem 2.4rem">
+  <div class="wrap reveal">
+    <div class="sec-label-en">05.5 — Here, Too</div>
+    <div class="sec-label-ar">هنا أيضاً</div>
+    <h2 class="sec-h">The Silence Canada Asks For</h2>
+    <p class="sec-p">Over 50,000 Palestinians live in Canada. They did not leave the Nakba behind — they carried it here. And in Canada, a different set of tools is used to enforce their silence.</p>
+  </div>
+
+  <div class="canada-grid reveal" style="max-width:1080px;margin:2.5rem auto 0;display:grid;grid-template-columns:1fr 1fr;gap:1.4rem">
+
+    <div class="can-card" style="background:var(--card);border-radius:14px;padding:2rem 1.8rem;border:1px solid var(--sand);border-top:3px solid var(--green)">
+      <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:.7rem">The Nakba Denial</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.7rem">Canada Does Not Recognize the Nakba</h3>
+      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">Canada still does not officially recognize the Nakba as a historical event. Some NDP members of parliament have acknowledged it, but the Canadian government's silence is itself a form of anti-Palestinian racism — it denies Palestinians their history, erases their heritage, and makes their suffering illegible.<span class="cite">CJPME, 2023</span> Canada only recognized Palestinian statehood in 2025 — while continuing to sell arms to Israel.<span class="cite">The Conversation, 2025</span></p>
+    </div>
+
+    <div class="can-card" style="background:var(--card);border-radius:14px;padding:2rem 1.8rem;border:1px solid var(--sand);border-top:3px solid var(--red)">
+      <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:.7rem">The Palestine Exception</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.7rem">Solidarity Becomes Extremism</h3>
+      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">Canadians who speak out about Palestine are routinely labelled antisemitic — and can lose their jobs or academic standing for doing so. CBC journalists faced serious institutional consequences simply for signing a letter in support of the Palestinian cause. The Palestine exception to free speech means that expressing solidarity with Palestinians is treated differently than any other form of political expression.</p>
+    </div>
+
+    <div class="can-card" style="background:var(--card);border-radius:14px;padding:2rem 1.8rem;border:1px solid var(--sand);border-top:3px solid var(--red)">
+      <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:.7rem">McGill 2024</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.7rem">Tear Gas on Campus</h3>
+      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">During a protest at McGill University in 2024, police used tear gas and brutal force against attendees — later kicking down tents, damaging belongings, and physically assaulting protesters. Students are at the forefront of this movement partly because of the deep financial ties between Canadian universities and Israel. Many protest knowing they risk their academic standing and future careers.</p>
+    </div>
+
+    <div class="can-card" style="background:var(--card);border-radius:14px;padding:2rem 1.8rem;border:1px solid var(--sand);border-top:3px solid var(--green)">
+      <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:.7rem">Ayyash, 2023</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.7rem">The Toxification of the Palestinian Other</h3>
+      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">Ayyash (2023)<span class="cite">Ayyash, 2023</span> describes how Palestinians and their allies are constructed as a dangerous presence — a process he calls the "toxification" of the Palestinian other. Social media platforms amplify this, justifying Israeli settler violence as self-defence while soldiers mock the destruction of Palestinian homes. Even wearing a kufiyeh or saying the word "Nakba" is reframed as a security risk, not an identity or a history. As Veracini (2022) argues, Islamophobia and settler colonialism are mutually reinforcing — the same logic that erases the Palestinian in Gaza erases them here in Canada.</p>
+    </div>
+
+  </div>
+
+  <!-- pull quote -->
+  <div class="reveal" style="max-width:1080px;margin:2.5rem auto 0;background:var(--charcoal);border-radius:14px;padding:2.5rem 3rem;display:flex;align-items:center;gap:2rem">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:3.5rem;color:var(--green);line-height:1;flex-shrink:0;opacity:.5">"</div>
+    <div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.6rem);font-style:italic;color:var(--white);line-height:1.5;margin-bottom:.7rem">The Nakba is a living wound passed down through generations. Non-Palestinians are also stripped of their ability to tell Palestinian stories.</p>
+      <div style="font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(253,248,242,.35)">Anti-Palestinian Racism in the Canadian Context</div>
+    </div>
+  </div>
+
+  <!-- Zine cite strip -->
+  <div class="reveal" style="max-width:1080px;margin:2.5rem auto 0;display:flex;align-items:center;gap:1.5rem;padding:1.4rem 2rem;background:var(--card);border-radius:12px;border:1px solid var(--sand);border-left:4px solid var(--red)">
+    <div style="font-size:2rem;opacity:.3;flex-shrink:0;font-family:'Playfair Display',serif">"</div>
+    <div>
+      <p style="font-size:.88rem;line-height:1.75;color:var(--black);font-style:italic;margin-bottom:.4rem">Anti-Palestinian racism needs to be included in Canada's Anti-Racism Strategy. Palestinian voices must not be the exception to anti-racism, but central to it.</p>
+      <div style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red)">The Conversation Canada, 2024 · CJPME, 2022</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- kufiyeh divider -->
+<div class="kufiyeh-divider" style="background:var(--parchment)">
+  <svg viewBox="0 0 1200 36" preserveAspectRatio="none">
+    <rect width="1200" height="36" fill="url(#kuf)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 06 ISLAMOPHOBIA FRAMEWORK ══════════════ -->
+<section id="zine-frame" style="background:var(--parchment);padding:5rem 0 0">
+  <div class="wrap reveal" style="padding-bottom:0">
+    <div class="sec-label-en">06 — Islamophobia &amp; Palestine</div>
+    <div class="sec-label-ar">إطار الإسلاموفوبيا</div>
+    <h2 class="sec-h">How Islamophobia Sustains Erasure</h2>
+    <p class="sec-p" style="max-width:600px">Islamophobia and anti-Palestinian racism are not the same thing — but they are not separate either. They are interlocking systems that together make Palestinian suffering unreadable and Palestinian resistance illegitimate.<span class="cite">Veracini, 2022</span><span class="cite">Zine, 2023</span></p>
+  </div>
+
+  <div class="split-frame reveal">
+    <!-- GREEN SIDE: Palestinian lived reality -->
+    <div class="split-side split-green reveal-left">
+      <div class="split-tag">Palestinian Lived Reality</div>
+      <h3 class="split-heading">What Is Being Erased</h3>
+      <ul class="split-list">
+        <li>A people with 4,000 years of continuous history in their land</li>
+        <li>The Nakba — 700,000 expelled, ~500 villages destroyed, still denied by Canada</li>
+        <li>The key of return: a legal claim passed between generations since 1948</li>
+        <li>Sumud — steadfastness as a way of life, not passive endurance</li>
+        <li>Olive trees uprooted because their roots are proof someone was there</li>
+        <li>The watermelon — identity survives even when the flag is banned</li>
+      </ul>
+      <p class="split-quote">"To exist is to resist."</p>
+    </div>
+    <!-- RED SIDE: How Islamophobia operates -->
+    <div class="split-side split-red reveal-right">
+      <div class="split-tag">How the Erasure Works</div>
+      <h3 class="split-heading">The Islamophobia Machine</h3>
+      <ul class="split-list">
+        <li>Palestinian identity treated as a security threat — flags, kufiyehs, even the word "Nakba"</li>
+        <li>CBC journalists silenced for signing a letter supporting Palestinian rights</li>
+        <li>McGill 2024: tear gas, tents destroyed, protesters physically assaulted</li>
+        <li>A student's mother removes a flag — "I want to see you come home safe"</li>
+        <li>Muslim MPPs removed from legislature for wearing a kufiyeh</li>
+        <li>Arms sales to Israel continue even after recognizing Palestinian statehood</li>
+      </ul>
+      <p class="split-quote">"Whose suffering is legible, and whose is erased?"</p>
+    </div>
+  </div>
+</section>
+
+<!-- tatreez divider -->
+<div class="tatreez-row" style="background:var(--cream)">
+  <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
+    <defs>
+      <pattern id="tz5" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 36,14 30,24 24,14" fill="#CE1126" opacity=".6"/>
+        <rect x="6" y="12" width="8" height="4" fill="#007A3D" opacity=".5"/>
+        <rect x="8" y="10" width="4" height="8" fill="#007A3D" opacity=".5"/>
+        <rect x="46" y="12" width="8" height="4" fill="#007A3D" opacity=".5"/>
+        <rect x="48" y="10" width="4" height="8" fill="#007A3D" opacity=".5"/>
+        <circle cx="30" cy="1.5" r="1.5" fill="#c9b99a" opacity=".45"/>
+        <circle cx="30" cy="26.5" r="1.5" fill="#c9b99a" opacity=".45"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="28" fill="url(#tz5)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 07 NARRATIVE TOGGLE ══════════════ -->
+<section id="narrative" style="background:var(--cream);padding:6rem 2.4rem 0">
+  <div class="wrap reveal">
+    <div class="sec-label-en">07 — Narrative Framing</div>
+    <div class="sec-label-ar">من يروي القصة؟</div>
+    <h2 class="sec-h">Who Tells the Story?</h2>
+  </div>
+  <div class="tog-row reveal">
+    <span class="tog-lbl">Human Stories</span>
+    <label class="tog"><input type="checkbox" id="nar-tog"/><span class="tog-track"></span></label>
+    <span class="tog-lbl">Media Framing</span>
+  </div>
+  <div class="nar-grid reveal">
+    <div class="nar-panel" id="p-human">
+      <div class="nar-tag">Lived Experience</div>
+      <h3>Voices of Palestinians</h3>
+      <ul>
+        <li>Displacement from ancestral land — the <em>nakba</em>: 700,000 expelled, 500 villages erased</li>
+        <li>Families keep the literal keys to homes they have never been allowed to return to</li>
+        <li>Cultural survival: olive trees, tatreez, watermelons, kufiyehs as acts of resistance</li>
+        <li>Sumud — steadfastness: planting olive trees in the rubble</li>
+        <li>"I want to see you come home safe" — Palestinian identity as a safety risk in Canada</li>
+      </ul>
+    </div>
+    <div class="nar-panel dim" id="p-media">
+      <div class="nar-tag">Western Media Frame</div>
+      <h3>Security, Conflict &amp; Islamophobia</h3>
+      <ul>
+        <li>"Conflict" implies two equal sides — this is a one-sided settler colonial project</li>
+        <li>Asymmetric language: Israeli "operations," Palestinian "attacks"</li>
+        <li>The Palestine exception: solidarity reframed as extremism or antisemitism</li>
+        <li>Institutions platform IDF soldiers while penalizing students who protest</li>
+        <li>Social media justifies settler violence as self-defence while soldiers mock destruction</li>
+      </ul>
+    </div>
+  </div>
+  <div style="height:5rem"></div>
+</section>
+
+<!-- tatreez divider -->
+<div class="tatreez-row" style="background:#0e2118">
+  <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
+    <defs>
+      <pattern id="tz6" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 36,14 30,24 24,14" fill="#5db87a" opacity=".6"/>
+        <rect x="6" y="12" width="8" height="4" fill="#CE1126" opacity=".45"/>
+        <rect x="8" y="10" width="4" height="8" fill="#CE1126" opacity=".45"/>
+        <rect x="46" y="12" width="8" height="4" fill="#CE1126" opacity=".45"/>
+        <rect x="48" y="10" width="4" height="8" fill="#CE1126" opacity=".45"/>
+        <circle cx="30" cy="1.5" r="1.5" fill="#f5ede0" opacity=".3"/>
+        <circle cx="30" cy="26.5" r="1.5" fill="#f5ede0" opacity=".3"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="28" fill="url(#tz6)"/>
+  </svg>
+</div>
+
+<!-- ══════════════ 08 RETURN ══════════════ -->
+<section id="return" style="background:#0e2118;padding:7rem 2.4rem;position:relative;overflow:hidden">
+  <!-- ghost Palestine watermark -->
+  <div style="position:absolute;right:-2rem;top:50%;transform:translateY(-50%);opacity:.04;pointer-events:none">
+    <img src="logo.svg" alt="" style="height:80%;max-height:500px;width:auto;filter:brightness(0) invert(1)">
+  </div>
+
+  <div class="wrap reveal" style="text-align:center;position:relative;z-index:1">
+    <div style="font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(93,184,122,.6);margin-bottom:1.2rem">08 — The Living Promise</div>
+    <div style="font-family:'Amiri',serif;font-size:clamp(2.5rem,8vw,6rem);color:#4eff85;direction:rtl;line-height:1;margin-bottom:.4rem;text-shadow:0 0 60px rgba(78,255,133,.2)">فلسطين ستعود</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2.5vw,1.5rem);letter-spacing:.2em;text-transform:uppercase;color:rgba(245,237,224,.3);margin-bottom:3.5rem">Palestine Will Return</div>
+  </div>
+
+  <div class="return-grid reveal" style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;position:relative;z-index:1">
+
+    <!-- THE OLIVE TREE -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:2.2rem 1.8rem;text-align:center">
+      <div style="font-size:2.8rem;margin-bottom:1rem">🫒</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#5db87a;margin-bottom:.5rem;font-weight:600">The Olive Tree</div>
+      <div style="font-family:'Amiri',serif;font-size:.95rem;color:rgba(245,237,224,.4);margin-bottom:.9rem;direction:rtl">شجرة الزيتون</div>
+      <p style="font-size:.82rem;line-height:1.85;color:rgba(245,237,224,.55)">An olive tree can live for a thousand years. Colonial powers can destroy houses, uproot trees, and redraw borders — but they cannot erase the roots that grew for a millennium. Palestinians plant new olive trees in the rubble. Every tree is a declaration: someone was here, and someone will be here again.</p>
+    </div>
+
+    <!-- THE KEY OF RETURN -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:2.2rem 1.8rem;text-align:center">
+      <div style="font-size:2.8rem;margin-bottom:1rem">🗝️</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#b8860b;margin-bottom:.5rem;font-weight:600">The Key of Return</div>
+      <div style="font-family:'Amiri',serif;font-size:.95rem;color:rgba(245,237,224,.4);margin-bottom:.9rem;direction:rtl">مفتاح العودة</div>
+      <p style="font-size:.82rem;line-height:1.85;color:rgba(245,237,224,.55)">Since 1948, Palestinian families have kept the literal keys to their homes — passing them to children and grandchildren who have never been allowed to return. The key is not nostalgia. It is a legal claim under international law, a living memory that refuses to expire. As long as the keys exist, the right of return exists.</p>
+    </div>
+
+    <!-- SPREADING AWARENESS -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:2.2rem 1.8rem;text-align:center">
+      <div style="font-size:2.8rem;margin-bottom:1rem">🍉</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#CE1126;margin-bottom:.5rem;font-weight:600">Awareness Is Resistance</div>
+      <div style="font-family:'Amiri',serif;font-size:.95rem;color:rgba(245,237,224,.4);margin-bottom:.9rem;direction:rtl">الوعي مقاومة</div>
+      <p style="font-size:.82rem;line-height:1.85;color:rgba(245,237,224,.55)">Every story told, every map shared, every kufiyeh worn and every watermelon held up is an act of keeping Palestinian identity alive. Anti-Palestinian racism and Islamophobia survive on silence. Spreading awareness — in classrooms, on campuses, through art and archives like this one — is how that silence is broken. As the CJPME (2022) argues, Palestinian voices must not be the exception to anti-racism, but central to it.</p>
+    </div>
+
+  </div>
+
+  <!-- Surah An-Nisa pull -->
+  <div class="reveal" style="max-width:700px;margin:3.5rem auto 0;text-align:center;position:relative;z-index:1">
+    <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-style:italic;color:rgba(245,237,224,.7);line-height:1.6;margin-bottom:.7rem">"And what is wrong with you that you do not fight in the cause of Allah and for the oppressed — men, women, and children who cry out: Our Lord, deliver us from this land whose people are oppressors."</p>
+    <div style="font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(253,248,242,.28)">— Surah An-Nisa 4:75 · The Quran</div>
+  </div>
+
+</section>
+
+<!-- ══════════════ 08 REFLECTION ══════════════ -->
+<section id="reflection">
+
+  <!-- corner olive tree -->
+  <svg class="olive-corner" width="320" height="320" viewBox="0 0 320 320" fill="none">
+    <path d="M20 300 C60 240 110 180 170 140 C220 105 275 110 310 80" stroke="#5db87a" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="80" cy="230" rx="28" ry="11" fill="#2a5a2a" transform="rotate(-32 80 230)" opacity=".7"/>
+    <ellipse cx="130" cy="185" rx="26" ry="10" fill="#2a5a2a" transform="rotate(-22 130 185)" opacity=".68"/>
+    <ellipse cx="180" cy="152" rx="24" ry="9.5" fill="#2a5a2a" transform="rotate(-12 180 152)" opacity=".64"/>
+    <ellipse cx="230" cy="124" rx="22" ry="9" fill="#2a5a2a" transform="rotate(-2 230 124)" opacity=".58"/>
+    <ellipse cx="275" cy="100" rx="20" ry="8" fill="#2a5a2a" transform="rotate(8 275 100)" opacity=".52"/>
+    <circle cx="105" cy="220" r="8" fill="#4db870" opacity=".8"/>
+    <circle cx="155" cy="175" r="7.5" fill="#4db870" opacity=".78"/>
+    <circle cx="205" cy="143" r="7" fill="#4db870" opacity=".72"/>
+    <circle cx="255" cy="114" r="6.5" fill="#4db870" opacity=".66"/>
+  </svg>
+
+  <div class="refl-arabic reveal">A Closing Reflection · خاتمة</div>
+  <div style="max-width:760px;position:relative;z-index:1" class="reveal">
+    <p class="refl-q">"And do not say about those who are killed in the way of Allah, 'They are dead.' Rather, they are <em>alive</em> — but you do not perceive it."</p>
+    <div style="font-size:.72rem;color:var(--muted);margin-bottom:1.8rem;font-style:italic;text-align:center">— Surah Al-Baqarah 2:154</div>
+    <div class="refl-div"></div>
+    <p class="refl-body">
+      <b>Palestinian dispossession did not begin in 1948 and it has not ended.</b> It started with colonial decisions made by empires that never consulted the people whose lives they were deciding — from Sykes-Picot to Balfour to the UN partition plan. It accelerated with the Nakba, concentrated in Gaza, and followed Palestinians into the diaspora.
+    </p>
+    <p class="refl-body">
+      The olive tree lives for a thousand years. Hundreds of thousands have been uprooted — not because they pose a threat but because their roots are proof that someone was there before. <b>Sumud is the refusal to be uprooted. The key of return is the refusal to forget. The watermelon is the refusal to be silent.</b>
+    </p>
+    <p class="refl-body">
+      The Palestinians killed in Jaffa in 1948, in Gaza today — they are alive in every key that was kept, every olive tree that was replanted, every watermelon held up in defiance, every student who wore a kufiyeh and refused to take it off. This project is built to make that visible.
+    </p>
+
+    <!-- Real Palestine flag SVG -->
+    <svg class="pal-flag-svg" width="180" height="90" viewBox="0 0 180 90" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Palestinian flag">
+      <rect width="180" height="30" fill="#000000"/>
+      <rect y="30" width="180" height="30" fill="#FFFFFF"/>
+      <rect y="60" width="180" height="30" fill="#007A3D"/>
+      <polygon points="0,0 60,45 0,90" fill="#CE1126"/>
+    </svg>
+
+    <a href="#hero" class="refl-return reveal">↑ &nbsp; Return to the Beginning</a>
+  </div>
+  <p class="sources reveal">
+    Ayyash (2023) · Veracini (2022) · Khalidi (2020, 2017, 2016) · Salem (2002) · CJPME (2022, 2023) · Zine — The Conversation (2023) · The Conversation Canada (2024, 2025) · Al Jazeera · CTV News (2024) · UNRWA · The Quran: Surah Al-Baqarah 2:154 &amp; Surah An-Nisa 4:75 · Full citations in accompanying paper · RE 339 · Dynamics of Islamophobia · Dr. Jasmin Zine · Wilfrid Laurier University
+  </p>
+</section>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script>
+/* ── REVEAL ── */
+const ro = new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); });
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── density bars animate on scroll ── */
+const barObs = new IntersectionObserver(es=>{
+  if(es[0].isIntersecting){
+    document.querySelectorAll('.d-bar-fill').forEach(b=>{
+      b.style.width = b.dataset.w;
+    });
+  }
+},{threshold:.3});
+const bw = document.querySelector('.density-bar-wrap');
+if(bw) barObs.observe(bw);
+
+/* ── MAP HELPERS ── */
+function lightTile(){return L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OSM © CARTO',maxZoom:19})}
+function voyagerTile(){return L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'© OSM © CARTO',maxZoom:19})}
+function oliveIcon(color='#007A3D'){
+  return L.divIcon({
+    html:`<div style="width:32px;height:32px"><svg viewBox="0 0 30 30" fill="none">
+      <path d="M4 24C9 16 15 10 22 7" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+      <ellipse cx="11" cy="17" rx="5.5" ry="2.4" fill="${color}" transform="rotate(-30 11 17)" opacity=".9"/>
+      <ellipse cx="18" cy="11" rx="5" ry="2.2" fill="${color}" transform="rotate(-16 18 11)"/>
+      <circle cx="13" cy="15.5" r="2.1" fill="#5db87a"/>
+      <circle cx="20" cy="10" r="1.9" fill="#5db87a"/>
+    </svg></div>`,
+    className:'',iconSize:[32,32],iconAnchor:[16,16]
+  });
+}
+function pulseIcon(color='#CE1126'){
+  return L.divIcon({
+    html:`<div style="width:13px;height:13px;border-radius:50%;background:${color};border:2.5px solid white;box-shadow:0 0 10px ${color}99;animation:pulse 2s infinite"></div>`,
+    className:'',iconSize:[13,13],iconAnchor:[6.5,6.5]
+  });
+}
+function popup(en, ar, body, badge){
+  return `<div class="pop-h">${en}</div>${ar?`<div class="pop-h-ar">${ar}</div>`:''}
+          <div class="pop-p">${body}</div>${badge?`<div class="pop-badge">${badge}</div>`:''}`;
+}
+document.querySelectorAll('.map-box').forEach(b=>{
+  ['mousedown','touchstart'].forEach(ev=>
+    b.addEventListener(ev,()=>b.classList.add('touched'),{once:true,passive:true}));
+});
+
+/* ══ CITIES MAP ══ */
+const CITIES=[
+  {name:'Jaffa',ar:'يافا',lat:32.054,lng:34.752,color:'#007A3D',
+   note:'Ancient port city — the "Bride of the Sea". Cultural and trade hub of Ottoman Palestine.',badge:'~120,000 Arab residents before 1948'},
+  {name:'Haifa',ar:'حيفا',lat:32.820,lng:34.990,color:'#CE1126',
+   note:'Cosmopolitan port city. Mixed Arab–Jewish neighbourhoods before the Nakba.',badge:'~70,000 displaced — most fled to Lebanon'},
+  {name:'Acre',ar:'عكا',lat:32.928,lng:35.070,color:'#5c6b2e',
+   note:'4,000-year-old walled port city. UNESCO World Heritage Site.',badge:'~13,500 Arab residents displaced'},
+  {name:'Jerusalem',ar:'القدس',lat:31.771,lng:35.217,color:'#a05020',
+   note:'Holy to three Abrahamic faiths. East Jerusalem occupied since 1967.',badge:'Ongoing displacement through settlement expansion'},
+  {name:'Gaza',ar:'غزة',lat:31.501,lng:34.466,color:'#1a1410',
+   note:'One of the oldest continuously inhabited cities on earth.',badge:'2.3M people · 365 km² · 70% refugees'},
+];
+const citiesMap=L.map('cities-map',{zoomControl:true,scrollWheelZoom:false,tap:true}).setView([32.1,34.9],8);
+lightTile().addTo(citiesMap);
+const cityMarkers=[];
+CITIES.forEach((c,i)=>{
+  const m=L.marker([c.lat,c.lng],{icon:oliveIcon(c.color)}).addTo(citiesMap)
+    .bindPopup(popup(c.name,c.ar,c.note,c.badge),{maxWidth:260});
+  m.on('click',()=>{document.querySelectorAll('.city-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.city-btn')[i].classList.add('active');});
+  cityMarkers.push(m);
+});
+const clEl=document.getElementById('city-list');
+CITIES.forEach((c,i)=>{
+  const btn=document.createElement('button');
+  btn.className='city-btn';
+  btn.innerHTML=`<div class="city-dot" style="background:${c.color}"></div>
+    <div><div class="city-name">${c.name} <span class="city-name-ar">${c.ar}</span></div>
+    <div class="city-sub">${c.badge.split('·')[0].trim()}</div></div>`;
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.city-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    citiesMap.flyTo([c.lat,c.lng],11,{animate:true,duration:.9});
+    setTimeout(()=>cityMarkers[i].openPopup(),920);
+  });
+  clEl.appendChild(btn);
+});
+new IntersectionObserver(es=>{if(es[0].isIntersecting)setTimeout(()=>citiesMap.invalidateSize(),200);},{threshold:.2}).observe(document.getElementById('cities'));
+
+/* ══ TIMELINE with TAB BUTTONS ══ */
+const TL=[
+  {year:1948,label:'The Nakba',ar:'النكبة',num:'700,000+',ctx:'531 villages depopulated',
+   note:'The Nakba — "catastrophe" — defined an entire generation and the Palestinian refugee crisis.',color:'#CE1126',
+   events:[
+     {lat:32.82,lng:34.99,label:'Haifa',note:'April–May 1948 — mass expulsion during siege.'},
+     {lat:32.054,lng:34.752,label:'Jaffa',note:'April–May 1948 — besieged; mass displacement begins.'},
+     {lat:32.928,lng:35.07,label:'Acre',note:'May 1948 — city falls; residents expelled northward.'},
+     {lat:31.5,lng:34.46,label:'Gaza Refugees',note:'Hundreds of thousands flee internally to Gaza.'},
+   ]},
+  {year:1967,label:'The Occupation',ar:'الاحتلال',num:'300,000+',ctx:'West Bank + Gaza occupied',
+   note:'Military occupation begins. Settlement construction, checkpoints, and dispossession continue to this day.',color:'#007A3D',
+   events:[
+     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'June 1967 — occupied and later unilaterally annexed.'},
+     {lat:31.5,lng:34.46,label:'Gaza Strip',note:'1967 — comes under Israeli military occupation.'},
+     {lat:32.1,lng:35.2,label:'West Bank',note:'1967 — occupied; settlement construction begins immediately.'},
+   ]},
+  {year:2024,label:'Present Day',ar:'اليوم',num:'5.9M',ctx:'Registered refugees globally (UNRWA)',
+   note:"The world's longest-standing refugee crisis. 75 years of displacement, still unresolved.",color:'#1a1410',
+   events:[
+     {lat:31.5,lng:34.46,label:'Gaza',note:'17th year of comprehensive blockade. Ongoing conflict.'},
+     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'Over 700,000 Israeli settlers in occupied territories.'},
+     {lat:33.85,lng:35.86,label:'Lebanon',note:'~270,000 Palestinian refugees registered with UNRWA.'},
+   ]},
+];
+const tlMap=L.map('tl-map',{zoomControl:true,scrollWheelZoom:false,tap:true}).setView([32.0,35.0],7);
+voyagerTile().addTo(tlMap);
+let tlLayers=[];
+function selectEra(i){
+  document.querySelectorAll('.tl-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  tlLayers.forEach(l=>tlMap.removeLayer(l)); tlLayers=[];
+  const d=TL[i];
+  d.events.forEach(ev=>{
+    const m=L.marker([ev.lat,ev.lng],{icon:pulseIcon(d.color)})
+      .bindPopup(popup(ev.label,'',ev.note),{maxWidth:230}).addTo(tlMap);
+    tlLayers.push(m);
+  });
+  document.getElementById('tl-info').innerHTML=`
+    <div class="tl-fact"><div class="tl-fact-n">${d.num}</div><div class="tl-fact-d">Displaced / refugees</div></div>
+    <div class="tl-fact"><div class="tl-fact-n" style="font-size:.95rem">${d.ctx}</div></div>
+    <div class="tl-fact"><div class="tl-fact-d" style="margin-top:.2rem">${d.note}</div></div>`;
+  document.getElementById('tl-map-box').classList.add('touched');
+}
+selectEra(0);
+new IntersectionObserver(es=>{if(es[0].isIntersecting)setTimeout(()=>tlMap.invalidateSize(),200);},{threshold:.2}).observe(document.getElementById('timeline'));
+
+/* ── GAZA REAL MAP (Leaflet, dark tiles, auto-zoom) ── */
+const gzRealMap = L.map('gz-map-real', {
+  zoomControl: false,
+  scrollWheelZoom: false,
+  tap: true,
+  dragging: true
+}).setView([31.5, 34.47], 10);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OSM © CARTO', maxZoom: 19
+}).addTo(gzRealMap);
+
+// Camp markers
+const gzCamps = [
+  { lat: 31.535, lng: 34.502, name: 'Gaza City', note: 'One of the oldest continuously inhabited cities · ~750,000 residents', type: 'city' },
+  { lat: 31.548, lng: 34.500, name: 'Jabalia Camp', note: 'N. Gaza · ~116,000 registered refugees · Established 1948', type: 'camp' },
+  { lat: 31.524, lng: 34.487, name: 'Beach (Shati) Camp', note: 'NW Gaza · ~87,000 residents · Among most densely populated on earth', type: 'camp' },
+  { lat: 31.454, lng: 34.457, name: 'Nuseirat Camp', note: 'Central Gaza · ~80,000 refugees · Established 1948 by UNRWA', type: 'camp' },
+  { lat: 31.443, lng: 34.462, name: 'Bureij Camp', note: 'Central Gaza · ~40,000 refugees · Established 1949', type: 'camp' },
+  { lat: 31.345, lng: 34.305, name: 'Khan Younis', note: '2nd largest city · ~450,000 residents', type: 'city' },
+  { lat: 31.296, lng: 34.265, name: 'Rafah', note: 'Southern border · Only crossing not controlled by Israel', type: 'city' },
+];
+
+gzCamps.forEach(c => {
+  const col = c.type === 'city' ? '#5db87a' : '#CE1126';
+  const sz = c.type === 'city' ? 12 : 8;
+  const icon = L.divIcon({
+    html: `<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${col};border:2px solid rgba(255,255,255,.5);box-shadow:0 0 8px ${col}88"></div>`,
+    className: '', iconSize: [sz, sz], iconAnchor: [sz/2, sz/2]
+  });
+  L.marker([c.lat, c.lng], { icon })
+    .bindPopup(`<div class="pop-h">${c.name}</div><div class="pop-p">${c.note}</div>`)
+    .addTo(gzRealMap);
+});
+
+// Auto-zoom when Gaza section enters viewport
+let gzRealFlown = false;
+new IntersectionObserver(es => {
+  if (es[0].isIntersecting) {
+    setTimeout(() => gzRealMap.invalidateSize(), 150);
+    if (!gzRealFlown) {
+      gzRealFlown = true;
+      setTimeout(() => gzRealMap.flyTo([31.43, 34.38], 12, { animate: true, duration: 2.5 }), 500);
+    }
+  }
+}, { threshold: 0.3 }).observe(document.getElementById('gaza'));
+
+/* ══ DIASPORA MAP ══ */
+const diasMap=L.map('dias-map',{zoomControl:true,scrollWheelZoom:false,tap:true,minZoom:1}).setView([38,15],2);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'© OSM © CARTO',maxZoom:10}).addTo(diasMap);
+function dotIcon(c,s=12){return L.divIcon({html:`<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};border:2.5px solid white;box-shadow:0 2px 10px ${c}88"></div>`,className:'',iconSize:[s,s],iconAnchor:[s/2,s/2]})}
+[{lat:31.5,lng:34.46,label:'Gaza, Palestine',badge:'Origin',c:'#007A3D',s:15},
+ {lat:33.85,lng:35.86,label:'Beirut, Lebanon',badge:'~270,000 registered',c:'#CE1126',s:10},
+ {lat:31.95,lng:35.93,label:'Amman, Jordan',badge:'~2.4M registered',c:'#CE1126',s:10},
+ {lat:43.65,lng:-79.38,label:'Toronto, Canada',badge:'~50,000 Palestinians',c:'#CE1126',s:10},
+ {lat:52.52,lng:13.40,label:'Berlin, Germany',badge:'Growing community',c:'#CE1126',s:10},
+ {lat:24.70,lng:46.70,label:'Riyadh, Saudi Arabia',badge:'~280,000',c:'#CE1126',s:10},
+].forEach(p=>{
+  L.marker([p.lat,p.lng],{icon:dotIcon(p.c,p.s)})
+   .bindPopup(popup(p.label,'','',p.badge),{maxWidth:200}).addTo(diasMap);
+});
+[[31.5,34.46],[33.85,35.86],[31.5,34.46],[31.95,35.93],
+ [31.5,34.46],[43.65,-79.38],[31.5,34.46],[52.52,13.40],[31.5,34.46],[24.70,46.70]
+].reduce((acc,p,i)=>{if(i%2)L.polyline([acc,p],{color:'#007A3D',weight:1.2,opacity:.2,dashArray:'4 7'}).addTo(diasMap);return p;});
+
+const FLIGHT=[
+  [31.50,34.46],[34.50,30.00],[38.50,23.00],[44.00,15.00],[48.50,5.50],
+  [51.50,-1.00],[54.00,-10.00],[56.00,-22.00],[53.00,-40.00],[48.00,-55.00],
+  [45.00,-65.00],[43.65,-79.38],
+];
+let planeMkr=null,flightDone=false;
+function lerp(a,b,t){return a+(b-a)*t}
+function bearing(a,b){return Math.atan2(b[1]-a[1],b[0]-a[0])*180/Math.PI}
+function planeIco(angle){return L.divIcon({html:`<div style="font-size:22px;line-height:1;transform:rotate(${angle}deg);filter:drop-shadow(0 2px 6px rgba(0,0,0,.38))">✈</div>`,className:'',iconSize:[26,26],iconAnchor:[13,13]})}
+function launchFlight(){
+  if(flightDone)return; flightDone=true;
+  const btn=document.getElementById('fly-btn');
+  btn.classList.add('flew'); btn.innerHTML='<span style="font-size:1.2rem">✈</span> In flight…'; btn.disabled=true;
+  document.getElementById('dias-map-box').classList.add('touched');
+  L.polyline(FLIGHT,{color:'#CE1126',weight:2,opacity:.6,dashArray:'7 5'}).addTo(diasMap);
+  diasMap.flyToBounds(L.latLngBounds(FLIGHT),{padding:[40,40],animate:true,duration:1.3});
+  planeMkr=L.marker(FLIGHT[0],{icon:planeIco(-35),zIndexOffset:2000}).addTo(diasMap);
+  const STEPS=600,MS=10000,SEGS=FLIGHT.length-1;
+  const barEl=document.getElementById('flight-bar');
+  const bubbleEl=document.getElementById('story-bubble');
+  let step=0;
+  const timer=setInterval(()=>{
+    step++;
+    if(step>STEPS){clearInterval(timer);btn.innerHTML='<span>🕊</span> Landed in Toronto';return;}
+    const prog=step/STEPS;
+    barEl.style.width=(prog*100)+'%';
+    if(prog>0.42&&prog<0.85) bubbleEl.classList.add('show');
+    else bubbleEl.classList.remove('show');
+    const sp=prog*SEGS,si=Math.min(Math.floor(sp),SEGS-1),st=sp-si;
+    const from=FLIGHT[si],to=FLIGHT[si+1];
+    planeMkr.setLatLng([lerp(from[0],to[0],st),lerp(from[1],to[1],st)]);
+    planeMkr.setIcon(planeIco(bearing(from,to)));
+  },MS/STEPS);
+}
+new IntersectionObserver(es=>{if(es[0].isIntersecting)setTimeout(()=>diasMap.invalidateSize(),200);},{threshold:.2}).observe(document.getElementById('diaspora'));
+
+/* ══ NARRATIVE TOGGLE ══ */
+document.getElementById('nar-tog').addEventListener('change',function(){
+  document.getElementById('p-human').classList.toggle('dim',this.checked);
+  document.getElementById('p-media').classList.toggle('dim',!this.checked);
+});
+
+/* ── shrink bar animate on scroll ── */
+const shrinkObs = new IntersectionObserver(es=>{
+  if(es[0].isIntersecting){
+    const fill = document.querySelector('.shrink-bar-fill');
+    if(fill) fill.style.width = fill.dataset.w;
+  }
+},{threshold:.3});
+const shrinkRow = document.querySelector('.shrink-bar-row');
+if(shrinkRow) shrinkObs.observe(shrinkRow);
+
+/* ══ RESIZE ══ */
+window.addEventListener('resize',()=>{
+  [citiesMap,tlMap,diasMap,gzRealMap].forEach(m=>setTimeout(()=>m.invalidateSize(),100));
+});
+
+/* ══════════════════════════════════════════
+   SCROLL PROGRESS BAR
+══════════════════════════════════════════ */
+const progressBar = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  if (progressBar) progressBar.style.width = Math.min(100, (scrolled / total) * 100) + '%';
+}, { passive: true });
+
+/* ══════════════════════════════════════════
+   ACTIVE NAV SECTION HIGHLIGHTING
+══════════════════════════════════════════ */
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+const sections = Array.from(navLinks)
+  .map(a => document.querySelector(a.getAttribute('href')))
+  .filter(Boolean);
+
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('nav-active'));
+      const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('nav-active');
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => navObs.observe(s));
+
+/* ══════════════════════════════════════════
+   ENHANCED INTERSECTION OBSERVER
+   (handles reveal-left, reveal-right, reveal-scale, stagger)
+══════════════════════════════════════════ */
+const enhancedObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('on');
+      enhancedObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal-left,.reveal-right,.reveal-scale,.stagger').forEach(el => {
+  enhancedObs.observe(el);
+});
+
+/* ══════════════════════════════════════════
+   WORD-BY-WORD REVEAL — skips Arabic elements
+══════════════════════════════════════════ */
+document.querySelectorAll('.word-reveal').forEach(el => {
+  // Skip Arabic — just animate the whole element
+  const isArabic = /[\u0600-\u06FF]/.test(el.textContent);
+  if (isArabic) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity .9s cubic-bezier(.16,1,.3,1) .2s, transform .9s cubic-bezier(.16,1,.3,1) .2s';
+    setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, 50);
+    return;
+  }
+  const text = el.textContent;
+  const words = text.split(/(\s+)/);
+  el.innerHTML = words.map(w =>
+    w.trim() ? `<span class="word">${w}</span>` : w
+  ).join('');
+  el.querySelectorAll('.word').forEach((w, i) => {
+    w.style.transitionDelay = (0.05 + i * 0.06) + 's';
+  });
+});
+
+/* ══════════════════════════════════════════
+   PARALLAX — lightweight background parallax
+══════════════════════════════════════════ */
+const parallaxEls = document.querySelectorAll('.parallax-bg');
+if (parallaxEls.length) {
+  window.addEventListener('scroll', () => {
+    const sy = window.scrollY;
+    parallaxEls.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      const speed = parseFloat(el.dataset.speed || '0.3');
+      const offset = (rect.top + sy) * speed;
+      el.style.transform = `translateY(${offset * 0.08}px)`;
+    });
+  }, { passive: true });
+}
+
+/* ══════════════════════════════════════════
+   STAGGER GRID CHILDREN — for canada-grid, return-grid
+══════════════════════════════════════════ */
+const gridObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const children = entry.target.querySelectorAll(':scope > *');
+      children.forEach((child, i) => {
+        child.style.opacity = '0';
+        child.style.transform = 'translateY(28px)';
+        child.style.transition = `opacity .7s cubic-bezier(.16,1,.3,1) ${i * 0.12}s, transform .7s cubic-bezier(.16,1,.3,1) ${i * 0.12}s`;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            child.style.opacity = '1';
+            child.style.transform = 'none';
+          });
+        });
+      });
+      gridObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+const canadaGrid = document.querySelector('.canada-grid');
+const returnGrid = document.querySelector('.return-grid');
+const tl_info = document.getElementById('tl-info');
+if (canadaGrid) gridObs.observe(canadaGrid);
+if (returnGrid) gridObs.observe(returnGrid);
+
+/* ══════════════════════════════════════════
+   SECTION CHAPTER NUMBER COUNTER
+   Adds a large ghost number behind each section
+══════════════════════════════════════════ */
+// no DOM changes needed — handled purely via CSS above
+
+/* ══ NAV SCROLL-SHRINK ══ */
+const navEl = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  if (navEl) navEl.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+/* ══════════════════════════════════════════
+   HERO PARALLAX DEPTH
+══════════════════════════════════════════ */
+const hero = document.getElementById('hero');
+if (hero) {
+  window.addEventListener('scroll', () => {
+    const sy = window.scrollY;
+    if (sy < window.innerHeight * 1.5) {
+      const arabic = hero.querySelector('.hero-arabic');
+      const sub = hero.querySelector('.hero-sub');
+      if (arabic) arabic.style.transform = `translateY(${sy * 0.18}px)`;
+      if (sub) sub.style.transform = `translateY(${sy * 0.08}px)`;
+    }
+  }, { passive: true });
+}
+</script>
+</body>
+</html>
