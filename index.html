@@ -1172,7 +1172,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   </div>
 </div>
 
-  <!-- INTUITIVE TAB BUTTONS instead of slider -->
+  <!-- TIMELINE TAB BUTTONS — 1948 to 2026 -->
   <div class="tl-tabs reveal stagger" id="tl-tabs">
     <button class="tl-tab active" data-idx="0" onclick="selectEra(0)">
       <span class="tab-yr">1948</span>
@@ -1185,8 +1185,28 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="tab-name-ar">الاحتلال</div>
     </button>
     <button class="tl-tab" data-idx="2" onclick="selectEra(2)">
-      <span class="tab-yr">2024</span>
-      <div class="tab-name">Present Day</div>
+      <span class="tab-yr">1987</span>
+      <div class="tab-name">First Intifada</div>
+      <div class="tab-name-ar">الانتفاضة الأولى</div>
+    </button>
+    <button class="tl-tab" data-idx="3" onclick="selectEra(3)">
+      <span class="tab-yr">1993</span>
+      <div class="tab-name">Oslo Accords</div>
+      <div class="tab-name-ar">اتفاقية أوسلو</div>
+    </button>
+    <button class="tl-tab" data-idx="4" onclick="selectEra(4)">
+      <span class="tab-yr">2007</span>
+      <div class="tab-name">Gaza Blockade</div>
+      <div class="tab-name-ar">حصار غزة</div>
+    </button>
+    <button class="tl-tab" data-idx="5" onclick="selectEra(5)">
+      <span class="tab-yr">2023</span>
+      <div class="tab-name">The War on Gaza</div>
+      <div class="tab-name-ar">الحرب على غزة</div>
+    </button>
+    <button class="tl-tab" data-idx="6" onclick="selectEra(6)" style="border-color:var(--red)">
+      <span class="tab-yr" style="color:var(--red)">2026</span>
+      <div class="tab-name">Today</div>
       <div class="tab-name-ar">اليوم</div>
     </button>
   </div>
@@ -1716,29 +1736,72 @@ CITIES.forEach((c,i)=>{
 });
 new IntersectionObserver(es=>{if(es[0].isIntersecting)setTimeout(()=>citiesMap.invalidateSize(),200);},{threshold:.2}).observe(document.getElementById('cities'));
 
-/* ══ TIMELINE with TAB BUTTONS ══ */
+/* ══ TIMELINE with TAB BUTTONS — 1948 to 2026 ══ */
 const TL=[
-  {year:1948,label:'The Nakba',ar:'النكبة',num:'700,000+',ctx:'531 villages depopulated',
-   note:'The Nakba, "catastrophe", defined an entire generation and the Palestinian refugee crisis.',color:'#CE1126',
+  {year:1948,label:'The Nakba',ar:'النكبة',num:'700,000+',ctx:'~531 villages depopulated',
+   note:'The Nakba — "catastrophe" in Arabic. In Jaffa alone, a city of 120,000 Palestinians was emptied within weeks. 700,000 expelled. Around 500 villages destroyed. Many left holding their house keys, thinking they\'d be back in days.',color:'#CE1126',
+   view:[32.1,34.9,8],
    events:[
-     {lat:32.82,lng:34.99,label:'Haifa',note:'April–May 1948: mass expulsion during siege.'},
-     {lat:32.054,lng:34.752,label:'Jaffa',note:'April–May 1948: besieged; mass displacement begins.'},
-     {lat:32.928,lng:35.07,label:'Acre',note:'May 1948: city falls; residents expelled northward.'},
-     {lat:31.5,lng:34.46,label:'Gaza Refugees',note:'Hundreds of thousands flee internally to Gaza.'},
+     {lat:32.054,lng:34.752,label:'Jaffa',note:'April–May 1948: ~120,000 Palestinian residents. City besieged and emptied within weeks. One of the biggest urban expulsions of the Nakba.'},
+     {lat:32.82,lng:34.99,label:'Haifa',note:'April–May 1948: mass expulsion during the siege. ~70,000 Palestinians displaced, most fled to Lebanon.'},
+     {lat:32.928,lng:35.07,label:'Acre',note:'May 1948: ancient walled city falls. ~13,500 Arab residents expelled northward.'},
+     {lat:31.5,lng:34.46,label:'Gaza',note:'Hundreds of thousands fled internally to Gaza, turning it into one of the most densely populated refugee zones on earth.'},
+     {lat:31.77,lng:35.21,label:'Jerusalem',note:'West Jerusalem falls in 1948. Palestinian neighbourhoods emptied. East Jerusalem comes under Jordanian control until 1967.'},
    ]},
-  {year:1967,label:'The Occupation',ar:'الاحتلال',num:'300,000+',ctx:'West Bank + Gaza occupied',
-   note:'Military occupation begins. Settlement construction, checkpoints, and dispossession continue to this day.',color:'#007A3D',
+  {year:1967,label:'The Occupation',ar:'الاحتلال',num:'300,000+',ctx:'West Bank + Gaza occupied in 6 days',
+   note:'Israel occupied the West Bank, Gaza Strip, East Jerusalem, Sinai, and the Golan Heights in six days. Military occupation begins. Settlement construction starts almost immediately and has never stopped.',color:'#007A3D',
+   view:[31.9,35.2,8],
    events:[
-     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'June 1967: occupied and later unilaterally annexed.'},
-     {lat:31.5,lng:34.46,label:'Gaza Strip',note:'1967: comes under Israeli military occupation.'},
-     {lat:32.1,lng:35.2,label:'West Bank',note:'1967: occupied; settlement construction begins immediately.'},
+     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'June 1967: occupied and later unilaterally annexed — a move not recognized under international law. Israeli settlement construction begins inside the city.'},
+     {lat:31.5,lng:34.46,label:'Gaza Strip',note:'1967: comes under Israeli military occupation after being under Egyptian administration. Gaza has been occupied or blockaded ever since.'},
+     {lat:32.1,lng:35.2,label:'West Bank',note:'1967: occupied. Settlement construction begins within months. Today over 700,000 Israeli settlers live in the West Bank.'},
+     {lat:31.9,lng:35.1,label:'Kalandia Checkpoint',note:'One of hundreds of checkpoints established across the West Bank. Palestinians need permits to travel between cities in their own land.'},
    ]},
-  {year:2024,label:'Present Day',ar:'اليوم',num:'5.9M',ctx:'Registered refugees globally (UNRWA)',
-   note:"The world's longest-standing refugee crisis. 75 years of displacement, still unresolved.",color:'#1a1410',
+  {year:1987,label:'First Intifada',ar:'الانتفاضة الأولى',num:'1,070+',ctx:'Palestinians killed in First Intifada (1987–1993)',
+   note:'The First Intifada was a mass uprising against Israeli military occupation. It started in Gaza and spread to the West Bank. Strikes, boycotts, stone-throwing, and civil disobedience. The world started paying attention.',color:'#a05020',
+   view:[31.9,35.0,8],
    events:[
-     {lat:31.5,lng:34.46,label:'Gaza',note:'17th year of comprehensive blockade. Ongoing conflict.'},
-     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'Over 700,000 Israeli settlers in occupied territories.'},
-     {lat:33.85,lng:35.86,label:'Lebanon',note:'~270,000 Palestinian refugees registered with UNRWA.'},
+     {lat:31.5,lng:34.46,label:'Jabalia Refugee Camp',note:'December 1987: the Intifada begins here after an Israeli truck kills four Palestinian workers. The camp erupts. The uprising spreads across Gaza and the West Bank within days.'},
+     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'Centre of civil protests and strikes. Palestinian shops closed in mass boycotts of Israeli goods throughout the Intifada.'},
+     {lat:31.9,lng:35.2,label:'Ramallah',note:'Major site of protests and Israeli crackdowns. Youth-led resistance organized throughout the West Bank.'},
+     {lat:32.2,lng:35.25,label:'Nablus',note:'A stronghold of the Intifada. Palestinian civil society organizes underground committees for education, health, and food during the uprising.'},
+   ]},
+  {year:1993,label:'Oslo Accords',ar:'اتفاقية أوسلو',num:'0',ctx:'Palestinian land actually returned',
+   note:'The Oslo Accords were supposed to be a peace deal. Instead, they created a Palestinian Authority with limited control over small patches of land, while Israel kept full control over borders, resources, and military. Settlement construction accelerated after Oslo.',color:'#5c6b2e',
+   view:[31.9,35.2,8],
+   events:[
+     {lat:31.5,lng:34.46,label:'Gaza — Area A',note:'Under Palestinian Authority control on paper. But Israel controls the borders, airspace, and sea access. The blockade makes "control" nearly meaningless.'},
+     {lat:31.9,lng:35.2,label:'West Bank — Area B',note:'Shared Palestinian–Israeli control. Palestinians handle civil affairs, Israel handles security. In practice, Israeli military can enter anytime.'},
+     {lat:32.3,lng:35.3,label:'West Bank — Area C',note:'60% of the West Bank. Full Israeli military and civil control. Palestinian construction here requires Israeli permits — almost never granted.'},
+     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'Oslo excluded East Jerusalem from negotiations. Israel continued settlement construction throughout the peace process period.'},
+   ]},
+  {year:2007,label:'Gaza Blockade',ar:'حصار غزة',num:'2.3M',ctx:'People under siege in Gaza',
+   note:'After Hamas won elections in 2006, Israel (and Egypt) imposed a comprehensive land, air, and sea blockade on Gaza in 2007. 2.3 million people have been living under this blockade ever since. Movement of people and goods tightly controlled. The UN called it "collective punishment."',color:'#CE1126',
+   view:[31.4,34.4,10],
+   events:[
+     {lat:31.5,lng:34.46,label:'Gaza City',note:'Largest city in Gaza. Under comprehensive blockade since 2007. Electricity limited to a few hours a day for years. Import of hundreds of goods banned or restricted.'},
+     {lat:31.345,lng:34.305,label:'Khan Younis',note:'Southern Gaza. One of the main cities affected by the blockade. Repeated Israeli military operations since 2008.'},
+     {lat:31.296,lng:34.265,label:'Rafah Crossing',note:'The only crossing not controlled by Israel, managed by Egypt. Frequently closed. The only escape route for most Gazans — and often locked shut.'},
+     {lat:31.524,lng:34.487,label:'Gaza Seaport',note:'Access blocked. Gaza fishermen restricted to a narrow maritime zone — sometimes just 3 nautical miles — enforced by the Israeli Navy.'},
+   ]},
+  {year:2023,label:'The War on Gaza',ar:'الحرب على غزة',num:'45,000+',ctx:'Palestinians killed since October 2023',
+   note:'October 7, 2023: Hamas launched an attack killing ~1,200 Israelis. Israel responded with one of the most intense bombardments in modern history. Over 45,000 Palestinians killed, more than half of them women and children. 90% of Gaza\'s population displaced.',color:'#CE1126',
+   view:[31.4,34.4,11],
+   events:[
+     {lat:31.535,lng:34.502,label:'Gaza City',note:'Heavily bombed since October 2023. Entire neighbourhoods levelled. Al-Shifa Hospital — the largest in Gaza — destroyed. Northern Gaza nearly uninhabitable.'},
+     {lat:31.548,lng:34.500,label:'Jabalia Camp',note:'Hit repeatedly by Israeli airstrikes, including direct strikes on the refugee camp itself. Thousands of civilians killed.'},
+     {lat:31.345,lng:34.305,label:'Khan Younis',note:'Site of major ground operations in late 2023 and 2024. Civilians ordered to evacuate — then bombed in the designated "safe zones."'},
+     {lat:31.296,lng:34.265,label:'Rafah',note:'1.5 million displaced Palestinians crammed into Rafah by early 2024. Israel launched a ground assault anyway. The UN and international courts called for a ceasefire.'},
+   ]},
+  {year:2026,label:'Today',ar:'اليوم',num:'5.9M+',ctx:'Palestinian refugees registered globally',
+   note:'Today. Over 75 years after the Nakba. Gaza is under siege, the West Bank under military occupation and expanding settlements, and Palestinians in the diaspora still fight to have their history recognized. This is where the story stands.',color:'#1a1410',
+   view:[31.5,34.8,8],
+   events:[
+     {lat:31.5,lng:34.46,label:'Gaza',note:'365 km². 2.3 million people. Only 4 of 400 aid distribution sites still operating. 50% of hospitals destroyed. Under comprehensive blockade since 2007, active military siege ongoing.'},
+     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'Over 700,000 Israeli settlers now live in occupied territories. Palestinian families continue to be evicted from their homes. Ongoing displacement through settlement expansion.'},
+     {lat:32.1,lng:35.2,label:'West Bank',note:'Settler violence against Palestinian communities increased dramatically since 2023. Area C remains under full Israeli military control. Palestinian movement restricted by hundreds of checkpoints.'},
+     {lat:43.65,lng:-79.38,label:'Toronto, Canada',note:'Over 50,000 Palestinians in Canada. Many carry the Nakba as a living memory passed down from parents and grandparents. Canada only recognized Palestine as a state in 2025 — while still selling arms to Israel.'},
+     {lat:33.85,lng:35.86,label:'Lebanon',note:'~270,000 Palestinian refugees registered with UNRWA. Many living in camps established in 1948. Still waiting for the right of return.'},
    ]},
 ];
 const tlMap=L.map('tl-map',{zoomControl:true,scrollWheelZoom:false,tap:true}).setView([32.0,35.0],7);
@@ -1748,15 +1811,16 @@ function selectEra(i){
   document.querySelectorAll('.tl-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
   tlLayers.forEach(l=>tlMap.removeLayer(l)); tlLayers=[];
   const d=TL[i];
+  if(d.view) tlMap.flyTo([d.view[0],d.view[1]],d.view[2],{animate:true,duration:.8});
   d.events.forEach(ev=>{
     const m=L.marker([ev.lat,ev.lng],{icon:pulseIcon(d.color)})
-      .bindPopup(popup(ev.label,'',ev.note),{maxWidth:230}).addTo(tlMap);
+      .bindPopup(popup(ev.label,'',ev.note),{maxWidth:260}).addTo(tlMap);
     tlLayers.push(m);
   });
   document.getElementById('tl-info').innerHTML=`
-    <div class="tl-fact"><div class="tl-fact-n">${d.num}</div><div class="tl-fact-d">Displaced / refugees</div></div>
-    <div class="tl-fact"><div class="tl-fact-n" style="font-size:.95rem">${d.ctx}</div></div>
-    <div class="tl-fact"><div class="tl-fact-d" style="margin-top:.2rem">${d.note}</div></div>`;
+    <div class="tl-fact"><div class="tl-fact-n">${d.num}</div><div class="tl-fact-d">${i===6?'Refugees registered globally':'Displaced / affected'}</div></div>
+    <div class="tl-fact"><div class="tl-fact-n" style="font-size:.9rem;line-height:1.3">${d.ctx}</div></div>
+    <div class="tl-fact" style="grid-column:1/-1"><div class="tl-fact-d" style="margin-top:.2rem;font-size:.8rem;line-height:1.65">${d.note}</div></div>`;
   document.getElementById('tl-map-box').classList.add('touched');
 }
 selectEra(0);
