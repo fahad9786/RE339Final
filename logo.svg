@@ -1,22 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95 240" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 300" fill="none">
+  <!-- Historic Palestine outline (Mandate borders) -->
   <path d="
-    M 52 6
-    L 86 2
-    L 92 16
-    C 93 26 90 34 84 40
-    C 78 46 72 48 73 58
-    L 76 72
-    C 77 86 78 102 76 116
-    L 74 136
-    C 70 155 64 175 55 196
-    L 48 240
-    L 38 196
-    C 28 175 22 155 17 136
-    L 12 115
-    C 10 100 10 86 12 72
-    L 16 52
-    C 22 36 34 22 46 12
-    C 49 8 51 6 52 6
+    M 42 8
+    C 38 10 34 14 30 20
+    C 26 28 22 36 20 46
+    C 18 56 16 68 15 78
+    C 14 88 12 100 11 112
+    C 10 124 9 136 10 148
+    C 11 160 12 170 14 180
+    C 16 190 18 198 20 206
+    C 22 214 24 220 26 226
+    C 28 232 32 240 38 250
+    C 42 258 48 268 55 280
+    L 58 290
+    L 60 286
+    C 62 280 64 274 66 268
+    C 70 258 74 248 76 238
+    C 78 228 80 218 82 208
+    C 83 200 84 192 85 184
+    C 86 176 86 168 86 160
+    L 86 148
+    C 86 140 86 132 88 124
+    C 90 116 92 108 94 100
+    L 96 90
+    C 98 82 100 74 100 66
+    C 100 58 98 52 96 48
+    C 92 40 88 36 82 32
+    C 78 28 72 26 66 22
+    C 60 16 54 12 48 10
+    C 46 9 44 8 42 8
     Z
-  " stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+  " stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Gaza location dot -->
+  <circle cx="14" cy="188" r="4" fill="currentColor" opacity=".4"/>
+  <!-- Jerusalem dot -->
+  <circle cx="82" cy="138" r="3" fill="currentColor" opacity=".3"/>
 </svg>
