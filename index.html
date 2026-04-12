@@ -695,6 +695,50 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   pointer-events:none;
 }
 @media(max-width:900px){#chapter-rail{display:none}}
+
+/* ══ FUN NARRATIVE ANIMATIONS ══ */
+@keyframes oliveDrop{
+  0%{transform:translateY(-60px) rotate(0deg);opacity:0}
+  60%{transform:translateY(5px) rotate(180deg);opacity:1}
+  80%{transform:translateY(-3px) rotate(200deg)}
+  100%{transform:translateY(0) rotate(190deg);opacity:1}
+}
+@keyframes keyTurn{
+  0%{transform:rotate(0deg)}
+  30%{transform:rotate(-25deg)}
+  60%{transform:rotate(15deg)}
+  100%{transform:rotate(0deg)}
+}
+@keyframes keyInsert{
+  0%{transform:translateX(30px);opacity:0}
+  50%{transform:translateX(0);opacity:1}
+  70%{transform:rotate(-15deg)}
+  100%{transform:rotate(0deg)}
+}
+@keyframes watermelonBounce{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  25%{transform:translateY(-12px) rotate(-5deg)}
+  50%{transform:translateY(0) rotate(0deg)}
+  75%{transform:translateY(-6px) rotate(3deg)}
+}
+@keyframes floatIn{
+  0%{opacity:0;transform:translateY(20px) scale(.9)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.olive-drop{animation:oliveDrop 1.2s cubic-bezier(.34,1.56,.64,1) forwards}
+.key-turn{animation:keyTurn 2s ease-in-out infinite}
+.key-insert{animation:keyInsert 1s ease forwards}
+.watermelon-bounce{animation:watermelonBounce 3s ease-in-out infinite}
+.float-in{animation:floatIn .8s ease forwards}
+
+/* Interactive hover hints */
+.interact-hint{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--green);opacity:.6;margin-top:.8rem;
+  animation:pulse 2s ease-in-out infinite;
+}
+.interact-hint::before{content:'👆'}
 </style>
 </head>
 <body>
@@ -735,12 +779,6 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 <section id="hero">
   <div class="hero-vol">RE 339 · Dynamics of Islamophobia · Wilfrid Laurier University</div>
   <div class="hero-arabic" id="hero-arabic">فلسطين</div>
-  <div class="hero-sumud">
-    <span class="sumud-ar">صمود</span>
-    <span class="sumud-divider">·</span>
-    <span class="sumud-en">Sumud</span>
-  </div>
-  <div class="hero-sumud-def">Steadfastness · Firmness · Perseverance</div>
   <div class="hero-en">A Century of Dispossession · Anti-Palestinian Racism &amp; Islamophobia</div>
 
   <div style="position:absolute;right:3rem;top:50%;transform:translateY(-50%);opacity:.04;pointer-events:none;z-index:0">
@@ -829,7 +867,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     </div>
   </div>
 
-  <p class="hero-sub">In 1948, Jaffa, a city of 120,000 Palestinians, was emptied in a week. That's like if the entire city of Cambridge, UK, just disappeared. 800,000 people displaced. 500 villages destroyed. Most people call it a conflict. It wasn't. This is a century-long colonial takeover.</p>
+  <p class="hero-sub">In 1948, Jaffa, a city of roughly 120,000 Palestinians, was emptied within a week. To put that in perspective, that's like if the entire city of Cambridge, UK, disappeared. This is what's known as the Nakba, which means catastrophe in Arabic. Most people call what's happening in Palestine a conflict. But a conflict implies two equal sides. What the media defines as a conflict is actually a one-sided settler colonial takeover.</p>
   <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
 </section>
 
@@ -849,7 +887,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
         <div style="font-size:.75rem;color:rgba(245,237,224,.35);line-height:1.7">One-sided dispossession. Built in stages by empires that never consulted the people they were displacing. This is what it actually is.</div>
       </div>
     </div>
-    <p class="reveal" style="font-size:.82rem;color:rgba(245,237,224,.4);max-width:480px;margin:0 auto;line-height:1.9">This site doesn't present both sides. It shows the side the western media leaves out. Because Palestinian dispossession is not a conflict. It's a century-long colonial project that started before 1948 and hasn't stopped.</p>
+    <p class="reveal" style="font-size:.82rem;color:rgba(245,237,224,.4);max-width:480px;margin:0 auto;line-height:1.9">This site doesn't present both sides. It shows the side the Western media leaves out. Palestinian dispossession is a century-long colonial takeover sustained through anti-Palestinian racism and Islamophobia, two interlocking systems that silence Palestinian identity, erase their history, and justify ongoing dispossession.</p>
   </div>
 </div>
 
@@ -875,7 +913,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="sec-label-en">01 · Symbols of Resistance</div>
     <div class="sec-label-ar">رموز المقاومة</div>
     <h2 class="sec-h">Objects That Refuse to Disappear</h2>
-    <p class="sec-p">The watermelon, the olive tree, the key, the kufiyeh. Each one is a refusal to be erased. When Israel banned the Palestinian flag, Palestinians held up a fruit instead. When trees were uprooted, they planted again. These aren't just symbols. They're acts of survival.</p>
+    <p class="sec-p">My design decisions are intentional. The key of return connects 1948 Palestinians being kicked out of their homes to today, where their grandchildren hold the same key. The kufiyeh and watermelon represent the Palestinian flag in places where the flag is banned. Every symbol here is an act of resistance against a system that spent a century trying to erase it.</p>
   </div>
   <div class="sym-grid reveal stagger">
 
@@ -890,13 +928,13 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       </div>
       <div class="sym-name">Sumud · صمود</div>
       <div class="sym-name-ar">[ṣu-mūd]</div>
-      <div class="sym-desc">An Arabic word meaning steadfastness. It's the refusal to be uprooted even when everything is taken. The olive tree is sumud made physical. It can live for a thousand years, and hundreds of thousands have been uprooted across Palestine not because they pose a threat, but because their roots are proof that someone was there before.</div>
+      <div class="sym-desc">Steadfastness. The refusal to be uprooted even when everything is taken. The olive tree is sumud made physical. It can live for a thousand years, and hundreds of thousands have been uprooted not because they're a threat, but because their roots are proof that someone was there before.</div>
     </div>
 
     <!-- Watermelon -->
     <div class="sym-card">
       <div class="sym-icon">
-        <svg width="70" height="60" viewBox="0 0 70 60" fill="none">
+        <svg class="watermelon-bounce" width="70" height="60" viewBox="0 0 70 60" fill="none">
           <path d="M5 30 Q35 -2 65 30" fill="#007A3D"/>
           <path d="M5 30 Q35 58 65 30" fill="#CE1126"/>
           <path d="M8 30 Q35 55 62 30 Q35 58 8 30Z" fill="white" opacity=".85"/>
@@ -933,7 +971,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <!-- Key -->
     <div class="sym-card">
       <div class="sym-icon">
-        <svg width="48" height="68" viewBox="0 0 48 68" fill="none">
+        <svg class="key-turn" width="48" height="68" viewBox="0 0 48 68" fill="none">
           <circle cx="24" cy="18" r="15" stroke="#a05020" stroke-width="3" fill="none"/>
           <circle cx="24" cy="18" r="7" fill="#a05020" opacity=".35"/>
           <circle cx="24" cy="18" r="3" fill="#a05020" opacity=".6"/>
@@ -1003,7 +1041,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="sec-label-en">02 · Historic Cities</div>
     <div class="sec-label-ar">المدن التاريخية</div>
     <h2 class="sec-h">A Land That Was Never Empty</h2>
-    <p class="sec-p">Palestine was never empty. Cities like Jaffa, Haifa, Jerusalem and Gaza had been home to Palestinians for thousands of years before colonial powers started deciding their future without asking anyone. Click a city to read what happened.</p>
+    <p class="sec-p">Many cities within modern-day Palestine such as Jaffa, Haifa, and Jerusalem were ruled by the Ottoman Empire, but the people there were never stripped of their land or identity. Palestinian dispossession didn't start with a takeover. It started as gradual change developed through colonial decisions from many different empires.</p>
   </div>
   <div class="cities-layout reveal">
     <div class="city-list" id="city-list"></div>
@@ -1039,7 +1077,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="sec-label-en">02.5 · How It Was Taken</div>
     <div class="sec-label-ar">كيف استُولي عليها</div>
     <h2 class="sec-h">Not a Conflict.<br>A Colonial Project.</h2>
-    <p class="sec-p">For something to be a "conflict," it would mean two parties struggling equally. What the media calls a conflict in Palestine is actually a one-sided settler colonial takeover. It was built in stages by empires that never once consulted the people whose lives they were deciding.</p>
+    <p class="sec-p">Most people call the oppression going on in Palestine a conflict. In order for it to be defined as a conflict, it would imply that two parties are struggling equally. However, when we read the term conflict in the context of Palestine, it's often misleading. What the media often defines as a conflict is instead a one-sided settler colonial takeover.</p>
   </div>
 
   <div class="col-timeline reveal" style="max-width:1080px;margin:3rem auto 0">
@@ -1048,7 +1086,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr">1899</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The First Warning</h3>
-        <p class="col-step-p">Jerusalem's mayor writes to the founder of the Zionist movement objecting to plans for Palestinian land. Palestinians saw this coming. Nobody listened.</p>
+        <p class="col-step-p">It started during the Ottoman Empire when Yusuf Diya, the mayor of Jerusalem, wrote a letter to the founder of the Zionist movement raising a Palestinian objection to its plans for Palestine. The letter the mayor wrote in 1899 is proof of the early concept of Zionism. Palestinians saw this coming long before the world paid attention.</p>
       </div>
     </div>
 
@@ -1056,7 +1094,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr">1916</div>
       <div class="col-step-content">
         <h3 class="col-step-h">Sykes-Picot Agreement</h3>
-        <p class="col-step-p">Britain and France secretly carve up the Middle East. Most of Palestine goes to Britain. Not a single Palestinian was asked.</p>
+        <p class="col-step-p">The Ottoman Empire was collapsing after 400 years of control over Palestine. It was up to Britain and France to decide what happened to the land. In 1916 they signed the Sykes-Picot agreement, splitting the Middle East into zones. Most of Palestine went to direct British rule. As with all imperialistic empires, the British didn't consult the people of Palestine before drawing up the borders.</p>
       </div>
     </div>
 
@@ -1064,7 +1102,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr">1917</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The Balfour Declaration</h3>
-        <p class="col-step-p">Britain promises a Jewish homeland inside Palestine, land it doesn't own. Balfour literally wrote they wouldn't bother "consulting the wishes of the present inhabitants."<span class="cite">Khalidi, 2017</span></p>
+        <p class="col-step-p">Although Britain did not own the land, it still issued the Balfour Declaration in 1917 promising a homeland for the Zionist movement. Balfour wrote "in Palestine we do not propose even to go through the form of consulting the wishes of the present inhabitants of the country." This was the start of denying Palestinians their identity. Zionists backed by the British military were able to slowly transform the 94% Arab majority Palestine into a Jewish state.</p>
         <div class="col-pull">
           <span class="col-pull-mark">"</span>
           We do not propose even to go through the form of consulting the wishes of the present inhabitants.
@@ -1077,7 +1115,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr">1947</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The UN Partition Plan</h3>
-        <p class="col-step-p">Jewish land ownership was 11.8%. The UN gave a majority share anyway. Palestinians rejected it: you can't split someone's land without asking them.<span class="cite">Salem, 2002</span></p>
+        <p class="col-step-p">After around 3 decades of unlimited immigration for European settlers, the UN came up with a partition plan to split the land. Even though Jewish land ownership was only 11.8%, the UN partition gave a majority share to expand the Jewish state. This expansion gave them leverage to take far more land in the coming years.</p>
       </div>
     </div>
 
@@ -1085,7 +1123,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr" style="color:var(--red)">1948</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The Nakba</h3>
-        <p class="col-step-p">700,000 Palestinians expelled or fled. ~500 villages destroyed. Jaffa, a city of 120,000, emptied in weeks, like if Cambridge, UK vanished overnight. Many left holding their house keys, thinking they'd be back in days.</p>
+        <p class="col-step-p">In February 1948, the Zionist movement planned to capture land outside their jurisdiction including Jerusalem, Jaffa, Acre, and others. What followed was the Nakba. Around 700,000 Palestinians were either kicked out or fled their homes. Many who left kept their key with them as a sign of returning. To put it in perspective, Jaffa, a city of 120,000 people, was emptied within a week. That's like if Cambridge, UK just vanished.</p>
       </div>
     </div>
 
@@ -1117,7 +1155,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr" style="color:var(--red)">2023</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The War on Gaza</h3>
-        <p class="col-step-p">Over 45,000 Palestinians killed. 90% of Gaza's population displaced. Only 4 of 400 aid sites still running. 50% of hospitals destroyed. Gaza is being economically and physically dismantled. Israeli-planned beach resorts for the same land are already being drawn up.<span class="cite">The Conversation, 2024</span></p>
+        <p class="col-step-p">Only four aid distribution sites operate in Gaza compared to the 400 that were once there. Israeli forces were accused of open firing on civilians seeking aid. Around 50% of hospitals, 81% of roads, and 92% of drinking water infrastructure have been destroyed. Gaza is going through not only a humanitarian crisis, it's also being economically destroyed from the inside. There are Israeli planned projects picturing Gaza as a vacation spot while all of Gaza is without food, water, and hospitals.</p>
       </div>
     </div>
 
@@ -1125,7 +1163,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr" style="color:var(--red)">2026</div>
       <div class="col-step-content">
         <h3 class="col-step-h">Today</h3>
-        <p class="col-step-p">Canada recognized Palestine as a state in 2025 and still sends arms to Israel. 92% of Gaza's drinking water infrastructure is destroyed. Palestinians worldwide are still fighting to have the Nakba acknowledged. The project didn't end. It just changed shape.<span class="cite">Zine, 2023</span></p>
+        <p class="col-step-p">Canada recognized Palestine as a state in 2025, yet still sends arms to Israel. By doing this, Canada is allowing a blockade on food supplies in Palestine. Even if they recognize the state, they are destroying it by sending arms. The same ideologies and supporters that are destroying Gaza are working hard to destroy the Palestinian identity in North America.</p>
       </div>
     </div>
 
@@ -1135,6 +1173,9 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   <div class="map-box reveal" id="colonial-map-box" style="max-width:1080px;margin:2.5rem auto 0;width:calc(100% - 4.8rem)">
     <div class="map-hint">Click markers · each one a decision made without Palestinians</div>
     <div id="colonial-map" style="height:400px"></div>
+  </div>
+  <div style="max-width:1080px;margin:.8rem auto 0">
+    <button id="col-tour-btn" onclick="startColTour()" style="background:var(--green);color:white;border:none;border-radius:8px;padding:.7rem 1.4rem;font-size:.74rem;letter-spacing:.06em;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;box-shadow:0 4px 16px rgba(0,122,61,.2)">🗺️ Take the Colonial History Tour</button>
   </div>
   <div style="height:1rem"></div>
 
@@ -1313,6 +1354,10 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="tab-name-ar">اليوم</div>
     </button>
   </div>
+  <div style="max-width:1080px;margin:.8rem auto 0;display:flex;gap:.8rem;flex-wrap:wrap">
+    <button id="tl-autoplay" onclick="toggleTlAuto()" style="background:var(--green);color:white;border:none;border-radius:8px;padding:.6rem 1.2rem;font-size:.72rem;letter-spacing:.08em;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s">▶ Auto-Play Timeline</button>
+    <button onclick="selectEra(0);stopTlAuto()" style="background:var(--card);border:1px solid var(--sand);border-radius:8px;padding:.6rem 1rem;font-size:.7rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--muted)">↺ Reset to 1948</button>
+  </div>
 
   <div class="map-box reveal" id="tl-map-box" style="max-width:1080px;margin:1.2rem auto 0;width:calc(100% - 4.8rem)">
     <div class="map-hint">Click a year tab above, then click markers</div>
@@ -1345,8 +1390,8 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   <div class="wrap reveal">
     <div class="sec-label-en">04 · Ground Reality</div>
     <div class="sec-label-ar">غزة · الواقع</div>
-    <h2 class="sec-h">Inside Gaza:<br>What's Actually Happening</h2>
-    <p class="sec-p">365 km². 2.3 million people. Gaza isn't just going through a humanitarian crisis. It's being deliberately destroyed from the inside.</p>
+    <h2 class="sec-h">Inside Gaza</h2>
+    <p class="sec-p">The area of Gaza is going through a horrific humanitarian crisis. Only four aid distribution sites operate compared to the 400 that were once there. Israeli forces were accused of open firing on civilians while they were seeking aid. Gaza is going through not only a humanitarian crisis, it's also being economically destroyed from the inside.</p>
   </div>
 
   <div class="gaza-layout reveal">
@@ -1359,15 +1404,15 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="gz-cards stagger">
       <div class="gz-card">
         <span class="gz-card-n">4 of 400</span>
-        <div class="gz-card-d">Aid distribution sites still operating compared to 400 that once existed. Israeli forces accused of opening fire on civilians who were just trying to get food.</div>
+        <div class="gz-card-d">Aid distribution sites still operating, compared to the 400 that were once there. Israeli forces accused of open firing on civilians while they were seeking aid.</div>
       </div>
       <div class="gz-card">
         <span class="gz-card-n">50%</span>
-        <div class="gz-card-d">Of hospitals destroyed. 81% of roads and 92% of drinking water infrastructure demolished. It's not just a crisis, it's making any kind of normal life impossible.</div>
+        <div class="gz-card-d">Of hospitals destroyed. 81% of roads and 92% of drinking water infrastructure have been destroyed.</div>
       </div>
       <div class="gz-card">
         <span class="gz-card-n">2.3M</span>
-        <div class="gz-card-d">Palestinians trapped without food, water, or hospitals. Meanwhile Israeli-planned mega projects picture Gaza as a vacation destination for Israelis.</div>
+        <div class="gz-card-d">Palestinians trapped inside Gaza. There are Israeli planned projects picturing it as a vacation spot for Israelis while all of Gaza is without food, water and hospitals.</div>
       </div>
       <div class="gz-card">
         <span class="gz-card-n">صمود</span>
@@ -1434,7 +1479,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   </div>
   <div class="flight-layout reveal">
     <div class="flight-story">
-      <p><b>Over 50,000 Palestinians call Canada home</b> and many of them carry the Nakba not as distant history but as something their parents and grandparents actually lived through. Canada still doesn't officially recognize the Nakba as a historical event. The government only recognized Palestine as a state in 2025, but still sends arms to Israel.</p><p>Canadians who speak out about Palestine are often labelled antisemitic. CBC journalists faced serious consequences just for signing a letter supporting the Palestinian cause. At McGill in 2024, police used tear gas and brutal force against student protesters. One student put a Palestinian flag on their motorcycle. Their own mother removed it, saying <em>"I want to see you come home safe."</em></p>
+      <p><b>Many of these Palestinians found their new homes in Canada.</b> However, Canada still does not recognize the Nakba as a significant world event. Some NDP members have recognized it and made several statements on it. The Canadian government's denial of the Nakba is seen as anti-Palestinian racism. It denies and silences Palestinian heritage and culture.</p><p>For a long time Canada couldn't even recognize Palestine as a state until 2025, yet Canada still sends arms to Israel. By doing this, Canada is allowing a blockade on food supplies in Palestine. Even if they recognize the state, they're destroying it by sending arms.</p>
       <button class="plane-btn" id="fly-btn" onclick="launchFlight()">
         <span style="font-size:1.2rem">✈</span> Launch the flight
       </button>
@@ -1482,7 +1527,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="sec-label-en">05.5 · Here, Too</div>
     <div class="sec-label-ar">هنا أيضاً</div>
     <h2 class="sec-h">The Silence Canada Asks For</h2>
-    <p class="sec-p">Over 50,000 Palestinians live in Canada. They didn't leave the Nakba behind when they arrived. They carried it here. And in Canada, a different set of tools is used to enforce their silence.</p>
+    <p class="sec-p">Even though many Palestinians in Canada don't face issues like limited access to hospitals, roads, and water, they still face anti-Palestinian racism as their history is being silenced by institutions, media, and society. The Nakba wasn't just something in the past for them. Many live with the stories from their parents and grandparents who migrated to Canada.</p>
   </div>
 
   <div class="canada-grid reveal" style="max-width:1080px;margin:2.5rem auto 0;display:grid;grid-template-columns:1fr 1fr;gap:1.4rem">
@@ -1490,34 +1535,27 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="can-card" style="background:var(--card);border-radius:14px;padding:2rem 1.8rem;border:1px solid var(--sand);border-top:3px solid var(--green)">
       <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:.7rem">The Nakba Denial</div>
       <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.7rem">Canada Does Not Recognize the Nakba</h3>
-      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">Canada still doesn't officially recognize the Nakba as a historical event. Some NDP members have acknowledged it, but the Canadian government's silence is itself a form of anti-Palestinian racism. It denies Palestinians their history, erases their heritage, and makes their suffering invisible.<span class="cite">CJPME, 2023</span> Canada only recognized Palestinian statehood in 2025, and still sends arms to Israel.<span class="cite">The Conversation, 2025</span></p>
+      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">Canada still doesn't officially recognize the Nakba as a historical event. Some NDP members have acknowledged it, but the Canadian government's silence is itself a form of anti-Palestinian racism. It denies Palestinians their history, erases their heritage, and makes their suffering invisible. Canada only recognized Palestinian statehood in 2025, and still sends arms to Israel.</p>
     </div>
 
     <div class="can-card" style="background:var(--card);border-radius:14px;padding:2rem 1.8rem;border:1px solid var(--sand);border-top:3px solid var(--red)">
       <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:.7rem">The Palestine Exception</div>
       <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.7rem">Solidarity Becomes Extremism</h3>
-      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">Canadians who speak out about Palestine are routinely labelled antisemitic and can lose their jobs or get kicked out of school for doing so. CBC journalists faced serious institutional consequences just for signing a letter supporting the Palestinian cause. Speaking up for Palestine is treated completely differently than any other form of political expression.</p>
+      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">Canadians who speak out about how Palestine is being wronged, whether at school or university, are often labelled as antisemitic and can be fired or kicked out of schools. Non-Palestinians are stripped away from telling Palestinian stories too, like CBC journalists who were in severe trouble when they decided to support the Palestinian cause.</p>
     </div>
 
     <div class="can-card" style="background:var(--card);border-radius:14px;padding:2rem 1.8rem;border:1px solid var(--sand);border-top:3px solid var(--red)">
       <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:.7rem">McGill 2024</div>
       <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.7rem">Tear Gas on Campus</h3>
-      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">During a protest at McGill University in 2024, police used tear gas and brutal force against attendees. They later kicked down tents, damaged belongings, and physically assaulted protesters. Students are at the front of this movement partly because of the deep financial ties between Canadian universities and Israel. Many protest knowing they risk their academic standing and future careers.</p>
+      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">During a protest at McGill in 2024, police forces were shown using brutal force and tear gas against attendees when one person broke a window. Later on, police were kicking down people's tents, damaging belongings, and bashing protestors. One of the main reasons students are at the forefront of protesting is due to the connection of these institutions to Zionism as a whole.</p>
     </div>
 
     <div class="can-card" style="background:var(--card);border-radius:14px;padding:2rem 1.8rem;border:1px solid var(--sand);border-top:3px solid var(--green)">
-      <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:.7rem">Ayyash, 2023</div>
+      <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:.7rem">Ayyash, 2022</div>
       <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:.7rem">The Toxification of the Palestinian Other</h3>
-      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">Ayyash (2023)<span class="cite">Ayyash, 2023</span> describes how Palestinians and their allies are constructed as a dangerous presence, something he calls the "toxification" of the Palestinian other. Social media amplifies this by justifying Israeli settler violence as self-defense while soldiers mock the destruction of Palestinian homes. Even wearing a kufiyeh or saying the word "Nakba" gets reframed as a security risk. As Veracini (2022) argues, Islamophobia and settler colonialism work together. The same logic that erases Palestinians in Gaza erases them here in Canada too.</p>
+      <p style="font-size:.83rem;line-height:1.85;color:var(--muted)">Ayyash (2022) describes how Palestinians and their allies are constructed as a dangerous presence, something he calls the "toxification" of the Palestinian other. Social media amplifies this by justifying Israeli settler violence as self-defense while soldiers mock the destruction of Palestinian homes. Even wearing a kufiyeh or saying the word "Nakba" gets reframed as a security risk. Islamophobia and settler colonialism work together. The same logic that erases Palestinians in Gaza erases them here in Canada too.</p>
     </div>
 
-  </div>
-
-  <!-- motorcycle personal story -->
-  <div class="reveal" style="max-width:1080px;margin:2rem auto;padding:1.6rem 2rem;background:var(--cream);border-radius:12px;border-left:4px solid var(--green);border:1px solid var(--sand);border-left-width:4px">
-    <div style="font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:.6rem">A Personal Story</div>
-    <p style="font-size:.88rem;line-height:1.85;color:var(--charcoal);font-style:italic;margin-bottom:.5rem">"I put a Palestinian flag on my motorcycle. The next day it was gone. I assumed someone at university had taken it, maybe someone who supported having IDF soldiers speak on campus. But it was my mother. She said: <b style="font-style:normal">'I want to see you come home safe.'</b> She meant that driving with a Palestinian flag in Canada could get me hurt."</p>
-    <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Personal experience · RE 339 · 2026</div>
   </div>
 
   <!-- pull quote -->
@@ -1534,7 +1572,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div style="font-size:2rem;opacity:.3;flex-shrink:0;font-family:'Playfair Display',serif">"</div>
     <div>
       <p style="font-size:.88rem;line-height:1.75;color:var(--black);font-style:italic;margin-bottom:.4rem">Anti-Palestinian racism needs to be included in Canada's Anti-Racism Strategy. Palestinian voices must not be the exception to anti-racism, but central to it.</p>
-      <div style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red)">The Conversation Canada, 2024 · CJPME, 2022</div>
+      <div style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red)">Zine, 2024 · CJPME, 2022</div>
     </div>
   </div>
 
@@ -1553,7 +1591,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="sec-label-en">06 · Islamophobia &amp; Palestine</div>
     <div class="sec-label-ar">إطار الإسلاموفوبيا</div>
     <h2 class="sec-h">How Islamophobia Makes Erasure Possible</h2>
-    <p class="sec-p" style="max-width:600px">Islamophobia and anti-Palestinian racism aren't the same thing, but they work together. Prof. Zine argues Palestinians face anti-Palestinian racism on top of the racism they face for being Muslim. Together, these systems make Palestinian suffering invisible and Palestinian resistance illegitimate. There are three dimensions to how this plays out.<span class="cite">Zine, 2024</span><span class="cite">Veracini, 2022</span></p>
+    <p class="sec-p" style="max-width:600px">Islamophobia and anti-Palestinian racism aren't the same thing, but they work together. Prof. Zine argues Palestinians face anti-Palestinian racism on top of the racism they face for being Muslim. Together, these systems make Palestinian suffering invisible and Palestinian resistance illegitimate. There are three dimensions to how this plays out.</p>
   </div>
 
   <!-- 3 Dimensions interactive -->
@@ -1689,7 +1727,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div style="font-size:2.8rem;margin-bottom:1rem">🍉</div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#CE1126;margin-bottom:.5rem;font-weight:600">Awareness Is Resistance</div>
       <div style="font-family:'Amiri',serif;font-size:.95rem;color:rgba(245,237,224,.4);margin-bottom:.9rem;direction:rtl">الوعي مقاومة</div>
-      <p style="font-size:.82rem;line-height:1.85;color:rgba(245,237,224,.55)">Every story told, every map shared, every kufiyeh worn and every watermelon held up keeps Palestinian identity alive. Anti-Palestinian racism and Islamophobia survive on silence. Spreading awareness in classrooms, on campuses, through art and archives like this one is how that silence gets broken. As the CJPME (2022) argues, Palestinian voices must be central to anti-racism, not the exception to it.</p>
+      <p style="font-size:.82rem;line-height:1.85;color:rgba(245,237,224,.55)">Palestinian dispossession didn't begin in 1948, and it has not ended. From the Ottomans into Sykes-Picot, then Nakba, then Gaza and into the streets of Canada. Palestinian voices must not be the exception to anti-racism. They need to be at the forefront of it.</p>
     </div>
 
   </div>
@@ -1698,6 +1736,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   <div class="reveal" style="max-width:700px;margin:3.5rem auto 0;text-align:center;position:relative;z-index:1">
     <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-style:italic;color:rgba(245,237,224,.7);line-height:1.6;margin-bottom:.7rem">"And what is wrong with you that you do not fight in the cause of Allah and for the oppressed, men, women, and children who cry out: Our Lord, deliver us from this land whose people are oppressors."</p>
     <div style="font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(253,248,242,.28)">Surah An-Nisa 4:75 · The Quran</div>
+    <div style="font-size:.78rem;color:rgba(245,237,224,.45);margin-top:1rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.85;text-align:center">This is a call to stand with the oppressed. Palestinians are not asking for war. They are asking for their basic human rights, their land, their identity. Standing up for Palestine is standing up for justice.</div>
   </div>
 
 </section>
@@ -1708,7 +1747,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="reveal" style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(245,237,224,.3);margin-bottom:1.2rem;display:flex;align-items:center;gap:.8rem"><span style="display:inline-block;width:24px;height:1px;background:rgba(245,237,224,.3)"></span>About This Site</div>
     <p class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.8vw,1.8rem);color:var(--white);line-height:1.5;margin-bottom:1.8rem;font-style:italic">"This site was built alongside my RE 339 paper to restore the Palestinian narrative, while Zionism spent a century trying to erase it."</p>
     <div class="reveal" style="font-size:.84rem;color:rgba(245,237,224,.55);line-height:1.9;margin-bottom:1rem">It takes you through the full history of Palestine, from the Ottoman Empire to the Nakba to Gaza, then to the Canadian diaspora. It uses maps, timelines, symbols and animations to tell the story. It doesn't present this as a conflict from both sides. It shows it as a one-sided invasion.</div>
-    <div class="reveal" style="font-size:.84rem;color:rgba(245,237,224,.55);line-height:1.9;margin-bottom:1rem">Every design decision is intentional. The key of return connects 1948 Palestinians being expelled from their homes to today, where their grandchildren still hold that same key. The kuffiyeh and watermelon represent the Palestinian flag in places where the flag itself is banned.</div>
+    <div class="reveal" style="font-size:.84rem;color:rgba(245,237,224,.55);line-height:1.9;margin-bottom:1rem">My design decisions are intentional. The key of return connects 1948 Palestinians being kicked out of their homes to modern day, where they hold the same key in hopes of one day going back. I also use the kuffiyeh and watermelon, which represent the Palestinian flag in places where the flag is banned. This website is meant to spark public awareness by giving people information on the parts that the Western media leaves out.</div>
     <div class="reveal" style="font-size:.84rem;color:rgba(245,237,224,.55);line-height:1.9">This site is meant to spark public awareness and dialogue, to show the parts the Western media leaves out. Palestinian voices must not be the exception to anti-racism. They need to be at the forefront of it.</div>
     <div class="reveal" style="margin-top:1.8rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,237,224,.22)">RE 339 · Dynamics of Islamophobia · Dr. Jasmin Zine · Wilfrid Laurier University · 2026</div>
   </div>
@@ -1735,6 +1774,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   <div style="max-width:760px;position:relative;z-index:1" class="reveal">
     <p class="refl-q">"And do not say about those who are killed in the way of Allah, 'They are dead.' Rather, they are <em>alive</em>, but you do not perceive it."</p>
     <div style="font-size:.72rem;color:var(--muted);margin-bottom:1.8rem;font-style:italic;text-align:center">Surah Al-Baqarah 2:154</div>
+    <div style="font-size:.78rem;color:var(--muted);margin-top:1rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.85;font-style:italic;text-align:center">This verse speaks directly to the Palestinians who have lost their lives to a genocide that has continued for over a century. They are not gone. They live on through every olive tree replanted, every key passed down, every name remembered.</div>
     <div class="refl-div"></div>
     <p class="refl-body">
       <b>Palestinian dispossession didn't begin in 1948 and it hasn't ended.</b> It started with colonial decisions made by empires that never consulted the people whose lives they were deciding. From Sykes-Picot to Balfour to the UN partition plan. It accelerated with the Nakba, concentrated in Gaza, and followed Palestinians into the diaspora.
@@ -1757,8 +1797,11 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <a href="#hero" class="refl-return reveal">↑ &nbsp; Return to the Beginning</a>
   </div>
   <p class="sources reveal">
-    Ayyash (2023) · Veracini (2022) · Khalidi (2020, 2017, 2016) · Salem (2002) · CJPME (2022, 2023) · Zine, The Conversation (2023) · The Conversation Canada (2024, 2025) · Al Jazeera · CTV News (2024) · UNRWA · The Quran: Surah Al-Baqarah 2:154 &amp; Surah An-Nisa 4:75 · Full citations in accompanying paper · RE 339 · Dynamics of Islamophobia · Dr. Jasmin Zine · Wilfrid Laurier University
+    Al Jazeera (2017) · Ayyash (2022) · CJPME (2022, 2023) · Khalidi (2016, 2017, 2020) · Lau et al. (2024) · Pace (2025) · Salem (2002) · Wildeman (2025) · Zine (2024) · Zine, RE339 · The Quran: Surah Al-Baqarah 2:154 &amp; Surah An-Nisa 4:75 · RE 339 · Dynamics of Islamophobia · Dr. Jasmin Zine · Wilfrid Laurier University
   </p>
+  <div style="margin-top:3rem;font-size:.62rem;letter-spacing:.1em;color:rgba(253,248,242,.15);text-align:center;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.8">
+    Thank you to Dr. Jasmin Zine for RE 339. This course gave me the language and framework to understand what I've always known but could never fully articulate. فلسطين حرة
+  </div>
 </section>
 
 <!-- ══════════════ SCRIPTS ══════════════ -->
@@ -1876,6 +1919,39 @@ new IntersectionObserver(es=>{
   if(es[0].isIntersecting) setTimeout(()=>colMap.invalidateSize(),200);
 },{threshold:.2}).observe(document.getElementById('colonial'));
 
+// Colonial auto-tour
+let colTourIdx = 0;
+let colTourTimer = null;
+function startColTour(){
+  colTourIdx = 0;
+  if(colTourTimer) clearInterval(colTourTimer);
+  const ev = COL_EVENTS[0];
+  colMap.flyTo([ev.lat, ev.lng], 6, {duration: 1});
+  setTimeout(()=>{
+    COL_EVENTS.forEach((e,i)=>{
+      colMap._layers && Object.values(colMap._layers).forEach(l=>{
+        if(l.getLatLng && l.getLatLng().lat===e.lat) l.closePopup();
+      });
+    });
+    // open first popup
+    Object.values(colMap._layers).forEach(l=>{
+      if(l.getLatLng && Math.abs(l.getLatLng().lat - ev.lat)<0.01) l.openPopup();
+    });
+  }, 1200);
+  colTourTimer = setInterval(()=>{
+    colTourIdx++;
+    if(colTourIdx >= COL_EVENTS.length){clearInterval(colTourTimer);colTourTimer=null;
+      const btn=document.getElementById('col-tour-btn');if(btn)btn.textContent='🗺️ Take the Tour Again';return;}
+    const e = COL_EVENTS[colTourIdx];
+    colMap.flyTo([e.lat,e.lng], colTourIdx>=4?8:5, {duration:1.5});
+    setTimeout(()=>{
+      Object.values(colMap._layers).forEach(l=>{
+        if(l.getLatLng && Math.abs(l.getLatLng().lat-e.lat)<0.01 && Math.abs(l.getLatLng().lng-e.lng)<0.01) l.openPopup();
+      });
+    },1800);
+  }, 5000);
+}
+
 /* ══ TIMELINE with TAB BUTTONS — 1948 to 2026 ══ */
 const TL=[
   {year:1948,label:'The Nakba',ar:'النكبة',num:'700,000+',ctx:'~531 villages depopulated',
@@ -1964,6 +2040,33 @@ function selectEra(i){
   document.getElementById('tl-map-box').classList.add('touched');
 }
 selectEra(0);
+
+// Auto-play timeline
+let tlAutoTimer = null;
+let tlAutoIdx = 0;
+function startTlAuto(){
+  if(tlAutoTimer) return;
+  const btn = document.getElementById('tl-autoplay');
+  if(btn) btn.textContent = '⏸ Pause';
+  tlAutoTimer = setInterval(()=>{
+    tlAutoIdx = (tlAutoIdx + 1) % TL.length;
+    selectEra(tlAutoIdx);
+  }, 4000);
+}
+function stopTlAuto(){
+  clearInterval(tlAutoTimer);
+  tlAutoTimer = null;
+  const btn = document.getElementById('tl-autoplay');
+  if(btn) btn.textContent = '▶ Auto-Play Timeline';
+}
+function toggleTlAuto(){
+  if(tlAutoTimer) stopTlAuto(); else startTlAuto();
+}
+// Stop auto when user clicks a tab manually
+document.querySelectorAll('.tl-tab').forEach(t => {
+  t.addEventListener('click', () => { stopTlAuto(); tlAutoIdx = parseInt(t.dataset.idx)||0; });
+});
+
 new IntersectionObserver(es=>{if(es[0].isIntersecting)setTimeout(()=>tlMap.invalidateSize(),200);},{threshold:.2}).observe(document.getElementById('timeline'));
 
 /* ── GAZA REAL MAP (Leaflet, dark tiles, auto-zoom) ── */
@@ -2261,8 +2364,8 @@ const DIMS = [
     color:'var(--green)',
     icon:'🔒',
     head:'Treated as Threats for Simply Existing',
-    body:'Palestinians are monitored and surveilled not for what they do but for who they are. Wearing a kuffiyeh, posting about Palestine, carrying a flag, all of it gets read as a security risk. My own mother took a Palestinian flag off my motorcycle because she feared for my safety on Canadian roads. Palestinian identity itself has been made into a threat.',
-    examples:['Mother removes Palestinian flag from motorcycle out of fear','IDF soldiers invited to speak at Canadian universities','Students labelled antisemitic for wearing kuffiyehs']
+    body:'Palestinians are treated as threats to be monitored and surveilled simply for existing. Wearing a kuffiyeh, posting about Palestine, carrying a flag, all of it gets read as a security risk. Even Palestinians who are Christian face this. It\'s about the Palestinian identity itself being made into something dangerous.',
+    examples:['Palestinian identity treated as a security threat','IDF soldiers invited to speak at Canadian universities','Students labelled antisemitic for wearing kuffiyehs']
   },
   {
     label:'Media Dimension',
