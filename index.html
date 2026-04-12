@@ -114,7 +114,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:9999;
 .reveal.on{opacity:1;transform:none}
 
 /* ══════════════════ 01 SYMBOLS ══════════════════ */
-#symbols{background:var(--parchment);padding:5rem 2.4rem 4rem}
+#symbols{background:var(--cream);padding:5rem 2.4rem 4rem}
 .sym-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.4rem;
   max-width:1080px;margin:2.5rem auto 0}
 .sym-card{background:var(--card);border:1px solid var(--sand);border-radius:14px;
@@ -143,7 +143,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:9999;
 #cities-map{height:440px}
 
 /* ══════════════════ 03 TIMELINE ══════════════════ */
-#timeline{background:var(--parchment);padding:6rem 2.4rem 0}
+#timeline{background:var(--cream);padding:6rem 2.4rem 0}
 
 /* year button tabs — much more intuitive than a slider */
 .tl-tabs{display:flex;gap:.8rem;max-width:1080px;margin:1.8rem auto 0;flex-wrap:wrap}
@@ -238,7 +238,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:9999;
 .story-bubble b{color:#5db87a}
 
 /* ══════════════════ 06 ZINE FRAME ══════════════════ */
-#zine-frame{background:var(--parchment);padding:6rem 2.4rem}
+#zine-frame{background:var(--cream);padding:6rem 2.4rem}
 .zine-intro{font-size:.84rem;line-height:1.9;color:var(--muted);
   max-width:1080px;margin:.8rem auto 0}
 .zine-intro b{color:var(--black);font-weight:500}
@@ -379,7 +379,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:9999;
   align-items:center;justify-content:center;flex-shrink:0;padding-bottom:2rem}
 /* loss bar */
 .shrink-bar-row{display:flex;align-items:center;gap:1rem;margin-top:1.5rem;
-  background:var(--parchment);border-radius:10px;padding:1rem 1.4rem;
+  background:var(--cream);border-radius:10px;padding:1rem 1.4rem;
   border:1px solid var(--sand)}
 .shrink-bar-label{font-size:.72rem;color:var(--muted);flex-shrink:0;width:200px}
 .shrink-bar-track{flex:1;height:10px;background:rgba(26,20,16,.1);border-radius:5px;overflow:hidden}
@@ -413,7 +413,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:9999;
 /* year circle marker */
 .col-step-yr::after{content:'';position:absolute;right:-13px;top:8px;
   width:10px;height:10px;border-radius:50%;background:var(--green);
-  border:2px solid var(--parchment);z-index:2}
+  border:2px solid var(--cream);z-index:2}
 .col-step-content{padding-left:.5rem}
 .col-step-h{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;
   margin-bottom:.5rem;color:var(--black)}
@@ -671,10 +671,45 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   font-style:italic;line-height:1.45;
   max-width:760px;margin:0 auto;
 }
+
+/* ══ CHAPTER RAIL ══ */
+#chapter-rail{
+  position:fixed;left:1.4rem;top:50%;transform:translateY(-50%);
+  z-index:8000;display:flex;flex-direction:column;gap:.7rem;
+  opacity:0;transition:opacity .4s;
+}
+#chapter-rail.visible{opacity:1}
+.cr-dot{width:8px;height:8px;border-radius:50%;
+  background:var(--stone);border:none;cursor:pointer;
+  transition:background .3s,transform .3s,width .3s;
+  position:relative;display:block;padding:0;
+}
+.cr-dot.active{background:var(--green);transform:scale(1.4)}
+.cr-dot:hover::after,.cr-dot.active::after{
+  content:attr(data-label);
+  position:absolute;left:18px;top:50%;transform:translateY(-50%);
+  font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--charcoal);white-space:nowrap;
+  background:var(--cream);border-radius:4px;
+  padding:.2rem .5rem;box-shadow:0 2px 8px rgba(0,0,0,.1);
+  pointer-events:none;
+}
+@media(max-width:900px){#chapter-rail{display:none}}
 </style>
 </head>
 <body>
 
+<nav id="chapter-rail" aria-label="Chapter navigation">
+  <button class="cr-dot" data-section="symbols" data-label="Symbols"></button>
+  <button class="cr-dot" data-section="cities" data-label="Cities"></button>
+  <button class="cr-dot" data-section="colonial" data-label="Colonial History"></button>
+  <button class="cr-dot" data-section="timeline" data-label="Timeline"></button>
+  <button class="cr-dot" data-section="gaza" data-label="Inside Gaza"></button>
+  <button class="cr-dot" data-section="diaspora" data-label="Diaspora"></button>
+  <button class="cr-dot" data-section="canada" data-label="In Canada"></button>
+  <button class="cr-dot" data-section="zine-frame" data-label="Islamophobia"></button>
+  <button class="cr-dot" data-section="return" data-label="Return"></button>
+</nav>
 <div id="scroll-progress"></div>
 
 <!-- ══════════════ NAV ══════════════ -->
@@ -698,7 +733,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 
 <!-- ══════════════ HERO ══════════════ -->
 <section id="hero">
-  <div class="hero-vol">Volume I · The Living Archive</div>
+  <div class="hero-vol">RE 339 · Dynamics of Islamophobia · Wilfrid Laurier University</div>
   <div class="hero-arabic" id="hero-arabic">فلسطين</div>
   <div class="hero-sumud">
     <span class="sumud-ar">صمود</span>
@@ -794,12 +829,32 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     </div>
   </div>
 
-  <p class="hero-sub">Most people call what's happening in Palestine a <em style="color:rgba(245,237,224,.65);font-style:italic">conflict</em>. But for something to be a conflict, both sides have to be struggling equally. What's actually unfolding is a century-long colonial takeover. This site traces it from Ottoman Palestine through the Nakba, into Gaza, and all the way to the Canadian diaspora.</p>
+  <p class="hero-sub">In 1948, Jaffa, a city of 120,000 Palestinians, was emptied in a week. That's like if the entire city of Cambridge, UK, just disappeared. 800,000 people displaced. 500 villages destroyed. Most people call it a conflict. It wasn't. This is a century-long colonial takeover.</p>
   <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
 </section>
 
+<!-- ══ CONFLICT OR COLONIAL ══ -->
+<div id="conflict-callout" style="background:#0e2118;padding:5rem 2.4rem;text-align:center">
+  <div style="max-width:720px;margin:0 auto">
+    <div style="font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(93,184,122,.5);margin-bottom:2rem">The Framing Problem</div>
+    <div class="reveal" style="display:flex;gap:0;max-width:640px;margin:0 auto 2rem;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.08)">
+      <div id="cf-conflict" style="flex:1;padding:2rem 1.6rem;background:rgba(206,17,38,.15);border-right:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .3s" onclick="document.getElementById('cf-conflict').style.background='rgba(206,17,38,.3)';document.getElementById('cf-colonial').style.background='rgba(255,255,255,.03)'">
+        <div style="font-size:1.8rem;margin-bottom:.5rem">⚔️</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:rgba(245,237,224,.7);margin-bottom:.5rem">"Conflict"</div>
+        <div style="font-size:.75rem;color:rgba(245,237,224,.35);line-height:1.7">Implies two equal sides. Mutual struggle. Comparable parties. This is the word the media uses.</div>
+      </div>
+      <div id="cf-colonial" style="flex:1;padding:2rem 1.6rem;background:rgba(0,122,61,.15);cursor:pointer;transition:background .3s" onclick="document.getElementById('cf-colonial').style.background='rgba(0,122,61,.3)';document.getElementById('cf-conflict').style.background='rgba(255,255,255,.03)'">
+        <div style="font-size:1.8rem;margin-bottom:.5rem">🏴</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:rgba(245,237,224,.7);margin-bottom:.5rem">"Colonial Takeover"</div>
+        <div style="font-size:.75rem;color:rgba(245,237,224,.35);line-height:1.7">One-sided dispossession. Built in stages by empires that never consulted the people they were displacing. This is what it actually is.</div>
+      </div>
+    </div>
+    <p class="reveal" style="font-size:.82rem;color:rgba(245,237,224,.4);max-width:480px;margin:0 auto;line-height:1.9">This site doesn't present both sides. It shows the side the western media leaves out. Because Palestinian dispossession is not a conflict. It's a century-long colonial project that started before 1948 and hasn't stopped.</p>
+  </div>
+</div>
+
 <!-- kufiyeh divider -->
-<div class="kufiyeh-divider" style="background:var(--parchment)">
+<div class="kufiyeh-divider" style="background:var(--cream)">
   <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <pattern id="kuf" x="0" y="0" width="24" height="36" patternUnits="userSpaceOnUse">
@@ -961,7 +1016,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 </section>
 
 <!-- tatreez divider -->
-<div class="tatreez-row" style="background:var(--parchment)">
+<div class="tatreez-row" style="background:var(--cream)">
   <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
     <defs>
       <pattern id="tz2" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
@@ -1009,7 +1064,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr">1917</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The Balfour Declaration</h3>
-        <p class="col-step-p">Britain promises a Jewish homeland inside Palestine — land it doesn't own. Balfour literally wrote they wouldn't bother "consulting the wishes of the present inhabitants."<span class="cite">Khalidi, 2017</span></p>
+        <p class="col-step-p">Britain promises a Jewish homeland inside Palestine, land it doesn't own. Balfour literally wrote they wouldn't bother "consulting the wishes of the present inhabitants."<span class="cite">Khalidi, 2017</span></p>
         <div class="col-pull">
           <span class="col-pull-mark">"</span>
           We do not propose even to go through the form of consulting the wishes of the present inhabitants.
@@ -1022,7 +1077,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr">1947</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The UN Partition Plan</h3>
-        <p class="col-step-p">Jewish land ownership was 11.8%. The UN gave a majority share anyway. Palestinians rejected it — you can't split someone's land without asking them.<span class="cite">Salem, 2002</span></p>
+        <p class="col-step-p">Jewish land ownership was 11.8%. The UN gave a majority share anyway. Palestinians rejected it: you can't split someone's land without asking them.<span class="cite">Salem, 2002</span></p>
       </div>
     </div>
 
@@ -1030,7 +1085,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr" style="color:var(--red)">1948</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The Nakba</h3>
-        <p class="col-step-p">700,000 Palestinians expelled or fled. ~500 villages destroyed. Jaffa, a city of 120,000, emptied in weeks — like if Cambridge, UK vanished overnight. Many left holding their house keys, thinking they'd be back in days.</p>
+        <p class="col-step-p">700,000 Palestinians expelled or fled. ~500 villages destroyed. Jaffa, a city of 120,000, emptied in weeks, like if Cambridge, UK vanished overnight. Many left holding their house keys, thinking they'd be back in days.</p>
       </div>
     </div>
 
@@ -1054,7 +1109,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr" style="color:var(--red)">2007</div>
       <div class="col-step-content">
         <h3 class="col-step-h">Gaza Blockade</h3>
-        <p class="col-step-p">A comprehensive land, air, and sea blockade locks 2.3 million people inside Gaza. The UN calls it collective punishment. Electricity for a few hours a day. The Rafah crossing — the only exit — frequently shut.</p>
+        <p class="col-step-p">A comprehensive land, air, and sea blockade locks 2.3 million people inside Gaza. The UN calls it collective punishment. Electricity for a few hours a day. The Rafah crossing, the only exit, frequently shut.</p>
       </div>
     </div>
 
@@ -1062,7 +1117,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr" style="color:var(--red)">2023</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The War on Gaza</h3>
-        <p class="col-step-p">Over 45,000 Palestinians killed. 90% of Gaza's population displaced. Only 4 of 400 aid sites still running. 50% of hospitals destroyed. Gaza is being economically and physically dismantled — while Israeli-planned beach resorts for the same land are already being drawn up.<span class="cite">The Conversation, 2024</span></p>
+        <p class="col-step-p">Over 45,000 Palestinians killed. 90% of Gaza's population displaced. Only 4 of 400 aid sites still running. 50% of hospitals destroyed. Gaza is being economically and physically dismantled. Israeli-planned beach resorts for the same land are already being drawn up.<span class="cite">The Conversation, 2024</span></p>
       </div>
     </div>
 
@@ -1095,7 +1150,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 </div>
 
 <!-- tatreez divider -->
-<div class="tatreez-row" style="background:var(--parchment)">
+<div class="tatreez-row" style="background:var(--cream)">
   <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
     <defs>
       <pattern id="tz2b" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
@@ -1113,7 +1168,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 </div>
 
 <!-- ══════════════ 03 TIMELINE ══════════════ -->
-<section id="timeline" style="background:var(--parchment);padding:6rem 2.4rem 0">
+<section id="timeline" style="background:var(--cream);padding:6rem 2.4rem 0">
   <div class="wrap reveal">
     <div class="sec-label-en">03 · Historical Timeline</div>
     <div class="sec-label-ar">الجدول الزمني للتهجير</div>
@@ -1404,7 +1459,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 </section>
 
 <!-- tatreez divider -->
-<div class="tatreez-row" style="background:var(--parchment)">
+<div class="tatreez-row" style="background:var(--cream)">
   <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
     <defs>
       <pattern id="tz4b" x="0" y="0" width="60" height="28" patternUnits="userSpaceOnUse">
@@ -1422,7 +1477,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 </div>
 
 <!-- ══════════════ 05.5 PALESTINIANS IN CANADA ══════════════ -->
-<section id="canada" style="background:var(--parchment);padding:6rem 2.4rem">
+<section id="canada" style="background:var(--cream);padding:6rem 2.4rem">
   <div class="wrap reveal">
     <div class="sec-label-en">05.5 · Here, Too</div>
     <div class="sec-label-ar">هنا أيضاً</div>
@@ -1458,6 +1513,13 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 
   </div>
 
+  <!-- motorcycle personal story -->
+  <div class="reveal" style="max-width:1080px;margin:2rem auto;padding:1.6rem 2rem;background:var(--cream);border-radius:12px;border-left:4px solid var(--green);border:1px solid var(--sand);border-left-width:4px">
+    <div style="font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:.6rem">A Personal Story</div>
+    <p style="font-size:.88rem;line-height:1.85;color:var(--charcoal);font-style:italic;margin-bottom:.5rem">"I put a Palestinian flag on my motorcycle. The next day it was gone. I assumed someone at university had taken it, maybe someone who supported having IDF soldiers speak on campus. But it was my mother. She said: <b style="font-style:normal">'I want to see you come home safe.'</b> She meant that driving with a Palestinian flag in Canada could get me hurt."</p>
+    <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Personal experience · RE 339 · 2026</div>
+  </div>
+
   <!-- pull quote -->
   <div class="reveal" style="max-width:1080px;margin:2.5rem auto 0;background:var(--charcoal);border-radius:14px;padding:2.5rem 3rem;display:flex;align-items:center;gap:2rem">
     <div style="font-family:'Cormorant Garamond',serif;font-size:3.5rem;color:var(--green);line-height:1;flex-shrink:0;opacity:.5">"</div>
@@ -1479,49 +1541,39 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 </section>
 
 <!-- kufiyeh divider -->
-<div class="kufiyeh-divider" style="background:var(--parchment)">
+<div class="kufiyeh-divider" style="background:var(--cream)">
   <svg viewBox="0 0 1200 36" preserveAspectRatio="none">
     <rect width="1200" height="36" fill="url(#kuf)"/>
   </svg>
 </div>
 
 <!-- ══════════════ 06 ISLAMOPHOBIA FRAMEWORK ══════════════ -->
-<section id="zine-frame" style="background:var(--parchment);padding:5rem 0 0">
+<section id="zine-frame" style="background:var(--cream);padding:5rem 0 0">
   <div class="wrap reveal" style="padding-bottom:0">
     <div class="sec-label-en">06 · Islamophobia &amp; Palestine</div>
     <div class="sec-label-ar">إطار الإسلاموفوبيا</div>
-    <h2 class="sec-h">How Islamophobia Sustains Erasure</h2>
-    <p class="sec-p" style="max-width:600px">Islamophobia and anti-Palestinian racism aren't the same thing, but they're not separate either. They're interlocking systems that work together to make Palestinian suffering invisible and Palestinian resistance illegitimate.<span class="cite">Veracini, 2022</span><span class="cite">Zine, 2023</span></p>
+    <h2 class="sec-h">How Islamophobia Makes Erasure Possible</h2>
+    <p class="sec-p" style="max-width:600px">Islamophobia and anti-Palestinian racism aren't the same thing, but they work together. Prof. Zine argues Palestinians face anti-Palestinian racism on top of the racism they face for being Muslim. Together, these systems make Palestinian suffering invisible and Palestinian resistance illegitimate. There are three dimensions to how this plays out.<span class="cite">Zine, 2024</span><span class="cite">Veracini, 2022</span></p>
   </div>
 
-  <div class="split-frame reveal">
-    <!-- GREEN SIDE: Palestinian lived reality -->
-    <div class="split-side split-green reveal-left">
-      <div class="split-tag">Palestinian Lived Reality</div>
-      <h3 class="split-heading">What Is Being Erased</h3>
-      <ul class="split-list">
-        <li>A people with 4,000 years of continuous history in their land</li>
-        <li>The Nakba: 700,000 expelled, ~500 villages destroyed, still denied by Canada</li>
-        <li>The key of return: a legal claim passed between generations since 1948</li>
-        <li>Sumud: steadfastness as a way of life, not passive endurance</li>
-        <li>Olive trees uprooted because their roots are proof someone was there</li>
-        <li>The watermelon: identity survives even when the flag is banned</li>
-      </ul>
-      <p class="split-quote">"To exist is to resist."</p>
+  <!-- 3 Dimensions interactive -->
+  <div class="iso-dims reveal" style="max-width:1080px;margin:3rem auto 0">
+    <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2rem" id="dim-tabs">
+      <button class="dim-tab active" onclick="setDim(0)" style="flex:1;min-width:160px;padding:1rem 1.4rem;background:var(--card);border:2px solid var(--green);border-radius:12px;cursor:pointer;text-align:left;transition:all .25s">
+        <div style="font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--green);margin-bottom:.3rem">Dimension 01</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--black)">🔒 Security</div>
+      </button>
+      <button class="dim-tab" onclick="setDim(1)" style="flex:1;min-width:160px;padding:1rem 1.4rem;background:var(--card);border:2px solid var(--sand);border-radius:12px;cursor:pointer;text-align:left;transition:all .25s">
+        <div style="font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem">Dimension 02</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--black)">📺 Media</div>
+      </button>
+      <button class="dim-tab" onclick="setDim(2)" style="flex:1;min-width:160px;padding:1rem 1.4rem;background:var(--card);border:2px solid var(--sand);border-radius:12px;cursor:pointer;text-align:left;transition:all .25s">
+        <div style="font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem">Dimension 03</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--black)">🤫 Silencing</div>
+      </button>
     </div>
-    <!-- RED SIDE: How Islamophobia operates -->
-    <div class="split-side split-red reveal-right">
-      <div class="split-tag">How the Erasure Works</div>
-      <h3 class="split-heading">The Islamophobia Machine</h3>
-      <ul class="split-list">
-        <li>Palestinian identity treated as a security threat: flags, kufiyehs, even the word "Nakba"</li>
-        <li>CBC journalists silenced for signing a letter supporting Palestinian rights</li>
-        <li>McGill 2024: tear gas, tents destroyed, protesters physically assaulted</li>
-        <li>A student's mother removes a flag. "I want to see you come home safe"</li>
-        <li>Muslim MPPs removed from legislature for wearing a kufiyeh</li>
-        <li>Arms sales to Israel continue even after recognizing Palestinian statehood</li>
-      </ul>
-      <p class="split-quote">"Whose suffering is legible, and whose is erased?"</p>
+    <div id="dim-content" style="background:var(--card);border-radius:14px;padding:2.5rem;border:1px solid var(--sand);min-height:220px;transition:opacity .3s">
+      <!-- filled by JS -->
     </div>
   </div>
 </section>
@@ -1552,14 +1604,14 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <h2 class="sec-h">Who Tells the Story?</h2>
   </div>
   <div class="tog-row reveal">
-    <span class="tog-lbl">Human Stories</span>
+    <span class="tog-lbl">Palestinian Reality</span>
     <label class="tog"><input type="checkbox" id="nar-tog"/><span class="tog-track"></span></label>
-    <span class="tog-lbl">Media Framing</span>
+    <span class="tog-lbl">Western Media Frame</span>
   </div>
   <div class="nar-grid reveal">
     <div class="nar-panel" id="p-human">
       <div class="nar-tag">Lived Experience</div>
-      <h3>Voices of Palestinians</h3>
+      <h3>What Palestinians Actually Experience</h3>
       <ul>
         <li>Displacement from ancestral land, the <em>nakba</em>: 700,000 expelled, 500 villages erased</li>
         <li>Families keep the literal keys to homes they have never been allowed to return to</li>
@@ -1570,7 +1622,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     </div>
     <div class="nar-panel dim" id="p-media">
       <div class="nar-tag">Western Media Frame</div>
-      <h3>Security, Conflict &amp; Islamophobia</h3>
+      <h3>How Western Media Frames It</h3>
       <ul>
         <li>"Conflict" implies two equal sides. This is a one-sided settler colonial project</li>
         <li>Asymmetric language: Israeli "operations," Palestinian "attacks"</li>
@@ -1648,6 +1700,18 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div style="font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(253,248,242,.28)">Surah An-Nisa 4:75 · The Quran</div>
   </div>
 
+</section>
+
+<!-- ══ ABOUT THIS SITE ══ -->
+<section id="about-site" style="background:var(--charcoal);padding:6rem 2.4rem">
+  <div style="max-width:780px;margin:0 auto">
+    <div class="reveal" style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(245,237,224,.3);margin-bottom:1.2rem;display:flex;align-items:center;gap:.8rem"><span style="display:inline-block;width:24px;height:1px;background:rgba(245,237,224,.3)"></span>About This Site</div>
+    <p class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.8vw,1.8rem);color:var(--white);line-height:1.5;margin-bottom:1.8rem;font-style:italic">"This site was built alongside my RE 339 paper to restore the Palestinian narrative, while Zionism spent a century trying to erase it."</p>
+    <div class="reveal" style="font-size:.84rem;color:rgba(245,237,224,.55);line-height:1.9;margin-bottom:1rem">It takes you through the full history of Palestine, from the Ottoman Empire to the Nakba to Gaza, then to the Canadian diaspora. It uses maps, timelines, symbols and animations to tell the story. It doesn't present this as a conflict from both sides. It shows it as a one-sided invasion.</div>
+    <div class="reveal" style="font-size:.84rem;color:rgba(245,237,224,.55);line-height:1.9;margin-bottom:1rem">Every design decision is intentional. The key of return connects 1948 Palestinians being expelled from their homes to today, where their grandchildren still hold that same key. The kuffiyeh and watermelon represent the Palestinian flag in places where the flag itself is banned.</div>
+    <div class="reveal" style="font-size:.84rem;color:rgba(245,237,224,.55);line-height:1.9">This site is meant to spark public awareness and dialogue, to show the parts the Western media leaves out. Palestinian voices must not be the exception to anti-racism. They need to be at the forefront of it.</div>
+    <div class="reveal" style="margin-top:1.8rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,237,224,.22)">RE 339 · Dynamics of Islamophobia · Dr. Jasmin Zine · Wilfrid Laurier University · 2026</div>
+  </div>
 </section>
 
 <!-- ══════════════ 08 REFLECTION ══════════════ -->
@@ -2162,6 +2226,82 @@ const navEl = document.querySelector('nav');
 window.addEventListener('scroll', () => {
   if (navEl) navEl.classList.toggle('scrolled', window.scrollY > 60);
 }, { passive: true });
+
+// Chapter rail
+const rail = document.getElementById('chapter-rail');
+const crDots = rail ? rail.querySelectorAll('.cr-dot') : [];
+crDots.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const el = document.getElementById(btn.dataset.section);
+    if (el) el.scrollIntoView({behavior:'smooth'});
+  });
+});
+const railObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      crDots.forEach(d => d.classList.toggle('active', d.dataset.section === entry.target.id));
+    }
+  });
+}, {rootMargin: '-30% 0px -60% 0px'});
+['symbols','cities','colonial','timeline','gaza','diaspora','canada','zine-frame','return'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) railObs.observe(el);
+});
+// Show rail after scrolling past hero
+const heroRailObs = new IntersectionObserver(entries => {
+  if (rail) rail.classList.toggle('visible', !entries[0].isIntersecting);
+}, {threshold: 0.1});
+const heroEl = document.getElementById('hero');
+if (heroEl) heroRailObs.observe(heroEl);
+
+// Islamophobia 3 dimensions
+const DIMS = [
+  {
+    label:'Security Dimension',
+    color:'var(--green)',
+    icon:'🔒',
+    head:'Treated as Threats for Simply Existing',
+    body:'Palestinians are monitored and surveilled not for what they do but for who they are. Wearing a kuffiyeh, posting about Palestine, carrying a flag, all of it gets read as a security risk. My own mother took a Palestinian flag off my motorcycle because she feared for my safety on Canadian roads. Palestinian identity itself has been made into a threat.',
+    examples:['Mother removes Palestinian flag from motorcycle out of fear','IDF soldiers invited to speak at Canadian universities','Students labelled antisemitic for wearing kuffiyehs']
+  },
+  {
+    label:'Media Dimension',
+    color:'var(--red)',
+    icon:'📺',
+    head:'Resistance = Terrorism. Genocide = Defence.',
+    body:'The media dimension is how Islamophobia reshapes language. Palestinian resistance gets called terrorism. The destruction of hospitals, roads, and water infrastructure gets called defence. Calling it a "conflict" implies two equal sides. It doesn\'t. The word "conflict" is doing political work, and it\'s working against Palestinians.',
+    examples:['Asymmetric language: Israeli "operations" vs Palestinian "attacks"','Social media used to justify settler violence as self-defence','Soldiers posting videos mocking destruction of Palestinian homes']
+  },
+  {
+    label:'Silencing Dimension',
+    color:'var(--charcoal)',
+    icon:'🤫',
+    head:'Your Identity Is a Reason to Remove You',
+    body:'This is where Islamophobia shows up in Canada most visibly. A guidance counsellor told a student their kuffiyeh reminded her of a terrorist. A Muslim MPP was repeatedly removed from the Ontario legislature for wearing one. CBC journalists faced institutional consequences for signing a letter supporting Palestinian rights. Showing a Palestinian flag or saying the word Nakba becomes grounds for removal.',
+    examples:['Muslim MPP removed from Ontario legislature for wearing kuffiyeh','CBC journalists face consequences for signing pro-Palestine letter','McGill 2024: tear gas, tents destroyed, protesters assaulted']
+  }
+];
+function setDim(i){
+  const d = DIMS[i];
+  document.querySelectorAll('.dim-tab').forEach((t,j)=>{
+    const isActive = j===i;
+    t.style.borderColor = isActive ? 'var(--green)' : 'var(--sand)';
+    t.querySelector('div:first-child').style.color = isActive ? 'var(--green)' : 'var(--muted)';
+  });
+  const box = document.getElementById('dim-content');
+  box.style.opacity='0';
+  setTimeout(()=>{
+    box.innerHTML = `
+      <div style="font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:${d.color};margin-bottom:.8rem;font-weight:600">${d.icon} ${d.label}</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--black);margin-bottom:1rem;line-height:1.3">${d.head}</h3>
+      <p style="font-size:.85rem;line-height:1.85;color:var(--muted);margin-bottom:1.4rem">${d.body}</p>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        ${d.examples.map(e=>`<div style="display:flex;align-items:flex-start;gap:.6rem;font-size:.78rem;color:var(--charcoal);line-height:1.6"><span style="color:${d.color};flex-shrink:0;margin-top:.1rem">·</span>${e}</div>`).join('')}
+      </div>`;
+    box.style.opacity='1';
+  },150);
+}
+setDim(0);
 
 /* ══════════════════════════════════════════
    HERO PARALLAX DEPTH
