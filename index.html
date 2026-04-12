@@ -114,17 +114,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:9999;
 .reveal.on{opacity:1;transform:none}
 
 /* ══════════════════ 01 SYMBOLS ══════════════════ */
-#symbols{background:var(--cream);padding:5rem 2.4rem 4rem}
+#symbols{background:var(--charcoal);color:var(--white);padding:5rem 2.4rem 4rem}
+#symbols .sec-label-en{color:rgba(245,237,224,.35)}
+#symbols .sec-label-ar{color:#5db87a}
+#symbols .sec-h{color:var(--white)}
+#symbols .sec-p{color:rgba(245,237,224,.5)}
 .sym-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.4rem;
   max-width:1080px;margin:2.5rem auto 0}
-.sym-card{background:var(--card);border:1px solid var(--sand);border-radius:14px;
+.sym-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;
   padding:2rem 1.4rem 1.6rem;text-align:center;
   transition:transform .2s,box-shadow .2s;}
 .sym-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,.1)}
 .sym-icon{height:72px;display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem}
-.sym-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:.25rem}
-.sym-name-ar{font-family:'Amiri',serif;font-size:.95rem;color:var(--muted);direction:rtl;margin-bottom:.55rem}
-.sym-desc{font-size:.76rem;line-height:1.75;color:var(--muted)}
+.sym-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:.25rem;color:var(--white)}
+.sym-name-ar{font-family:'Amiri',serif;font-size:.95rem;color:rgba(245,237,224,.45);direction:rtl;margin-bottom:.55rem}
+.sym-desc{font-size:.76rem;line-height:1.75;color:rgba(245,237,224,.55)}
 
 /* ══════════════════ 02 CITIES ══════════════════ */
 #cities{background:var(--cream);padding:6rem 2.4rem 0}
@@ -780,6 +784,15 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   80%{transform:translateY(-3px) rotate(200deg)}
   100%{transform:translateY(0) rotate(190deg);opacity:1}
 }
+@keyframes oliveFall{
+  0%{transform:translate(0,0) rotate(0deg);opacity:1}
+  20%{transform:translate(4px,12px) rotate(30deg);opacity:1}
+  50%{transform:translate(-2px,30px) rotate(-15deg);opacity:.8}
+  70%{transform:translate(6px,45px) rotate(40deg);opacity:.6}
+  90%{transform:translate(2px,55px) rotate(10deg);opacity:.3}
+  100%{transform:translate(0,65px) rotate(0deg);opacity:0}
+}
+.olive-fall{animation:oliveFall 4s ease-in infinite;animation-delay:2s;transform-origin:center}
 @keyframes keyTurn{
   0%{transform:rotate(0deg)}
   30%{transform:rotate(-25deg)}
@@ -945,7 +958,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     </div>
   </div>
 
-  <p class="hero-sub">In 1948, Jaffa — a city of 120,000 Palestinians — was emptied in a week. That's like Cambridge, UK vanishing overnight. This isn't a conflict. It's a century-long colonial takeover.</p>
+  <p class="hero-sub">In 1948, Jaffa, a city of 120,000 Palestinians, was emptied in a week. That's like Cambridge, UK vanishing overnight. This isn't a conflict. It's a century-long colonial takeover.</p>
   <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
   <div class="particles" id="hero-particles"></div>
 </section>
@@ -999,7 +1012,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="sec-label-en">01 · Symbols of Resistance</div>
     <div class="sec-label-ar">رموز المقاومة</div>
     <h2 class="sec-h">Objects That Refuse to Disappear</h2>
-    <p class="sec-p">Every symbol here is an act of resistance. The key, the kufiyeh, the watermelon — each one defies a system that spent a century trying to erase Palestinian identity.</p>
+    <p class="sec-p">Every symbol here is an act of resistance. The key, the kufiyeh, the watermelon. Each one defies a system that spent a century trying to erase Palestinian identity.</p>
   </div>
   <div class="sym-grid reveal stagger">
 
@@ -1014,7 +1027,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       </div>
       <div class="sym-name">Sumud · صمود</div>
       <div class="sym-name-ar">[ṣu-mūd]</div>
-      <div class="sym-desc">The refusal to be uprooted. The olive tree is sumud made physical — hundreds of thousands uprooted because their roots are proof someone was there before.</div>
+      <div class="sym-desc">The refusal to be uprooted. The olive tree is sumud made physical. Hundreds of thousands uprooted because their roots are proof someone was there before.</div>
     </div>
 
     <!-- Watermelon -->
@@ -1039,19 +1052,28 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <!-- Olive -->
     <div class="sym-card glow-card">
       <div class="sym-icon">
-        <svg width="70" height="62" viewBox="0 0 70 62" fill="none" style="animation:oliveSway 5s ease-in-out infinite">
-          <path d="M8 54C20 40 34 26 54 16" stroke="#5db87a" stroke-width="1.8" stroke-linecap="round"/>
-          <ellipse cx="22" cy="40" rx="10" ry="4" fill="#3a6b3a" transform="rotate(-30 22 40)" opacity=".9"/>
-          <ellipse cx="38" cy="28" rx="9.5" ry="3.8" fill="#3a6b3a" transform="rotate(-18 38 28)" opacity=".88"/>
-          <ellipse cx="50" cy="20" rx="8" ry="3.4" fill="#3a6b3a" transform="rotate(-8 50 20)" opacity=".82"/>
-          <circle cx="28" cy="36" r="3.5" fill="#5db87a"/>
-          <circle cx="43" cy="25" r="3.2" fill="#5db87a"/>
-          <circle cx="55" cy="18" r="2.5" fill="#4db870"/>
+        <svg width="70" height="72" viewBox="0 0 70 72" fill="none">
+          <!-- trunk -->
+          <path d="M35 72 L35 42 C35 38 33 35 30 33" stroke="#5c4a2a" stroke-width="3" stroke-linecap="round"/>
+          <path d="M35 50 C38 46 42 43 45 38" stroke="#5c4a2a" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M35 55 C32 50 28 48 25 44" stroke="#5c4a2a" stroke-width="2" stroke-linecap="round"/>
+          <!-- canopy -->
+          <ellipse cx="35" cy="26" rx="28" ry="22" fill="#2a5a2a" opacity=".85"/>
+          <ellipse cx="28" cy="22" rx="16" ry="13" fill="#3a6b3a" opacity=".7"/>
+          <ellipse cx="42" cy="20" rx="14" ry="12" fill="#3a6b3a" opacity=".65"/>
+          <ellipse cx="35" cy="16" rx="12" ry="10" fill="#4a7a4a" opacity=".5"/>
+          <!-- olives on tree -->
+          <circle cx="22" cy="30" r="3" fill="#5db87a"/>
+          <circle cx="42" cy="25" r="2.8" fill="#4db870"/>
+          <circle cx="30" cy="18" r="2.5" fill="#5db87a"/>
+          <circle cx="48" cy="32" r="2.2" fill="#4db870"/>
+          <!-- falling olive -->
+          <circle cx="38" cy="36" r="3" fill="#5db87a" class="olive-fall"/>
         </svg>
       </div>
       <div class="sym-name">Olive Tree</div>
       <div class="sym-name-ar">شجرة الزيتون</div>
-      <div class="sym-desc">Can live for a thousand years. Hundreds of thousands uprooted — not because they're a threat, but because their roots are proof Palestinians existed.</div>
+      <div class="sym-desc">Can live for a thousand years. Hundreds of thousands uprooted, not because they're a threat, but because their roots are proof Palestinians existed.</div>
     </div>
 
     <!-- Key -->
@@ -1135,7 +1157,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="sec-label-en">02 · Historic Cities</div>
     <div class="sec-label-ar">المدن التاريخية</div>
     <h2 class="sec-h">A Land That Was Never Empty</h2>
-    <p class="sec-p">Jaffa, Haifa, Jerusalem — thriving cities under Ottoman rule. Palestinian dispossession didn't start with a takeover. It started with colonial decisions.</p>
+    <p class="sec-p">Jaffa, Haifa, Jerusalem. Thriving cities under Ottoman rule. Palestinian dispossession didn't start with a takeover. It started with colonial decisions.</p>
   </div>
   <div class="cities-layout reveal">
     <div class="city-list" id="city-list"></div>
@@ -1249,7 +1271,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="col-step-yr" style="color:var(--red)">2023</div>
       <div class="col-step-content">
         <h3 class="col-step-h">The War on Gaza</h3>
-        <p class="col-step-p">4 of 400 aid sites still operating. 50% of hospitals, 81% of roads, 92% of water infrastructure — destroyed. Israeli planned projects picture Gaza as a vacation spot.</p>
+        <p class="col-step-p">4 of 400 aid sites still operating. 50% of hospitals, 81% of roads, 92% of water infrastructure, destroyed. Israeli planned projects picture Gaza as a vacation spot.</p>
       </div>
     </div>
 
@@ -1271,7 +1293,9 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   <div style="max-width:1080px;margin:.8rem auto 0">
     <button id="col-tour-btn" onclick="startColTour()" style="background:var(--green);color:white;border:none;border-radius:8px;padding:.7rem 1.4rem;font-size:.74rem;letter-spacing:.06em;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;box-shadow:0 4px 16px rgba(0,122,61,.2)">🗺️ Take the Colonial History Tour</button>
   </div>
-  <div style="height:1rem"></div>
+  <div class="reveal" style="max-width:700px;margin:2rem auto 0;text-align:center">
+    <p style="font-size:.84rem;line-height:1.9;color:var(--muted);font-style:italic">This colonial history didn't just take land. It built the framework for how Palestinians are dehumanized today. The same logic that justified the Balfour Declaration, making decisions about people without consulting them, is the same logic behind anti-Palestinian racism in Canada. Islamophobia makes this erasure invisible.</p>
+  </div>
 
 </section>
 
@@ -1485,7 +1509,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div class="sec-label-en">04 · Ground Reality</div>
     <div class="sec-label-ar">غزة · الواقع</div>
     <h2 class="sec-h">Inside Gaza</h2>
-    <p class="sec-p">4 of 400 aid sites still operating. 50% of hospitals destroyed. Gaza isn't just a humanitarian crisis — it's being erased from the inside.</p>
+    <p class="sec-p">4 of 400 aid sites still operating. 50% of hospitals destroyed. Gaza isn't just a humanitarian crisis. It's being erased from the inside.</p>
   </div>
 
   <div class="gaza-layout reveal">
@@ -1544,6 +1568,9 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div class="d-val">~5,700 / km²</div>
     </div>
   </div>
+  <div class="reveal" style="max-width:700px;margin:2.5rem auto 0;text-align:center">
+    <p style="font-size:.84rem;line-height:1.9;color:rgba(245,237,224,.45);font-style:italic">When Western media calls this a "conflict," it erases the power imbalance you just saw. The framing itself is Islamophobia at work. Palestinian suffering becomes invisible because Palestinians are framed as threats, not people.</p>
+  </div>
 </section>
 
 <!-- tatreez divider -->
@@ -1573,7 +1600,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   </div>
   <div class="flight-layout reveal">
     <div class="flight-story">
-      <p><b>The Nakba scattered Palestinians across the world.</b> Canada didn't recognize Palestine as a state until 2025 — and still sends arms to Israel. The denial of the Nakba is itself a form of anti-Palestinian racism.</p>
+      <p><b>The Nakba scattered Palestinians across the world.</b> Canada didn't recognize Palestine as a state until 2025, and still sends arms to Israel. The denial of the Nakba is itself a form of anti-Palestinian racism.</p>
       <button class="plane-btn" id="fly-btn" onclick="launchFlight()">
         <span style="font-size:1.2rem">✈</span> Launch the flight
       </button>
@@ -1813,7 +1840,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div style="font-size:2.8rem;margin-bottom:1rem">🗝️</div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#b8860b;margin-bottom:.5rem;font-weight:600">The Key of Return</div>
       <div style="font-family:'Amiri',serif;font-size:.95rem;color:rgba(245,237,224,.4);margin-bottom:.9rem;direction:rtl">مفتاح العودة</div>
-      <p style="font-size:.82rem;line-height:1.85;color:rgba(245,237,224,.55)">Since 1948, families have kept the literal keys to their homes, passing them to children who have never been allowed to return. The key isn't nostalgia — it's a legal claim that refuses to expire.</p>
+      <p style="font-size:.82rem;line-height:1.85;color:rgba(245,237,224,.55)">Since 1948, families have kept the literal keys to their homes, passing them to children who have never been allowed to return. The key isn't nostalgia. It's a legal claim that refuses to expire.</p>
     </div>
 
     <!-- SPREADING AWARENESS -->
@@ -1821,7 +1848,7 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
       <div style="font-size:2.8rem;margin-bottom:1rem">🍉</div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#CE1126;margin-bottom:.5rem;font-weight:600">Awareness Is Resistance</div>
       <div style="font-family:'Amiri',serif;font-size:.95rem;color:rgba(245,237,224,.4);margin-bottom:.9rem;direction:rtl">الوعي مقاومة</div>
-      <p style="font-size:.82rem;line-height:1.85;color:rgba(245,237,224,.55)">Palestinian dispossession didn't begin in 1948. From the Ottomans to Sykes-Picot to Gaza to Canada — Palestinian voices must not be the exception to anti-racism.</p>
+      <p style="font-size:.82rem;line-height:1.85;color:rgba(245,237,224,.55)">Palestinian dispossession didn't begin in 1948. From the Ottomans to Sykes-Picot to Gaza to Canada. Palestinian voices must not be the exception to anti-racism.</p>
     </div>
 
   </div>
@@ -1833,16 +1860,6 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div style="font-size:.78rem;color:rgba(245,237,224,.45);margin-top:1rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.85;text-align:center">This is a call to stand with the oppressed. Palestinians are not asking for war. They are asking for their basic human rights, their land, their identity. Standing up for Palestine is standing up for justice.</div>
   </div>
 
-</section>
-
-<!-- ══ ABOUT THIS SITE ══ -->
-<section id="about-site" style="background:var(--charcoal);padding:6rem 2.4rem">
-  <div style="max-width:780px;margin:0 auto">
-    <div class="reveal" style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(245,237,224,.3);margin-bottom:1.2rem;display:flex;align-items:center;gap:.8rem"><span style="display:inline-block;width:24px;height:1px;background:rgba(245,237,224,.3)"></span>About This Site</div>
-    <p class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.8vw,1.8rem);color:var(--white);line-height:1.5;margin-bottom:1.8rem;font-style:italic">"This site was built alongside my RE 339 paper to restore the Palestinian narrative, while Zionism spent a century trying to erase it."</p>
-    <div class="reveal" style="font-size:.84rem;color:rgba(245,237,224,.55);line-height:1.9">This site takes you from the Ottoman Empire through the Nakba to Gaza and into Canada's diaspora — using maps, timelines, and symbols to tell the story the Western media leaves out. Palestinian voices must not be the exception to anti-racism.</div>
-    <div class="reveal" style="margin-top:1.8rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,237,224,.22)">RE 339 · Dynamics of Islamophobia · Dr. Jasmin Zine · Wilfrid Laurier University · 2026</div>
-  </div>
 </section>
 
 <!-- ══════════════ 08 REFLECTION ══════════════ -->
@@ -1869,10 +1886,10 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div style="font-size:.78rem;color:var(--muted);margin-top:1rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.85;font-style:italic;text-align:center">This verse speaks directly to the Palestinians who have lost their lives to a genocide that has continued for over a century. They are not gone. They live on through every olive tree replanted, every key passed down, every name remembered.</div>
     <div class="refl-div"></div>
     <p class="refl-body">
-      <b>Palestinian dispossession didn't begin in 1948 and it hasn't ended.</b> From Sykes-Picot to Balfour to the Nakba to Gaza — each chapter built on the last. The same systems that erased Palestinians there erase them here.
+      <b>Palestinian dispossession didn't begin in 1948 and it hasn't ended.</b> From Sykes-Picot to Balfour to the Nakba to Gaza. Each chapter built on the last. The same systems that erased Palestinians there erase them here.
     </p>
     <p class="refl-body">
-      <b>The olive tree. The key. The watermelon. The kufiyeh.</b> Every symbol on this site is a refusal — to be uprooted, to forget, to be silent. They're alive in every key that was kept, every tree replanted, every student who wore a kufiyeh and refused to take it off.
+      <b>The olive tree. The key. The watermelon. The kufiyeh.</b> Every symbol on this site is a refusal. To be uprooted, to forget, to be silent. They're alive in every key that was kept, every tree replanted, every student who wore a kufiyeh and refused to take it off.
     </p>
 
     <!-- Real Palestine flag SVG -->
@@ -1884,6 +1901,16 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     </svg>
 
     <a href="#hero" class="refl-return reveal">↑ &nbsp; Return to the Beginning</a>
+  </div>
+</section>
+
+<!-- ══ ABOUT THIS SITE ══ -->
+<section id="about-site" style="background:var(--charcoal);padding:6rem 2.4rem">
+  <div style="max-width:780px;margin:0 auto">
+    <div class="reveal" style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(245,237,224,.3);margin-bottom:1.2rem;display:flex;align-items:center;gap:.8rem"><span style="display:inline-block;width:24px;height:1px;background:rgba(245,237,224,.3)"></span>About This Site</div>
+    <p class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.8vw,1.8rem);color:var(--white);line-height:1.5;margin-bottom:1.8rem;font-style:italic">"This site was built alongside my RE 339 paper to restore the Palestinian narrative, while Zionism spent a century trying to erase it."</p>
+    <div class="reveal" style="font-size:.84rem;color:rgba(245,237,224,.55);line-height:1.9">This site takes you from the Ottoman Empire through the Nakba to Gaza and into Canada's diaspora, using maps, timelines, and symbols to tell the story the Western media leaves out. Palestinian voices must not be the exception to anti-racism.</div>
+    <div class="reveal" style="margin-top:1.8rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,237,224,.22)">RE 339 · Dynamics of Islamophobia · Dr. Jasmin Zine · Wilfrid Laurier University · 2026</div>
   </div>
   <p class="sources reveal">
     Al Jazeera (2017) · Ayyash (2022) · CJPME (2022, 2023) · Khalidi (2016, 2017, 2020) · Lau et al. (2024) · Pace (2025) · Salem (2002) · Wildeman (2025) · Zine (2024) · Zine, RE339 · The Quran: Surah Al-Baqarah 2:154 &amp; Surah An-Nisa 4:75 · RE 339 · Dynamics of Islamophobia · Dr. Jasmin Zine · Wilfrid Laurier University
@@ -1985,20 +2012,20 @@ new IntersectionObserver(es=>{if(es[0].isIntersecting)setTimeout(()=>citiesMap.i
 const colMap = L.map('colonial-map',{zoomControl:true,scrollWheelZoom:false,tap:true}).setView([34,20],3);
 voyagerTile().addTo(colMap);
 const COL_EVENTS=[
-  {lat:31.77,lng:35.21,label:'Jerusalem — 1899',color:'#a05020',
+  {lat:31.77,lng:35.21,label:'Jerusalem, 1899',color:'#a05020',
    note:'Mayor Yusuf Diya writes to Theodor Herzl, founder of the Zionist movement, warning that Palestine already has a people. The first formal Palestinian objection to Zionist plans. Herzl\'s response: the Arabs would benefit. He was wrong.'},
-  {lat:33.89,lng:35.50,label:'Sykes-Picot — 1916',color:'#5c6b2e',
-   note:'Britain and France secretly divide the Middle East between themselves. Most of Palestine goes to Britain. The Ottoman Empire is collapsing after 400 years and two European powers are drawing the new borders — without asking a single Palestinian.'},
-  {lat:51.50,lng:-0.12,label:'London — Balfour Declaration 1917',color:'#007A3D',
-   note:'Britain promises a "national home for the Jewish people" inside Palestine — a land it doesn\'t own. Balfour wrote in a memo that they wouldn\'t even go through "the form of consulting the wishes of the present inhabitants." That quote aged exactly as you\'d expect.'},
-  {lat:40.75,lng:-73.99,label:'New York — UN Partition Plan 1947',color:'#CE1126',
-   note:'Jewish land ownership in Palestine was 11.8%. The UN partition gave a majority share to create a Jewish state. Palestinians rejected it — you can\'t divide someone else\'s land without asking them. The plan gave international cover to what was already happening.'},
-  {lat:32.05,lng:34.75,label:'Jaffa — The Nakba 1948',color:'#CE1126',
-   note:'Plan Dalet launches. Jaffa, home to 120,000 Palestinians, is emptied within weeks — like if the entire city of Cambridge UK disappeared in a day. 700,000 Palestinians expelled or flee. ~500 villages destroyed. Many left holding their house keys.'},
-  {lat:32.82,lng:34.99,label:'Haifa — 1948',color:'#CE1126',
+  {lat:33.89,lng:35.50,label:'Sykes-Picot, 1916',color:'#5c6b2e',
+   note:'Britain and France secretly divide the Middle East between themselves. Most of Palestine goes to Britain. The Ottoman Empire is collapsing after 400 years and two European powers are drawing the new borders, without asking a single Palestinian.'},
+  {lat:51.50,lng:-0.12,label:'London, Balfour Declaration 1917',color:'#007A3D',
+   note:'Britain promises a "national home for the Jewish people" inside Palestine, a land it doesn\'t own. Balfour wrote in a memo that they wouldn\'t even go through "the form of consulting the wishes of the present inhabitants." That quote aged exactly as you\'d expect.'},
+  {lat:40.75,lng:-73.99,label:'New York, UN Partition Plan 1947',color:'#CE1126',
+   note:'Jewish land ownership in Palestine was 11.8%. The UN partition gave a majority share to create a Jewish state. Palestinians rejected it. You can\'t divide someone else\'s land without asking them. The plan gave international cover to what was already happening.'},
+  {lat:32.05,lng:34.75,label:'Jaffa, The Nakba 1948',color:'#CE1126',
+   note:'Plan Dalet launches. Jaffa, home to 120,000 Palestinians, is emptied within weeks, like if the entire city of Cambridge UK disappeared in a day. 700,000 Palestinians expelled or flee. ~500 villages destroyed. Many left holding their house keys.'},
+  {lat:32.82,lng:34.99,label:'Haifa, 1948',color:'#CE1126',
    note:'~70,000 Palestinians expelled from Haifa during the siege. Most fled by boat to Lebanon, told it was temporary. They were never allowed to come back.'},
-  {lat:32.93,lng:35.07,label:'Acre — 1948',color:'#CE1126',
-   note:'~13,500 Arab residents expelled from Acre — a UNESCO World Heritage city continuously inhabited for 4,000 years. The dispossession wasn\'t random. It was strategic.'},
+  {lat:32.93,lng:35.07,label:'Acre, 1948',color:'#CE1126',
+   note:'~13,500 Arab residents expelled from Acre, a UNESCO World Heritage city continuously inhabited for 4,000 years. The dispossession wasn\'t random. It was strategic.'},
 ];
 COL_EVENTS.forEach(ev=>{
   L.marker([ev.lat,ev.lng],{icon:pulseIcon(ev.color)})
@@ -2044,7 +2071,7 @@ function startColTour(){
 /* ══ TIMELINE with TAB BUTTONS — 1948 to 2026 ══ */
 const TL=[
   {year:1948,label:'The Nakba',ar:'النكبة',num:'700,000+',ctx:'~531 villages depopulated',
-   note:'The Nakba — "catastrophe" in Arabic. In Jaffa alone, a city of 120,000 Palestinians was emptied within weeks. 700,000 expelled. Around 500 villages destroyed. Many left holding their house keys, thinking they\'d be back in days.',color:'#CE1126',
+   note:'The Nakba, "catastrophe" in Arabic. In Jaffa alone, a city of 120,000 Palestinians was emptied within weeks. 700,000 expelled. Around 500 villages destroyed. Many left holding their house keys, thinking they\'d be back in days.',color:'#CE1126',
    view:[32.1,34.9,8],
    events:[
      {lat:32.054,lng:34.752,label:'Jaffa',note:'April–May 1948: ~120,000 Palestinian residents. City besieged and emptied within weeks. One of the biggest urban expulsions of the Nakba.'},
@@ -2057,7 +2084,7 @@ const TL=[
    note:'Israel occupied the West Bank, Gaza Strip, East Jerusalem, Sinai, and the Golan Heights in six days. Military occupation begins. Settlement construction starts almost immediately and has never stopped.',color:'#007A3D',
    view:[31.9,35.2,8],
    events:[
-     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'June 1967: occupied and later unilaterally annexed — a move not recognized under international law. Israeli settlement construction begins inside the city.'},
+     {lat:31.77,lng:35.21,label:'East Jerusalem',note:'June 1967: occupied and later unilaterally annexed, a move not recognized under international law. Israeli settlement construction begins inside the city.'},
      {lat:31.5,lng:34.46,label:'Gaza Strip',note:'1967: comes under Israeli military occupation after being under Egyptian administration. Gaza has been occupied or blockaded ever since.'},
      {lat:32.1,lng:35.2,label:'West Bank',note:'1967: occupied. Settlement construction begins within months. Today over 700,000 Israeli settlers live in the West Bank.'},
      {lat:31.9,lng:35.1,label:'Kalandia Checkpoint',note:'One of hundreds of checkpoints established across the West Bank. Palestinians need permits to travel between cities in their own land.'},
@@ -2075,9 +2102,9 @@ const TL=[
    note:'The Oslo Accords were supposed to be a peace deal. Instead, they created a Palestinian Authority with limited control over small patches of land, while Israel kept full control over borders, resources, and military. Settlement construction accelerated after Oslo.',color:'#5c6b2e',
    view:[31.9,35.2,8],
    events:[
-     {lat:31.5,lng:34.46,label:'Gaza — Area A',note:'Under Palestinian Authority control on paper. But Israel controls the borders, airspace, and sea access. The blockade makes "control" nearly meaningless.'},
-     {lat:31.9,lng:35.2,label:'West Bank — Area B',note:'Shared Palestinian–Israeli control. Palestinians handle civil affairs, Israel handles security. In practice, Israeli military can enter anytime.'},
-     {lat:32.3,lng:35.3,label:'West Bank — Area C',note:'60% of the West Bank. Full Israeli military and civil control. Palestinian construction here requires Israeli permits — almost never granted.'},
+     {lat:31.5,lng:34.46,label:'Gaza, Area A',note:'Under Palestinian Authority control on paper. But Israel controls the borders, airspace, and sea access. The blockade makes "control" nearly meaningless.'},
+     {lat:31.9,lng:35.2,label:'West Bank, Area B',note:'Shared Palestinian–Israeli control. Palestinians handle civil affairs, Israel handles security. In practice, Israeli military can enter anytime.'},
+     {lat:32.3,lng:35.3,label:'West Bank, Area C',note:'60% of the West Bank. Full Israeli military and civil control. Palestinian construction here requires Israeli permits, almost never granted.'},
      {lat:31.77,lng:35.21,label:'East Jerusalem',note:'Oslo excluded East Jerusalem from negotiations. Israel continued settlement construction throughout the peace process period.'},
    ]},
   {year:2007,label:'Gaza Blockade',ar:'حصار غزة',num:'2.3M',ctx:'People under siege in Gaza',
@@ -2086,16 +2113,16 @@ const TL=[
    events:[
      {lat:31.5,lng:34.46,label:'Gaza City',note:'Largest city in Gaza. Under comprehensive blockade since 2007. Electricity limited to a few hours a day for years. Import of hundreds of goods banned or restricted.'},
      {lat:31.345,lng:34.305,label:'Khan Younis',note:'Southern Gaza. One of the main cities affected by the blockade. Repeated Israeli military operations since 2008.'},
-     {lat:31.296,lng:34.265,label:'Rafah Crossing',note:'The only crossing not controlled by Israel, managed by Egypt. Frequently closed. The only escape route for most Gazans — and often locked shut.'},
-     {lat:31.524,lng:34.487,label:'Gaza Seaport',note:'Access blocked. Gaza fishermen restricted to a narrow maritime zone — sometimes just 3 nautical miles — enforced by the Israeli Navy.'},
+     {lat:31.296,lng:34.265,label:'Rafah Crossing',note:'The only crossing not controlled by Israel, managed by Egypt. Frequently closed. The only escape route for most Gazans, and often locked shut.'},
+     {lat:31.524,lng:34.487,label:'Gaza Seaport',note:'Access blocked. Gaza fishermen restricted to a narrow maritime zone, sometimes just 3 nautical miles, enforced by the Israeli Navy.'},
    ]},
   {year:2023,label:'The War on Gaza',ar:'الحرب على غزة',num:'45,000+',ctx:'Palestinians killed since October 2023',
    note:'October 7, 2023: Hamas launched an attack killing ~1,200 Israelis. Israel responded with one of the most intense bombardments in modern history. Over 45,000 Palestinians killed, more than half of them women and children. 90% of Gaza\'s population displaced.',color:'#CE1126',
    view:[31.4,34.4,11],
    events:[
-     {lat:31.535,lng:34.502,label:'Gaza City',note:'Heavily bombed since October 2023. Entire neighbourhoods levelled. Al-Shifa Hospital — the largest in Gaza — destroyed. Northern Gaza nearly uninhabitable.'},
+     {lat:31.535,lng:34.502,label:'Gaza City',note:'Heavily bombed since October 2023. Entire neighbourhoods levelled. Al-Shifa Hospital, the largest in Gaza, destroyed. Northern Gaza nearly uninhabitable.'},
      {lat:31.548,lng:34.500,label:'Jabalia Camp',note:'Hit repeatedly by Israeli airstrikes, including direct strikes on the refugee camp itself. Thousands of civilians killed.'},
-     {lat:31.345,lng:34.305,label:'Khan Younis',note:'Site of major ground operations in late 2023 and 2024. Civilians ordered to evacuate — then bombed in the designated "safe zones."'},
+     {lat:31.345,lng:34.305,label:'Khan Younis',note:'Site of major ground operations in late 2023 and 2024. Civilians ordered to evacuate, then bombed in the designated "safe zones."'},
      {lat:31.296,lng:34.265,label:'Rafah',note:'1.5 million displaced Palestinians crammed into Rafah by early 2024. Israel launched a ground assault anyway. The UN and international courts called for a ceasefire.'},
    ]},
   {year:2026,label:'Today',ar:'اليوم',num:'5.9M+',ctx:'Palestinian refugees registered globally',
@@ -2105,7 +2132,7 @@ const TL=[
      {lat:31.5,lng:34.46,label:'Gaza',note:'365 km². 2.3 million people. Only 4 of 400 aid distribution sites still operating. 50% of hospitals destroyed. Under comprehensive blockade since 2007, active military siege ongoing.'},
      {lat:31.77,lng:35.21,label:'East Jerusalem',note:'Over 700,000 Israeli settlers now live in occupied territories. Palestinian families continue to be evicted from their homes. Ongoing displacement through settlement expansion.'},
      {lat:32.1,lng:35.2,label:'West Bank',note:'Settler violence against Palestinian communities increased dramatically since 2023. Area C remains under full Israeli military control. Palestinian movement restricted by hundreds of checkpoints.'},
-     {lat:43.65,lng:-79.38,label:'Toronto, Canada',note:'Over 50,000 Palestinians in Canada. Many carry the Nakba as a living memory passed down from parents and grandparents. Canada only recognized Palestine as a state in 2025 — while still selling arms to Israel.'},
+     {lat:43.65,lng:-79.38,label:'Toronto, Canada',note:'Over 50,000 Palestinians in Canada. Many carry the Nakba as a living memory passed down from parents and grandparents. Canada only recognized Palestine as a state in 2025, while still selling arms to Israel.'},
      {lat:33.85,lng:35.86,label:'Lebanon',note:'~270,000 Palestinian refugees registered with UNRWA. Many living in camps established in 1948. Still waiting for the right of return.'},
    ]},
 ];
@@ -2445,6 +2472,14 @@ const heroRailObs = new IntersectionObserver(entries => {
 }, {threshold: 0.1});
 const heroEl = document.getElementById('hero');
 if (heroEl) heroRailObs.observe(heroEl);
+
+// Hide rail on reflection/about sections
+const reflEl = document.getElementById('reflection');
+if (reflEl) {
+  new IntersectionObserver(entries => {
+    if (rail && entries[0].isIntersecting) rail.classList.remove('visible');
+  }, {threshold: 0.1}).observe(reflEl);
+}
 
 // Islamophobia 3 dimensions
 const DIMS = [
