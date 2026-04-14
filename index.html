@@ -753,29 +753,8 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   max-width:760px;margin:0 auto;
 }
 
-/* ══ CHAPTER RAIL ══ */
-#chapter-rail{
-  position:fixed;right:1.2rem;top:50%;transform:translateY(-50%);
-  z-index:8000;display:flex;flex-direction:column;gap:.7rem;
-  opacity:0;transition:opacity .4s;
-}
-#chapter-rail.visible{opacity:1}
-.cr-dot{width:8px;height:8px;border-radius:50%;
-  background:var(--stone);border:none;cursor:pointer;
-  transition:background .3s,transform .3s,width .3s;
-  position:relative;display:block;padding:0;
-}
-.cr-dot.active{background:var(--green);transform:scale(1.4)}
-.cr-dot:hover::before,.cr-dot.active::before{
-  content:attr(data-label);
-  position:absolute;right:18px;top:50%;transform:translateY(-50%);
-  font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--charcoal);white-space:nowrap;
-  background:var(--cream);border-radius:4px;
-  padding:.2rem .5rem;box-shadow:0 2px 8px rgba(0,0,0,.1);
-  pointer-events:none;
-}
-@media(max-width:900px){#chapter-rail{display:none}}
+/* ══ CHAPTER RAIL — removed, using top nav instead ══ */
+#chapter-rail{display:none!important}
 
 /* ══ FUN NARRATIVE ANIMATIONS ══ */
 @keyframes oliveDrop{
@@ -820,6 +799,30 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 .key-insert{animation:keyInsert 1s ease forwards}
 .watermelon-bounce{animation:watermelonBounce 3s ease-in-out infinite}
 .float-in{animation:floatIn .8s ease forwards}
+
+/* ══ OLIVE TREE FACT DROP ══ */
+.olive-tree-scene{position:relative;min-height:600px;overflow:hidden;
+  background:linear-gradient(180deg,var(--cream) 0%,#e8dcc6 100%);padding:4rem 2.4rem 6rem}
+.olive-tree-wrap{position:relative;max-width:500px;margin:0 auto;height:420px}
+.olive-tree-svg{width:100%;height:100%}
+.olive-fact{position:absolute;opacity:0;transform:translateY(-30px);
+  transition:opacity .6s,transform .8s cubic-bezier(.16,1,.3,1);pointer-events:none;
+  max-width:220px;text-align:center}
+.olive-fact.dropped{opacity:1;transform:translateY(0);pointer-events:auto}
+.olive-fact-bubble{background:rgba(46,39,32,.92);color:var(--white);
+  border-radius:12px;padding:.9rem 1.1rem;font-size:.76rem;line-height:1.7;
+  box-shadow:0 8px 24px rgba(0,0,0,.2);backdrop-filter:blur(6px);
+  border:1px solid rgba(93,184,122,.2)}
+.olive-fact-num{font-family:'Cormorant Garamond',serif;font-size:1.5rem;
+  font-weight:700;color:#5db87a;display:block;margin-bottom:.2rem}
+.olive-emoji{font-size:1.4rem;display:block;margin-bottom:.4rem}
+@keyframes oliveDrift{
+  0%{transform:translate(0,-20px) rotate(0deg);opacity:0}
+  15%{opacity:1}
+  100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0}
+}
+.drifting-olive{position:absolute;font-size:1.2rem;pointer-events:none;
+  animation:oliveDrift var(--dur) ease-in forwards;animation-delay:var(--delay)}
 
 /* Interactive hover hints */
 .interact-hint{
@@ -1132,6 +1135,70 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
     <div><div class="stat-pop counter" data-target="78">0</div><div class="stat-label">Years of displacement</div></div>
   </div>
 </div>
+
+<!-- ══════════════ OLIVE TREE FACTS ══════════════ -->
+<section class="olive-tree-scene reveal" id="olive-tree">
+  <div style="text-align:center;margin-bottom:1rem">
+    <span class="sec-label-ar" style="color:#5db87a">شجرة الزيتون</span>
+    <h2 class="sec-h" style="color:var(--charcoal)">The Olive Tree</h2>
+    <p class="sec-p" style="max-width:600px;margin:0 auto;color:var(--charcoal);opacity:.7;font-size:.95rem">
+      Olive trees are central to Palestinian life, culture, and economy. Since 1967, Israeli forces have uprooted over 800,000 Palestinian olive trees. Click the olives to reveal what each tree carries.
+    </p>
+  </div>
+
+  <div class="olive-tree-wrap" id="oliveTreeWrap">
+    <!-- SVG Olive Tree -->
+    <svg viewBox="0 0 500 420" width="100%" height="100%" style="position:absolute;top:0;left:0">
+      <!-- Trunk -->
+      <path d="M240 420 Q238 360 230 320 Q225 290 235 260 Q240 245 248 240 Q252 245 260 260 Q270 290 265 320 Q258 360 255 420Z" fill="#8B6914" opacity=".85"/>
+      <path d="M235 260 Q220 230 200 220 Q215 215 230 225 Q238 235 240 245Z" fill="#8B6914" opacity=".7"/>
+      <path d="M260 260 Q275 235 295 228 Q280 220 265 230 Q257 238 255 248Z" fill="#8B6914" opacity=".7"/>
+      <!-- Canopy -->
+      <ellipse cx="248" cy="160" rx="160" ry="130" fill="#3d7a3a" opacity=".18"/>
+      <ellipse cx="200" cy="140" rx="80" ry="70" fill="#4a8c47" opacity=".35"/>
+      <ellipse cx="300" cy="150" rx="75" ry="65" fill="#4a8c47" opacity=".3"/>
+      <ellipse cx="248" cy="110" rx="90" ry="70" fill="#5db87a" opacity=".3"/>
+      <ellipse cx="248" cy="170" rx="100" ry="60" fill="#3d6b38" opacity=".25"/>
+      <ellipse cx="170" cy="170" rx="55" ry="45" fill="#4a8c47" opacity=".25"/>
+      <ellipse cx="330" cy="165" rx="50" ry="42" fill="#4a8c47" opacity=".22"/>
+      <!-- Olives on branches (clickable) -->
+      <circle class="olive-btn" cx="150" cy="130" r="12" fill="#6b8e23" stroke="#556b2f" stroke-width="1.5" data-fact="0" style="cursor:pointer"/>
+      <circle class="olive-btn" cx="200" cy="80" r="11" fill="#6b8e23" stroke="#556b2f" stroke-width="1.5" data-fact="1" style="cursor:pointer"/>
+      <circle class="olive-btn" cx="290" cy="75" r="12" fill="#6b8e23" stroke="#556b2f" stroke-width="1.5" data-fact="2" style="cursor:pointer"/>
+      <circle class="olive-btn" cx="340" cy="135" r="11" fill="#6b8e23" stroke="#556b2f" stroke-width="1.5" data-fact="3" style="cursor:pointer"/>
+      <circle class="olive-btn" cx="248" cy="55" r="12" fill="#6b8e23" stroke="#556b2f" stroke-width="1.5" data-fact="4" style="cursor:pointer"/>
+      <circle class="olive-btn" cx="170" cy="190" r="10" fill="#6b8e23" stroke="#556b2f" stroke-width="1.5" data-fact="5" style="cursor:pointer"/>
+    </svg>
+
+    <!-- Fact bubbles -->
+    <div class="olive-fact" id="fact0" style="left:2%;top:28%">
+      <span class="olive-emoji">🫒</span>
+      <div class="olive-fact-bubble"><span class="olive-fact-num">800,000+</span>Olive trees uprooted by Israeli forces since 1967. Each tree takes decades to mature.</div>
+    </div>
+    <div class="olive-fact" id="fact1" style="left:18%;top:5%">
+      <span class="olive-emoji">🌿</span>
+      <div class="olive-fact-bubble"><span class="olive-fact-num">$12.3M</span>Annual losses to Palestinian farmers from tree destruction and settler violence during harvest.</div>
+    </div>
+    <div class="olive-fact" id="fact2" style="right:10%;top:2%">
+      <span class="olive-emoji">🕊️</span>
+      <div class="olive-fact-bubble"><span class="olive-fact-num">4,500+</span>Years Palestinians have cultivated olives. The tree is a symbol of sumud: steadfastness.</div>
+    </div>
+    <div class="olive-fact" id="fact3" style="right:0%;top:28%">
+      <span class="olive-emoji">🔥</span>
+      <div class="olive-fact-bubble"><span class="olive-fact-num">100+</span>Settler attacks on olive groves documented each harvest season, often under military protection.</div>
+    </div>
+    <div class="olive-fact" id="fact4" style="left:32%;top:-8%">
+      <span class="olive-emoji">✊</span>
+      <div class="olive-fact-bubble"><span class="olive-fact-num">Sumud</span>Palestinians replant olive trees after each uprooting. Planting is an act of resistance and continuity.</div>
+    </div>
+    <div class="olive-fact" id="fact5" style="left:5%;top:52%">
+      <span class="olive-emoji">🧬</span>
+      <div class="olive-fact-bubble"><span class="olive-fact-num">Identity</span>Islamophobia frames Palestinian olive harvest traditions as threatening. Cultural practices become suspect under racialized surveillance.</div>
+    </div>
+  </div>
+
+  <p style="text-align:center;margin-top:2rem;font-size:.82rem;opacity:.5;color:var(--charcoal)">Click each olive to reveal a fact</p>
+</section>
 
 <!-- tatreez divider -->
 <div class="tatreez-row" style="background:var(--cream)">
@@ -2598,6 +2665,40 @@ if (glowEl) {
     container.appendChild(p);
   }
 })();
+
+/* ══ OLIVE TREE FACT DROPS ══ */
+document.querySelectorAll('.olive-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const idx = this.getAttribute('data-fact');
+    const fact = document.getElementById('fact' + idx);
+    if (fact.classList.contains('dropped')) return;
+
+    // Animate olive falling off branch
+    const cx = +this.getAttribute('cx'), cy = +this.getAttribute('cy');
+    const wrap = document.getElementById('oliveTreeWrap');
+    for (let i = 0; i < 4; i++) {
+      const o = document.createElement('span');
+      o.className = 'drifting-olive';
+      o.textContent = '🫒';
+      o.style.left = (cx / 5) + '%';
+      o.style.top = (cy / 4.2) + '%';
+      o.style.setProperty('--dx', (Math.random() * 60 - 30) + 'px');
+      o.style.setProperty('--dy', (Math.random() * 80 + 60) + 'px');
+      o.style.setProperty('--rot', (Math.random() * 360) + 'deg');
+      o.style.setProperty('--dur', (1 + Math.random()) + 's');
+      o.style.setProperty('--delay', (i * 0.12) + 's');
+      wrap.appendChild(o);
+      setTimeout(() => o.remove(), 3000);
+    }
+
+    // Hide the olive on tree
+    this.style.transition = 'opacity .4s';
+    this.style.opacity = '0';
+
+    // Show fact bubble
+    setTimeout(() => { fact.classList.add('dropped'); }, 400);
+  });
+});
 
 /* ══ SMOOTH SECTION FADE ══ */
 document.querySelectorAll('.wipe-in').forEach(el => {
