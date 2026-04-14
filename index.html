@@ -804,18 +804,18 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 .olive-tree-scene{position:relative;overflow:visible;
   background:linear-gradient(180deg,var(--cream) 0%,#e8dcc6 100%);padding:4rem 2.4rem 5rem}
 .olive-tree-wrap{position:relative;max-width:460px;margin:0 auto;height:400px}
-.olive-btn{cursor:pointer;transform-box:fill-box;transform-origin:center;
-  transition:opacity .5s,transform .4s;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
-.olive-btn:hover{transform:scale(1.35)}
-.olive-btn.picked{opacity:0;transform:scale(0);pointer-events:none}
+.olive-btn{cursor:pointer;transition:opacity .5s ease;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+.olive-btn:hover{filter:drop-shadow(0 2px 12px rgba(93,184,122,.7)) brightness(1.2)}
+.olive-btn.picked{opacity:0 !important;pointer-events:none !important}
 @keyframes oliveGlow{0%,100%{filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
   50%{filter:drop-shadow(0 2px 10px rgba(93,184,122,.6))}}
-.olive-btn{animation:oliveGlow 2.5s ease-in-out infinite}
+.olive-btn:not(.picked){animation:oliveGlow 2.5s ease-in-out infinite}
 .olive-facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:1.2rem;max-width:900px;margin:2.5rem auto 0;min-height:60px}
-.olive-fact-card{max-height:0;opacity:0;transform:translateY(20px);overflow:hidden;
-  transition:max-height .6s cubic-bezier(.16,1,.3,1),opacity .5s .1s,transform .6s .1s cubic-bezier(.16,1,.3,1)}
-.olive-fact-card.dropped{max-height:300px;opacity:1;transform:translateY(0)}
+.olive-fact-card{display:none}
+.olive-fact-card.dropped{display:block;animation:factReveal .6s ease both}
+@keyframes factReveal{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .olive-fact-bubble{background:var(--charcoal);color:var(--white);
   border-radius:16px;padding:1.4rem 1.5rem;font-size:.85rem;line-height:1.75;
   box-shadow:0 10px 32px rgba(0,0,0,.22);
@@ -2726,9 +2726,11 @@ if (glowEl) {
         setTimeout(() => o.remove(), 2500);
       }
 
-      /* Fade and shrink the olive using CSS class */
+      /* Fade the olive */
       this.classList.add('picked');
       this.style.animation = 'none';
+      this.style.opacity = '0';
+      this.style.pointerEvents = 'none';
 
       /* Reveal the fact card below */
       setTimeout(() => {
