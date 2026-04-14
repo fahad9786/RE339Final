@@ -803,15 +803,19 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
 /* ══ OLIVE TREE FACT DROP ══ */
 .olive-tree-scene{position:relative;overflow:visible;
   background:linear-gradient(180deg,var(--cream) 0%,#e8dcc6 100%);padding:4rem 2.4rem 5rem}
-.olive-tree-wrap{position:relative;max-width:420px;margin:0 auto;height:380px}
-.olive-btn{cursor:pointer;transition:transform .3s,filter .3s}
-.olive-btn:hover{transform:scale(1.3);filter:brightness(1.3)}
+.olive-tree-wrap{position:relative;max-width:460px;margin:0 auto;height:400px}
+.olive-btn{cursor:pointer;transform-box:fill-box;transform-origin:center;
+  transition:opacity .5s,transform .4s;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+.olive-btn:hover{transform:scale(1.35)}
+.olive-btn.picked{opacity:0;transform:scale(0);pointer-events:none}
+@keyframes oliveGlow{0%,100%{filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+  50%{filter:drop-shadow(0 2px 10px rgba(93,184,122,.6))}}
+.olive-btn{animation:oliveGlow 2.5s ease-in-out infinite}
 .olive-facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:1.2rem;max-width:900px;margin:2.5rem auto 0;min-height:60px}
-.olive-fact-card{opacity:0;transform:translateY(24px) scale(.95);
-  transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);
-  pointer-events:none}
-.olive-fact-card.dropped{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.olive-fact-card{max-height:0;opacity:0;transform:translateY(20px);overflow:hidden;
+  transition:max-height .6s cubic-bezier(.16,1,.3,1),opacity .5s .1s,transform .6s .1s cubic-bezier(.16,1,.3,1)}
+.olive-fact-card.dropped{max-height:300px;opacity:1;transform:translateY(0)}
 .olive-fact-bubble{background:var(--charcoal);color:var(--white);
   border-radius:16px;padding:1.4rem 1.5rem;font-size:.85rem;line-height:1.75;
   box-shadow:0 10px 32px rgba(0,0,0,.22);
@@ -822,16 +826,13 @@ nav.scrolled{padding:.5rem 2.4rem;box-shadow:0 4px 24px rgba(26,20,16,.1)}
   font-weight:700;color:#5db87a;display:block;margin-bottom:.3rem}
 .olive-fact-emoji{font-size:1.3rem;float:left;margin-right:.6rem;margin-top:.1rem}
 .olive-counter{text-align:center;margin-top:1.5rem;font-size:.85rem;color:var(--charcoal);opacity:.55;
-  font-family:'Inter',sans-serif;letter-spacing:.04em}
+  font-family:'Inter',sans-serif;letter-spacing:.04em;transition:all .4s}
 @keyframes oliveDrift{
-  0%{transform:translate(0,-10px) rotate(0deg);opacity:0}
-  10%{opacity:1}
+  0%{transform:translate(0,0) rotate(0deg);opacity:1}
   100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0}
 }
-.drifting-olive{position:absolute;font-size:1.1rem;pointer-events:none;
-  animation:oliveDrift var(--dur) ease-in forwards;animation-delay:var(--delay)}
-@keyframes olivePulse{0%,100%{r:12}50%{r:14}}
-.olive-btn{animation:olivePulse 2.5s ease-in-out infinite}
+.drifting-olive{position:absolute;font-size:1.1rem;pointer-events:none;z-index:10;
+  animation:oliveDrift var(--dur) ease-out forwards;animation-delay:var(--delay)}
 
 /* Interactive hover hints */
 .interact-hint{
@@ -2687,50 +2688,60 @@ if (glowEl) {
 (function(){
   let picked = 0;
   const counter = document.getElementById('oliveCounter');
+  const wrap = document.getElementById('oliveTreeWrap');
+  const svg = wrap.querySelector('svg');
+
   document.querySelectorAll('.olive-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
       const idx = this.getAttribute('data-fact');
       const fact = document.getElementById('fact' + idx);
-      if (fact.classList.contains('dropped')) return;
+      if (this.classList.contains('picked')) return;
 
       picked++;
       counter.textContent = picked + ' / 6 olives picked';
 
-      // Shower of falling olives from the clicked position
-      const cx = +this.getAttribute('cx'), cy = +this.getAttribute('cy');
-      const wrap = document.getElementById('oliveTreeWrap');
-      for (let i = 0; i < 8; i++) {
+      /* Convert SVG coords to pixel coords in the wrapper */
+      const svgRect = svg.getBoundingClientRect();
+      const wrapRect = wrap.getBoundingClientRect();
+      const cx = +this.getAttribute('cx');
+      const cy = +this.getAttribute('cy');
+      const vb = svg.viewBox.baseVal;
+      const px = (cx / vb.width) * svgRect.width + (svgRect.left - wrapRect.left);
+      const py = (cy / vb.height) * svgRect.height + (svgRect.top - wrapRect.top);
+
+      /* Shower of falling olives from the clicked position */
+      for (let i = 0; i < 6; i++) {
         const o = document.createElement('span');
         o.className = 'drifting-olive';
         o.textContent = '🫒';
-        o.style.left = (cx / 5) + '%';
-        o.style.top = (cy / 4.2) + '%';
-        o.style.setProperty('--dx', (Math.random() * 100 - 50) + 'px');
-        o.style.setProperty('--dy', (Math.random() * 120 + 80) + 'px');
-        o.style.setProperty('--rot', (Math.random() * 540 - 270) + 'deg');
-        o.style.setProperty('--dur', (1.2 + Math.random() * 0.8) + 's');
-        o.style.setProperty('--delay', (i * 0.08) + 's');
+        o.style.left = px + 'px';
+        o.style.top = py + 'px';
+        o.style.setProperty('--dx', (Math.random() * 80 - 40) + 'px');
+        o.style.setProperty('--dy', (Math.random() * 100 + 60) + 'px');
+        o.style.setProperty('--rot', (Math.random() * 400 - 200) + 'deg');
+        o.style.setProperty('--dur', (0.9 + Math.random() * 0.6) + 's');
+        o.style.setProperty('--delay', (i * 0.06) + 's');
         wrap.appendChild(o);
-        setTimeout(() => o.remove(), 3500);
+        setTimeout(() => o.remove(), 2500);
       }
 
-      // Shrink and fade the olive on tree
-      this.style.transition = 'opacity .5s, r .5s';
-      this.style.opacity = '0';
-      this.setAttribute('r', '0');
+      /* Fade and shrink the olive using CSS class */
+      this.classList.add('picked');
+      this.style.animation = 'none';
 
-      // Reveal the fact card below with a stagger
+      /* Reveal the fact card below */
       setTimeout(() => {
         fact.classList.add('dropped');
-        // Smooth scroll to the revealed fact
         fact.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 500);
+      }, 400);
 
-      // If all picked, celebrate
+      /* All picked */
       if (picked === 6) {
-        counter.textContent = 'All olives picked. The roots remain.';
+        counter.textContent = 'All olives picked. The roots remain. 🫒';
         counter.style.color = '#5db87a';
         counter.style.fontWeight = '600';
+        counter.style.opacity = '1';
       }
     });
   });
